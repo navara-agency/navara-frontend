@@ -1,0 +1,462 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Navara Design System — Tailwind v4 CSS-first configuration
+   ============================================================ */
+
+@theme {
+  /* Color tokens — original design system (other pages) */
+  --color-navara-blue: #001192;
+  --color-navara-orange: #FB6107;
+  --color-navara-turquoise: #06AED5;
+  --color-navara-white: #FFFFFF;
+  --color-navara-dark: #0C0F0A;
+  --color-navara-light: #F9FAFB;
+
+  /* Font families — original design system */
+  --font-glancyr: 'Glancyr', sans-serif;
+  --font-sherika: 'Sherika', sans-serif;
+
+  /* v2 Brand Colors */
+  --color-primary-dark-blue: #060078;
+  --color-primary-cyan: #03c9e0;
+  --color-secondary-purple: #52379f;
+  --color-gradient-pink: #ffa5cd;
+  --color-gradient-light-blue: #c6cbe1;
+  --color-bg-light: #f8f9fa;
+  --color-text-dark: #1a1a1a;
+  --color-text-gray: #6b7280;
+
+  /* v2 Font families */
+  --font-handicrafts: 'Sherika', sans-serif;
+  --font-somar: 'Somar Sans', sans-serif;
+  --font-palestine: 'Palestine', 'Somar Sans', sans-serif;
+}
+
+/* ============================================================
+   @font-face — Glancyr (heading font)
+   ============================================================ */
+@font-face {
+  font-family: 'Glancyr';
+  src: url('../assets/fonts/Old-Fonts/Glancyr Variable-VF.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
+   @font-face — Sherika (primary English font)
+   ============================================================ */
+@font-face {
+  font-family: 'Sherika';
+  src: url('../assets/fonts/Old-Fonts/sherika/Sherika Variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sherika';
+  src: url('../assets/fonts/Old-Fonts/sherika/Sherika Italic Variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ============================================================
+   Arabic font override — Somar Sans for all text in RTL mode.
+   The Year of Handicrafts has no Arabic glyphs, so any element
+   using font-handicrafts falls back to Somar Sans when dir=rtl.
+   ============================================================ */
+[dir="rtl"] .font-handicrafts {
+  font-family: 'Somar Sans', sans-serif;
+}
+
+/* ============================================================
+   Arabic system font fallback (active when Sherika lacks
+   Arabic glyph coverage)
+   ============================================================ */
+@font-face {
+  font-family: 'Sherika-Arabic';
+  src: local('Noto Sans Arabic'), local('Arabic Typesetting'), local('sans-serif');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* ============================================================
+   @font-face — The Year of Handicrafts (v2 display/headline font)
+   ============================================================ */
+@font-face {
+  font-family: 'The Year of Handicrafts';
+  src: url('../assets/fonts/TheYearofHandicrafts-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'The Year of Handicrafts';
+  src: url('../assets/fonts/TheYearofHandicrafts-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'The Year of Handicrafts';
+  src: url('../assets/fonts/TheYearofHandicrafts-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'The Year of Handicrafts';
+  src: url('../assets/fonts/TheYearofHandicrafts-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'The Year of Handicrafts';
+  src: url('../assets/fonts/TheYearofHandicrafts-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
+   @font-face — Somar Sans (v2 body/subheading font)
+   Note: subfolder name contains spaces — URL must stay quoted.
+   ============================================================ */
+@font-face {
+  font-family: 'Somar Sans';
+  src: url('../assets/fonts/somar-sans which will be used frequently under the headlines/SomarSans-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Somar Sans';
+  src: url('../assets/fonts/somar-sans which will be used frequently under the headlines/SomarSans-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Somar Sans';
+  src: url('../assets/fonts/somar-sans which will be used frequently under the headlines/SomarSans-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Somar Sans';
+  src: url('../assets/fonts/somar-sans which will be used frequently under the headlines/SomarSans-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
+   @font-face — Palestine (v2 Arabic font)
+   Note: filename contains parentheses and space — URL stays quoted.
+   ============================================================ */
+@font-face {
+  font-family: 'Palestine';
+  src: url('../assets/fonts/ALFONT_COM_PALESTINE-REGULAR (2).TTF') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
+   CSS custom properties — Navara gradients
+   ============================================================ */
+:root {
+  --navara-gradient: linear-gradient(135deg, #001192, #06AED5);
+  --navara-gradient-warm: linear-gradient(135deg, #FB6107, #001192);
+}
+
+/* ============================================================
+   Base styles
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Somar Sans', sans-serif;
+  font-weight: 400;
+  color: #0C0F0A;
+  background-color: #FFFFFF;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Glancyr', sans-serif;
+}
+
+/* ============================================================
+   Heading shine — sweeps a bright highlight across gradient text
+   ============================================================ */
+@keyframes headingShine {
+  0%   { background-position: 200% center; }
+  100% { background-position: -50% center; }
+}
+
+/* ============================================================
+   Wave pattern animation (used in hero sections)
+   ============================================================ */
+@keyframes waveDrift {
+  0%, 100% {
+    transform: translateX(0) scale(1.02);
+    opacity: 0.1;
+  }
+  50% {
+    transform: translateX(-20px) scale(1.05);
+    opacity: 0.15;
+  }
+}
+
+.wave-pattern {
+  animation: waveDrift 8s ease-in-out infinite;
+}
+
+/* Respect reduced motion preference for wave pattern */
+@media (prefers-reduced-motion: reduce) {
+  .wave-pattern {
+    animation: none;
+    opacity: 0.1;
+  }
+}
+
+/* ============================================================
+   Infinite marquee scroll (client logos strip)
+   CSS-only: Framer Motion can't do gapless infinite translate.
+   See specs/003-creative-elevation/plan.md Complexity Tracking.
+   ============================================================ */
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 30s linear infinite;
+}
+
+.marquee-wrapper:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ============================================================
+   Shimmer skeleton (logo placeholders, loading states)
+   ============================================================ */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #e8eaf0 25%, #d4d7e2 50%, #e8eaf0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   Clip-path text reveal (used by RevealText component)
+   ============================================================ */
+.clip-reveal {
+  clip-path: inset(0 0 100% 0);
+}
+
+.clip-reveal.visible {
+  clip-path: inset(0 0 0% 0);
+  transition: clip-path 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* ============================================================
+   Reduced motion overrides for all new CSS animations
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .skeleton-shimmer {
+    animation: none;
+    background: #e8eaf0;
+  }
+  .clip-reveal,
+  .clip-reveal.visible {
+    clip-path: none;
+    transition: none;
+  }
+}
+
+/* ============================================================
+   Navara gradient backgrounds (utility classes)
+   ============================================================ */
+.bg-navara-gradient {
+  background: var(--navara-gradient);
+}
+
+.bg-navara-gradient-warm {
+  background: var(--navara-gradient-warm);
+}
+
+/* ============================================================
+   Spark border — rotating conic-gradient light on button edge.
+   Rendered as a sibling OUTSIDE the button (inset: -2px) so the
+   button's overflow:hidden and colors are completely unaffected.
+   The button sits above it via z-index, revealing only the 2px
+   outer ring as the spark sweeps around.
+   ============================================================ */
+@property --spark-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes spark-spin {
+  to { --spark-angle: 360deg; }
+}
+
+.spark-border {
+  background: conic-gradient(
+    from var(--spark-angle),
+    rgba(255, 210, 80, 0) 0%,
+    rgba(255, 210, 80, 0) 50%,
+    rgba(255, 210, 80, 0.8) 60%,
+    rgba(255, 255, 255, 1)  66%,
+    rgba(255, 210, 80, 0.8) 72%,
+    rgba(255, 210, 80, 0)   82%,
+    rgba(255, 210, 80, 0) 100%
+  );
+  animation: spark-spin 2.5s linear infinite;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spark-border { animation: none; }
+}
+
+/* ============================================================
+   Frame glow border — phone-wrap style rotating conic gradient.
+   Used as an outer layer behind a rounded inner container.
+   ============================================================ */
+@property --frame-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes frame-spin {
+  to { --frame-angle: 360deg; }
+}
+
+.frame-glow {
+  background: conic-gradient(
+    from var(--frame-angle),
+    rgba(3, 201, 224, 0.9) 0%,
+    rgba(255, 165, 205, 0.7) 25%,
+    rgba(82, 55, 159, 0.8) 50%,
+    rgba(6, 0, 120, 0.6) 75%,
+    rgba(3, 201, 224, 0.9) 100%
+  );
+  animation: frame-spin 5s linear infinite;
+  will-change: background;
+}
+
+/* Disable the heavy conic-gradient spin on mobile to prevent jank */
+@media (max-width: 767px) {
+  .frame-glow {
+    animation: none;
+    background: conic-gradient(
+      from 120deg,
+      rgba(3, 201, 224, 0.85),
+      rgba(82, 55, 159, 0.75),
+      rgba(255, 165, 205, 0.6),
+      rgba(3, 201, 224, 0.85)
+    );
+    will-change: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frame-glow {
+    animation: none;
+    background: conic-gradient(
+      from 45deg,
+      rgba(3, 201, 224, 0.9),
+      rgba(255, 165, 205, 0.7),
+      rgba(82, 55, 159, 0.8)
+    );
+    will-change: auto;
+  }
+}
+
+/* ============================================================
+   Services strip shimmer sweep (triggered on hover)
+   ============================================================ */
+@keyframes shimmerSweepLTR {
+  0%   { transform: translateX(-150%); opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateX(250%);  opacity: 0; }
+}
+
+@keyframes shimmerSweepRTL {
+  0%   { transform: translateX(150%);  opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateX(-250%); opacity: 0; }
+}
+
+.shimmer-line {
+  position: absolute;
+  inset-block: 0;
+  width: 45%;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transform: translateX(-150%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 38%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(255, 255, 255, 0.04) 62%,
+    transparent 100%
+  );
+}
+
+.service-strip:hover .shimmer-line {
+  animation: shimmerSweepLTR 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-strip.shimmer-rtl:hover .shimmer-line {
+  animation: shimmerSweepRTL 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-strip:hover .shimmer-line,
+  .service-strip.shimmer-rtl:hover .shimmer-line {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   Nav wave underline — repeating SVG sine wave that flows
+   continuously on hover, revealed via scaleX from the start edge.
+   ============================================================ */
