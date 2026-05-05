@@ -63,10 +63,10 @@ async function makePng(size, outputName) {
   return buf;
 }
 
-async function makeIco(buffers) {
+async function makeIco(buffers, outputName) {
   const ico = await toIco(buffers);
-  fs.writeFileSync(path.join(OUT, 'favicon.ico'), ico);
-  console.log(`  wrote favicon.ico (multi-size, ${ico.length} bytes)`);
+  fs.writeFileSync(path.join(OUT, outputName), ico);
+  console.log(`  wrote ${outputName} (multi-size, ${ico.length} bytes)`);
 }
 
 async function makeOgImage() {
@@ -97,14 +97,17 @@ async function main() {
   }
   console.log(`Source: ${SRC}`);
 
+  // Filenames intentionally use /nv-icon* prefix (not /favicon*) — the original
+  // paths were cached by Hostinger CDN with a 7-day max-age, and renaming side-steps
+  // that cache. Bump the prefix again (e.g., nv-icon2*) if the icon needs another change.
   const buffers = {};
   for (const size of PNG_SIZES) {
-    const name = size === 180 ? 'apple-touch-icon.png' : `favicon-${size}x${size}.png`;
+    const name = size === 180 ? 'nv-apple-touch.png' : `nv-icon-${size}.png`;
     buffers[size] = await makePng(size, name);
   }
 
   // Multi-size ICO from 16/32/48 PNG buffers
-  await makeIco([buffers[16], buffers[32], buffers[48]]);
+  await makeIco([buffers[16], buffers[32], buffers[48]], 'nv-icon.ico');
 
   await makeOgImage();
 
