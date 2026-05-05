@@ -5,6 +5,21 @@ import ar from './locales/ar.json'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'
 
+// Persist language choice across reloads. Without this, refreshing the page reverts
+// to the default (`en`) even after the user clicked AR, which is bad UX.
+const LANG_KEY = 'navara_lang'
+const VALID_LANGS = ['en', 'ar']
+
+function readSavedLang() {
+  if (typeof window === 'undefined') return 'en'
+  try {
+    const saved = window.localStorage.getItem(LANG_KEY)
+    return VALID_LANGS.includes(saved) ? saved : 'en'
+  } catch {
+    return 'en'
+  }
+}
+
 // Initialise with bundled JSON for instant render. Then asynchronously fetch the live
 // translations from /api/translations/:lang and overwrite the bundles, so dashboard edits
 // take effect on the next hard-refresh of the public site.
@@ -19,11 +34,18 @@ i18n
       en: { translation: en },
       ar: { translation: ar },
     },
-    lng: 'en',
+    lng: readSavedLang(),
     fallbackLng: 'en',
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
   })
+
+// Save every language change so reloads preserve the user's choice.
+i18n.on('languageChanged', (lng) => {
+  if (typeof window === 'undefined') return
+  if (!VALID_LANGS.includes(lng)) return
+  try { window.localStorage.setItem(LANG_KEY, lng) } catch { /* quota / blocked storage */ }
+})
 
 // Repair leftover JSON-stringified arrays/objects from earlier saves where flatten()
 // turned arrays into strings. Strings shaped like "[...]" or "{...}" that parse cleanly

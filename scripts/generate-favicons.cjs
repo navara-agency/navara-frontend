@@ -31,9 +31,30 @@ const BG = { r: 0x00, g: 0x11, b: 0x92, alpha: 1 };
 
 const PNG_SIZES = [16, 32, 48, 180, 192, 512];
 
+// Pre-process: trim transparent edges of the source so we have an exact bounding box,
+// then we can compute proper padding. Without this the symbol touches the canvas edges
+// at small sizes and looks cramped.
+let cachedTrimmed = null;
+async function getTrimmedSource() {
+  if (!cachedTrimmed) {
+    cachedTrimmed = await sharp(SRC).trim({ threshold: 10 }).toBuffer();
+  }
+  return cachedTrimmed;
+}
+
 async function makePng(size, outputName) {
-  const buf = await sharp(SRC)
-    .resize(size, size, { fit: 'contain', background: BG })
+  const trimmed = await getTrimmedSource();
+  // Resize the symbol to ~76% of the canvas, then extend with brand-blue padding.
+  // Lanczos3 keeps edges crisp at favicon scales.
+  const symbolSize = Math.round(size * 0.76);
+  const left = Math.round((size - symbolSize) / 2);
+  const right = size - symbolSize - left;
+  const top = left;
+  const bottom = right;
+
+  const buf = await sharp(trimmed)
+    .resize(symbolSize, symbolSize, { fit: 'contain', background: BG, kernel: sharp.kernel.lanczos3 })
+    .extend({ top, bottom, left, right, background: BG })
     .flatten({ background: BG })
     .png({ compressionLevel: 9 })
     .toBuffer();
@@ -49,10 +70,19 @@ async function makeIco(buffers) {
 }
 
 async function makeOgImage() {
-  // 1200x630 — standard og:image dimensions. Logo centred on brand-blue background.
-  const buf = await sharp(SRC)
-    .resize(630, 630, { fit: 'contain', background: BG })
-    .extend({ top: 0, bottom: 0, left: 285, right: 285, background: BG })
+  // 1200x630 — standard og:image dimensions. Logo centred on brand-blue background,
+  // resized to ~50% of the height so it has plenty of breathing room.
+  const trimmed = await getTrimmedSource();
+  const symbolH = 320;
+  const buf = await sharp(trimmed)
+    .resize(symbolH, symbolH, { fit: 'contain', background: BG, kernel: sharp.kernel.lanczos3 })
+    .extend({
+      top: Math.round((630 - symbolH) / 2),
+      bottom: Math.round((630 - symbolH) / 2),
+      left: Math.round((1200 - symbolH) / 2),
+      right: Math.round((1200 - symbolH) / 2),
+      background: BG,
+    })
     .flatten({ background: BG })
     .png({ compressionLevel: 9 })
     .toBuffer();
