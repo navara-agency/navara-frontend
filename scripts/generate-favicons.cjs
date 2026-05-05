@@ -19,7 +19,10 @@ const path = require('path');
 const sharp = require('sharp');
 const toIco = require('to-ico');
 
-const SRC = path.resolve(__dirname, '..', 'public', 'brand', 'logo', 'navara-logo-on-blue.png');
+// Use the production icon-white asset (the same one the Footer renders) — clean,
+// square-ish, transparent background. We composite it onto the brand-blue colour via
+// sharp's flatten() below so the icon reads well at 16/32/48 px.
+const SRC = path.resolve(__dirname, '..', 'public', 'brand', 'navara-logo-icon-white.png');
 const OUT = path.resolve(__dirname, '..', 'public');
 
 // Brand blue background — matches the source logo so Google sees a solid square,
