@@ -550,7 +550,7 @@
       },
       "whatsapp": "WhatsApp Number",
       "whatsappPlaceholder": "+20 1XX XXX XXXX",
-      "email": "Email Address (optional)",
+      "email": "Email Address",
       "emailPlaceholder": "your@email.com",
       "preferredDate": "Pick your preferred call date",
       "today": "Today",
