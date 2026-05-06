@@ -49,7 +49,8 @@ export default function HowWeWork() {
   const reduced = useReducedMotion()
   const processRef = useRef(null)
   const videoRef = useRef(null)
-  const [vidOpacity, setVidOpacity] = useState(0.42)
+  // Start at 0 — bumped to 0.42 once the video has buffered enough to play smoothly.
+  const [vidOpacity, setVidOpacity] = useState(0)
 
   useEffect(() => {
     const v = videoRef.current
@@ -84,8 +85,16 @@ export default function HowWeWork() {
         className="relative min-h-[82vh] flex items-center overflow-hidden bg-primary-dark-blue pt-32 pb-28"
         aria-label="How we work hero"
       >
-        {/* Video */}
+        {/* Poster image — visible until the video has buffered enough to play smoothly.
+            Prevents the "frozen first frame" / "blue cast only" flash on slow networks. */}
+        <img aria-hidden="true" src="/brand/hero-how-poster.jpg" alt=""
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          style={{ opacity: 0.42 }} />
+        {/* Video — fades in once canplay fires, then loops with the existing end-of-clip fade. */}
         <video ref={videoRef} aria-hidden="true" autoPlay loop muted playsInline
+          preload="auto"
+          poster="/brand/hero-how-poster.jpg"
+          onCanPlay={() => setVidOpacity(0.42)}
           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           style={{ opacity: vidOpacity, transition: 'opacity 0.8s ease' }}>
           <source src="/brand/HOWWEWORK.mp4" type="video/mp4" />

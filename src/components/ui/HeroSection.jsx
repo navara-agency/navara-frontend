@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -25,6 +26,7 @@ function renderH1Line(text) {
 export default function HeroSection({ onCtaClick }) {
   const { t } = useTranslation()
   const reduced = useReducedMotion()
+  const [videoReady, setVideoReady] = useState(false)
 
   const navigate = useNavigate()
   const handleCta = onCtaClick ?? (() => navigate('/contact#contact-form'))
@@ -35,13 +37,25 @@ export default function HeroSection({ onCtaClick }) {
       className="relative min-h-screen flex items-center overflow-hidden bg-primary-dark-blue"
       aria-label="Hero"
     >
-      {/* Background video */}
+      {/* Poster image — visible until video has buffered enough to play smoothly.
+          Prevents the "frozen first frame" / "blue cast only" flash on slow networks. */}
+      <img
+        aria-hidden="true"
+        src="/brand/hero-home-poster.jpg"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      />
+      {/* Background video — fades in once `canplay` fires, hiding any buffering. */}
       <video
         aria-hidden="true"
         autoPlay
         loop
         muted
         playsInline
+        preload="auto"
+        poster="/brand/hero-home-poster.jpg"
+        onCanPlay={() => setVideoReady(true)}
+        style={{ opacity: videoReady ? 1 : 0, transition: 'opacity 0.6s ease' }}
         className="absolute inset-0 w-full h-full object-cover pointer-events-none"
       >
         <source src="/brand/Animate_this_photo.mp4" type="video/mp4" />
