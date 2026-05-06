@@ -62,7 +62,7 @@ export default function Services() {
         <meta name="description" content={t('services.seo.description')} />
         <meta property="og:title" content={t('services.seo.title')} />
         <meta property="og:description" content={t('services.seo.description')} />
-        <link rel="canonical" href="https://navara.com/services" />
+        <link rel="canonical" href="https://navaraagency.com/services" />
       </Helmet>
 
       {/* ── Hero ─────────────────────────────────────────────── */}

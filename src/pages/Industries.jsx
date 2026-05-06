@@ -93,7 +93,7 @@ export default function Industries() {
         <meta name="description" content={t('industries.seo.description')} />
         <meta property="og:title" content={t('industries.seo.title')} />
         <meta property="og:description" content={t('industries.seo.description')} />
-        <link rel="canonical" href="https://navara.com/industries" />
+        <link rel="canonical" href="https://navaraagency.com/industries" />
       </Helmet>
 
       {/* ══════════════════════════════════════════════════════

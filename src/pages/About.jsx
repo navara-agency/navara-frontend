@@ -130,7 +130,7 @@ export default function About() {
         <meta name="description" content={t('about.seo.description')} />
         <meta property="og:title" content={t('about.seo.title')} />
         <meta property="og:description" content={t('about.seo.description')} />
-        <link rel="canonical" href="https://navara.com/about" />
+        <link rel="canonical" href="https://navaraagency.com/about" />
       </Helmet>
 
       {/* ══════════════════════════════════════════════════════════

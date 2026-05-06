@@ -333,7 +333,7 @@ export default function Contact() {
         <meta name="description" content={t('contact.seo.description')} />
         <meta property="og:title" content={t('contact.seo.title')} />
         <meta property="og:description" content={t('contact.seo.description')} />
-        <link rel="canonical" href="https://navara.com/contact" />
+        <link rel="canonical" href="https://navaraagency.com/contact" />
       </Helmet>
 
       {/* ── Hero ─────────────────────────────────────────────── */}

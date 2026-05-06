@@ -1,0 +1,9 @@
+# Allow all crawlers full access to public pages.
+# The /dashboard area is admin-only and uses client-side auth, but we explicitly
+# disallow it here so search engines don't waste crawl budget on it.
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /dashboard/
+
+Sitemap: https://navaraagency.com/sitemap.xml

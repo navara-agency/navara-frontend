@@ -135,7 +135,7 @@ export default function Home() {
         <meta name="description" content={t('home.seo.description')} />
         <meta property="og:title" content={t('home.seo.title')} />
         <meta property="og:description" content={t('home.seo.description')} />
-        <link rel="canonical" href="https://navara.com/" />
+        <link rel="canonical" href="https://navaraagency.com/" />
       </Helmet>
 
       <HeroSection onCtaClick={goToContact} />

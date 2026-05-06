@@ -76,7 +76,7 @@ export default function HowWeWork() {
         <meta name="description" content={t('howWeWork.seo.description')} />
         <meta property="og:title" content={t('howWeWork.seo.title')} />
         <meta property="og:description" content={t('howWeWork.seo.description')} />
-        <link rel="canonical" href="https://navara.com/how-we-work" />
+        <link rel="canonical" href="https://navaraagency.com/how-we-work" />
       </Helmet>
 
       {/* ── Hero ──────────────────────────────────────────────────── */}
