@@ -504,7 +504,7 @@
         "both": "كلاهما",
         "other": "أخرى"
       },
-      "industry": "القطاع (اختياري)",
+      "industry": "القطاع",
       "industryPlaceholder": "اختر قطاعك",
       "industryOptions": {
         "healthcare": "الرعاية الصحية",
@@ -516,7 +516,7 @@
         "multiBranch": "متعدد الفروع",
         "other": "أخرى"
       },
-      "primaryGoal": "الهدف الرئيسي (اختياري)",
+      "primaryGoal": "الهدف الرئيسي",
       "primaryGoalPlaceholder": "ما أولويتك الرئيسية؟",
       "primaryGoalOptions": {
         "presence": "بناء حضور رقمي قوي يجعلني مرجعاً في سوقي",
@@ -530,7 +530,7 @@
         "demandGeneration": "توليد الطلب",
         "growthPartner360": "شريك النمو 360"
       },
-      "budgetRange": "نطاق الميزانية الشهرية (اختياري)",
+      "budgetRange": "نطاق الميزانية الشهرية",
       "budgetPlaceholder": "اختر نطاقاً",
       "budgetOptions": {
         "under1k": "أقل من $1,000",
@@ -540,7 +540,7 @@
         "preferNot": "أفضل عدم الإفصاح"
       },
       "whatsapp": "رقم واتساب",
-      "whatsappPlaceholder": "+966 5X XXX XXXX",
+      "whatsappPlaceholder": "5X XXX XXXX",
       "email": "البريد الإلكتروني",
       "emailPlaceholder": "بريدك@الإلكتروني.com",
       "preferredDate": "اختار يوم المكالمة",
@@ -555,9 +555,14 @@
     "validation": {
       "fullNameRequired": "الاسم الكامل مطلوب",
       "businessNameRequired": "اسم الشركة مطلوب",
-      "marketRequired": "يرجى اختيار سوقك",
+      "industryRequired": "يرجى اختيار قطاعك",
+      "primaryGoalRequired": "يرجى اختيار هدفك الرئيسي",
+      "budgetRequired": "يرجى اختيار نطاق ميزانية",
       "whatsappRequired": "رقم واتساب مطلوب",
-      "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح"
+      "whatsappInvalid": "يرجى إدخال رقم هاتف صحيح",
+      "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+      "dateRequired": "يرجى اختيار تاريخ للمكالمة",
+      "slotRequired": "يرجى اختيار وقت للمكالمة"
     }
   },
 

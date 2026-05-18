@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { Mail, MapPin, Clock, Calendar } from 'lucide-react'
 import FadeUp from '../components/animations/FadeUp'
 import PhotoBackdrop from '../components/ui/PhotoBackdrop'
+import IntlPhoneInput from '../components/ui/IntlPhoneInput'
 import { api, ApiError } from '../lib/api'
 import { useGeo } from '../contexts/GeoContext'
 import { useApi } from '../hooks/useApi'
@@ -24,12 +25,9 @@ const PageWrapper = ({ children }) => (
 const fade = (delay, reduced) =>
   reduced ? { duration: 0 } : { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }
 
-// Map form value (i18n key) → backend ENUM value
-const MARKET_TO_BACKEND = { egypt: 'Egypt', ksa: 'KSA', both: 'Other', other: 'Other' }
-// Inverse — backend market → default form value
-const BACKEND_TO_FORM_MARKET = { Egypt: 'egypt', KSA: 'ksa' }
+// Geo market → ISO2 used by the phone input's flag/code default
+const MARKET_TO_ISO = { Egypt: 'EG', KSA: 'SA' }
 
-const MARKET_OPTIONS = ['egypt', 'ksa', 'both', 'other']
 const INDUSTRY_OPTIONS = ['healthcare', 'ecommerce', 'servicesBusiness', 'realEstate', 'automotive', 'retail', 'multiBranch', 'other']
 const GOAL_OPTIONS = ['presence', 'leads', 'both', 'notSure']
 const SERVICES_OPTIONS = ['brandPresence', 'demandGeneration', 'growthPartner360']
@@ -46,7 +44,7 @@ function fmtLocalDate(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
-function ThreeDayDateTimePicker({ dateValue, onDateChange, slotValue, onSlotChange, market }) {
+function ThreeDayDateTimePicker({ dateValue, onDateChange, slotValue, onSlotChange }) {
   const { t, i18n } = useTranslation()
   const locale = i18n.language === 'ar' ? 'ar-EG' : 'en-US'
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -72,7 +70,7 @@ function ThreeDayDateTimePicker({ dateValue, onDateChange, slotValue, onSlotChan
     Promise.all(candidates.map(async (d) => {
       const ds = fmtLocalDate(d)
       try {
-        const res = await api.get('/api/calcom/slots', { query: { date: ds, market: market || '', timezone } })
+        const res = await api.get('/api/calcom/slots', { query: { date: ds, timezone } })
         return { ds, slots: Array.isArray(res?.slots) ? res.slots : [], configured: res?.configured !== false }
       } catch {
         return { ds, slots: [], configured: true }
@@ -91,7 +89,7 @@ function ThreeDayDateTimePicker({ dateValue, onDateChange, slotValue, onSlotChan
     })
     return () => { cancelled = true }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [market, timezone])
+  }, [timezone])
 
   // Pick the first N candidates that have at least one slot — skipping weekends/holidays/full days.
   const visibleDays = useMemo(() => {
@@ -224,7 +222,8 @@ export default function Contact() {
   const heroRef = useRef(null)
   const successRef = useRef(null)
 
-  // Live contact info + market from GeoContext / site config
+  // Live contact info + market from GeoContext / site config — market is used only to seed
+  // the phone-input flag default; we no longer ask the visitor to pick a market.
   const { market: geoMarket, config: geoConfig } = useGeo()
   const { data: siteConfig } = useApi('/api/site-config')
   const liveEmail = siteConfig?.global?.emailContact
@@ -233,24 +232,15 @@ export default function Contact() {
   const calLink = geoConfig?.calLink || null
   const calUrl = calLink ? `https://cal.com/${calLink}` : null
 
-  // Pre-fill the market dropdown with the geo-detected market.
-  // Only sets it when the form value is still empty so we don't clobber the user's choice.
-  const defaultMarket = BACKEND_TO_FORM_MARKET[geoMarket] || ''
+  const defaultPhoneIso = MARKET_TO_ISO[geoMarket] || 'EG'
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
-    defaultValues: { market: defaultMarket },
+    defaultValues: { whatsappNumber: '' },
   })
   const preferredDate = watch('preferredDate')
   const preferredSlot = watch('preferredSlot') // Exact ISO from Cal.com /v2/slots
+  const whatsappNumber = watch('whatsappNumber')
   const [bookingResult, setBookingResult] = useState(null)
-
-  // Geo loads asynchronously — once it resolves, push the value into the form (only if user hasn't picked yet)
-  useEffect(() => {
-    if (defaultMarket && !watch('market')) {
-      setValue('market', defaultMarket)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultMarket])
 
   const onSubmit = async (data) => {
     setSubmitStatus('submitting')
@@ -262,15 +252,15 @@ export default function Contact() {
     const preferredDateTime = data.preferredSlot || null
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
-    // Map react-hook-form fields → /api/leads payload (FR-008)
+    // Map react-hook-form fields → /api/leads payload (FR-008). Market is no longer collected
+    // from the form — the backend derives it from the phone's country code.
     const payload = {
       name: data.fullName,
       company: data.businessName,
-      market: MARKET_TO_BACKEND[data.market] || 'Other',
-      industry: data.industry || 'Other',
-      goal: data.primaryGoal || null,
+      industry: data.industry,
+      goal: data.primaryGoal,
       services: Array.isArray(data.servicesOfInterest) ? data.servicesOfInterest : (data.servicesOfInterest ? [data.servicesOfInterest] : []),
-      budget: data.budgetRange || null,
+      budget: data.budgetRange,
       phone: data.whatsappNumber || null,
       email: data.email,
       note: [data.briefNote, preferredDateTime ? `Preferred slot: ${preferredDateTime}` : null].filter(Boolean).join('\n'),
@@ -691,38 +681,33 @@ export default function Contact() {
                       </div>
 
                       <div>
-                        <label htmlFor="market" className="block font-somar text-sm font-medium text-text-dark mb-1.5">{t('contact.form.market')} *</label>
+                        <label htmlFor="industry" className="block font-somar text-sm font-medium text-text-dark mb-1.5">{t('contact.form.industry')} *</label>
                         <select
-                          id="market"
-                          className={`w-full bg-white border rounded-md px-4 py-3 font-somar text-sm focus:outline-none focus:ring-1 transition-colors ${errors.market ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : 'border-gray-200 focus:border-primary-cyan focus:ring-primary-cyan/30'}`}
-                          {...register('market', { required: t('contact.validation.marketRequired') })}
+                          id="industry"
+                          className={`w-full bg-white border rounded-md px-4 py-3 font-somar text-sm focus:outline-none focus:ring-1 transition-colors ${errors.industry ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : 'border-gray-200 focus:border-primary-cyan focus:ring-primary-cyan/30'}`}
+                          {...register('industry', { required: t('contact.validation.industryRequired') })}
                         >
-                          <option value="">{t('contact.form.marketPlaceholder')}</option>
-                          {MARKET_OPTIONS.map((opt) => (
-                            <option key={opt} value={opt}>{t(`contact.form.marketOptions.${opt}`)}</option>
-                          ))}
-                        </select>
-                        {errors.market && <p role="alert" className="font-somar text-xs text-red-500 mt-1">{errors.market.message}</p>}
-                      </div>
-
-                      <div>
-                        <label htmlFor="industry" className="block font-somar text-sm font-medium text-text-dark mb-1.5">{t('contact.form.industry')}</label>
-                        <select id="industry" className="w-full bg-white border border-gray-200 rounded-md px-4 py-3 font-somar text-sm focus:outline-none focus:border-primary-cyan focus:ring-1 focus:ring-primary-cyan/30 transition-colors" {...register('industry')}>
                           <option value="">{t('contact.form.industryPlaceholder')}</option>
                           {INDUSTRY_OPTIONS.map((opt) => (
                             <option key={opt} value={opt}>{t(`contact.form.industryOptions.${opt}`)}</option>
                           ))}
                         </select>
+                        {errors.industry && <p role="alert" className="font-somar text-xs text-red-500 mt-1">{errors.industry.message}</p>}
                       </div>
 
                       <div>
-                        <label htmlFor="primaryGoal" className="block font-somar text-sm font-medium text-text-dark mb-1.5">{t('contact.form.primaryGoal')}</label>
-                        <select id="primaryGoal" className="w-full bg-white border border-gray-200 rounded-md px-4 py-3 font-somar text-sm focus:outline-none focus:border-primary-cyan focus:ring-1 focus:ring-primary-cyan/30 transition-colors" {...register('primaryGoal')}>
+                        <label htmlFor="primaryGoal" className="block font-somar text-sm font-medium text-text-dark mb-1.5">{t('contact.form.primaryGoal')} *</label>
+                        <select
+                          id="primaryGoal"
+                          className={`w-full bg-white border rounded-md px-4 py-3 font-somar text-sm focus:outline-none focus:ring-1 transition-colors ${errors.primaryGoal ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : 'border-gray-200 focus:border-primary-cyan focus:ring-primary-cyan/30'}`}
+                          {...register('primaryGoal', { required: t('contact.validation.primaryGoalRequired') })}
+                        >
                           <option value="">{t('contact.form.primaryGoalPlaceholder')}</option>
                           {GOAL_OPTIONS.map((opt) => (
                             <option key={opt} value={opt}>{t(`contact.form.primaryGoalOptions.${opt}`)}</option>
                           ))}
                         </select>
+                        {errors.primaryGoal && <p role="alert" className="font-somar text-xs text-red-500 mt-1">{errors.primaryGoal.message}</p>}
                       </div>
 
                       <div>
@@ -742,22 +727,38 @@ export default function Contact() {
                       </div>
 
                       <div>
-                        <label htmlFor="budgetRange" className="block font-somar text-sm font-medium text-text-dark mb-1.5">{t('contact.form.budgetRange')}</label>
-                        <select id="budgetRange" className="w-full bg-white border border-gray-200 rounded-md px-4 py-3 font-somar text-sm focus:outline-none focus:border-primary-cyan focus:ring-1 focus:ring-primary-cyan/30 transition-colors" {...register('budgetRange')}>
+                        <label htmlFor="budgetRange" className="block font-somar text-sm font-medium text-text-dark mb-1.5">{t('contact.form.budgetRange')} *</label>
+                        <select
+                          id="budgetRange"
+                          className={`w-full bg-white border rounded-md px-4 py-3 font-somar text-sm focus:outline-none focus:ring-1 transition-colors ${errors.budgetRange ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : 'border-gray-200 focus:border-primary-cyan focus:ring-primary-cyan/30'}`}
+                          {...register('budgetRange', { required: t('contact.validation.budgetRequired') })}
+                        >
                           <option value="">{t('contact.form.budgetPlaceholder')}</option>
                           {BUDGET_OPTIONS.map((opt) => (
                             <option key={opt} value={opt}>{t(`contact.form.budgetOptions.${opt}`)}</option>
                           ))}
                         </select>
+                        {errors.budgetRange && <p role="alert" className="font-somar text-xs text-red-500 mt-1">{errors.budgetRange.message}</p>}
                       </div>
 
                       <div>
                         <label htmlFor="whatsappNumber" className="block font-somar text-sm font-medium text-text-dark mb-1.5">{t('contact.form.whatsapp')} *</label>
-                        <input
-                          id="whatsappNumber" type="tel"
+                        {/* IntlPhoneInput is controlled — we register the field manually with
+                            validation, then push the composed E.164 value via setValue. */}
+                        <input type="hidden" {...register('whatsappNumber', {
+                          required: t('contact.validation.whatsappRequired'),
+                          validate: (v) => {
+                            const digits = String(v || '').replace(/\D+/g, '')
+                            return digits.length >= 8 || t('contact.validation.whatsappInvalid')
+                          },
+                        })} />
+                        <IntlPhoneInput
+                          id="whatsappNumber"
+                          value={whatsappNumber || ''}
+                          onChange={(v) => setValue('whatsappNumber', v, { shouldValidate: true })}
+                          defaultIso={defaultPhoneIso}
+                          error={Boolean(errors.whatsappNumber)}
                           placeholder={t('contact.form.whatsappPlaceholder')}
-                          className={`w-full border rounded-md px-4 py-3 font-somar text-sm focus:outline-none focus:ring-1 transition-colors ${errors.whatsappNumber ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : 'border-gray-200 focus:border-primary-cyan focus:ring-primary-cyan/30'}`}
-                          {...register('whatsappNumber', { required: t('contact.validation.whatsappRequired') })}
                         />
                         {errors.whatsappNumber && <p role="alert" className="font-somar text-xs text-red-500 mt-1">{errors.whatsappNumber.message}</p>}
                       </div>
@@ -778,13 +779,14 @@ export default function Contact() {
 
                       <ThreeDayDateTimePicker
                         dateValue={preferredDate}
-                        onDateChange={(date) => { setValue('preferredDate', date); setValue('preferredSlot', '') }}
+                        onDateChange={(date) => { setValue('preferredDate', date, { shouldValidate: true }); setValue('preferredSlot', '', { shouldValidate: true }) }}
                         slotValue={preferredSlot}
-                        onSlotChange={(iso) => setValue('preferredSlot', iso)}
-                        market={MARKET_TO_BACKEND[watch('market')] || ''}
+                        onSlotChange={(iso) => setValue('preferredSlot', iso, { shouldValidate: true })}
                       />
-                      <input type="hidden" {...register('preferredDate')} />
-                      <input type="hidden" {...register('preferredSlot')} />
+                      <input type="hidden" {...register('preferredDate', { required: t('contact.validation.dateRequired') })} />
+                      <input type="hidden" {...register('preferredSlot', { required: t('contact.validation.slotRequired') })} />
+                      {errors.preferredDate && <p role="alert" className="font-somar text-xs text-red-500 mt-1">{errors.preferredDate.message}</p>}
+                      {errors.preferredSlot && !errors.preferredDate && <p role="alert" className="font-somar text-xs text-red-500 mt-1">{errors.preferredSlot.message}</p>}
 
                       {/* Honeypot — bots fill this; humans never see it. R13.
                           Obscure name + autoComplete="off" + new-password trick to avoid browser autofill. */}

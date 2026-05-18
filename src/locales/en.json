@@ -513,7 +513,7 @@
         "both": "Both",
         "other": "Other"
       },
-      "industry": "Industry (optional)",
+      "industry": "Industry",
       "industryPlaceholder": "Select your industry",
       "industryOptions": {
         "healthcare": "Healthcare",
@@ -525,7 +525,7 @@
         "multiBranch": "Multi-Branch",
         "other": "Other"
       },
-      "primaryGoal": "Primary Goal (optional)",
+      "primaryGoal": "Primary Goal",
       "primaryGoalPlaceholder": "What's your main priority?",
       "primaryGoalOptions": {
         "presence": "Build a strong digital presence that positions me as an authority in my market",
@@ -539,7 +539,7 @@
         "demandGeneration": "Demand Generation",
         "growthPartner360": "Growth Partner 360"
       },
-      "budgetRange": "Monthly Budget Range (optional)",
+      "budgetRange": "Monthly Budget Range",
       "budgetPlaceholder": "Select a range",
       "budgetOptions": {
         "under1k": "Under $1,000",
@@ -549,7 +549,7 @@
         "preferNot": "Prefer not to say"
       },
       "whatsapp": "WhatsApp Number",
-      "whatsappPlaceholder": "+20 1XX XXX XXXX",
+      "whatsappPlaceholder": "1XX XXX XXXX",
       "email": "Email Address",
       "emailPlaceholder": "your@email.com",
       "preferredDate": "Pick your preferred call date",
@@ -564,9 +564,14 @@
     "validation": {
       "fullNameRequired": "Full name is required",
       "businessNameRequired": "Business name is required",
-      "marketRequired": "Please select your market",
+      "industryRequired": "Please select your industry",
+      "primaryGoalRequired": "Please select your primary goal",
+      "budgetRequired": "Please select a budget range",
       "whatsappRequired": "WhatsApp number is required",
-      "emailInvalid": "Please enter a valid email address"
+      "whatsappInvalid": "Please enter a valid phone number",
+      "emailInvalid": "Please enter a valid email address",
+      "dateRequired": "Please pick a date for the call",
+      "slotRequired": "Please pick a time slot"
     }
   },
 
