@@ -44,7 +44,7 @@ function fmtLocalDate(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
-function ThreeDayDateTimePicker({ dateValue, onDateChange, slotValue, onSlotChange }) {
+function ThreeDayDateTimePicker({ dateValue, onDateChange, slotValue, onSlotChange, market }) {
   const { t, i18n } = useTranslation()
   const locale = i18n.language === 'ar' ? 'ar-EG' : 'en-US'
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -70,7 +70,7 @@ function ThreeDayDateTimePicker({ dateValue, onDateChange, slotValue, onSlotChan
     Promise.all(candidates.map(async (d) => {
       const ds = fmtLocalDate(d)
       try {
-        const res = await api.get('/api/calcom/slots', { query: { date: ds, timezone } })
+        const res = await api.get('/api/calcom/slots', { query: { date: ds, market: market || '', timezone } })
         return { ds, slots: Array.isArray(res?.slots) ? res.slots : [], configured: res?.configured !== false }
       } catch {
         return { ds, slots: [], configured: true }
@@ -89,7 +89,7 @@ function ThreeDayDateTimePicker({ dateValue, onDateChange, slotValue, onSlotChan
     })
     return () => { cancelled = true }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timezone])
+  }, [market, timezone])
 
   // Pick the first N candidates that have at least one slot — skipping weekends/holidays/full days.
   const visibleDays = useMemo(() => {
@@ -782,6 +782,10 @@ export default function Contact() {
                         onDateChange={(date) => { setValue('preferredDate', date, { shouldValidate: true }); setValue('preferredSlot', '', { shouldValidate: true }) }}
                         slotValue={preferredSlot}
                         onSlotChange={(iso) => setValue('preferredSlot', iso, { shouldValidate: true })}
+                        // Geo-resolved market keeps the per-market Cal.com event-type split working
+                        // without exposing a Market dropdown to the visitor. Falls back to Egypt
+                        // (the default geo) if geo hasn't resolved yet.
+                        market={geoMarket || 'Egypt'}
                       />
                       <input type="hidden" {...register('preferredDate', { required: t('contact.validation.dateRequired') })} />
                       <input type="hidden" {...register('preferredSlot', { required: t('contact.validation.slotRequired') })} />
