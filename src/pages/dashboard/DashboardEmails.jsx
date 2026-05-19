@@ -1,23 +1,26 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Save, Check, Loader2, AlertCircle, Send, RotateCcw, Power, ChevronRight, Eye, EyeOff } from 'lucide-react'
+import { Save, Check, Loader2, AlertCircle, Send, RotateCcw, Power, Eye, Code2, Copy } from 'lucide-react'
 import { api } from '../../lib/api'
 
 const INPUT = 'w-full bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-navara-blue/30'
 
-// Human-readable labels for the three templates. Keep them short so the list stays scannable.
+// Human-readable labels for the three templates. Keep them short so the tab bar stays scannable.
 const TEMPLATE_LABELS = {
   lead_notification: {
     title: 'Lead Notification',
+    short: 'Lead',
     description: 'Sent to your admin email each time a visitor submits the contact form.',
     audience: 'Admin',
   },
   booking_confirmation: {
     title: 'Booking Confirmation',
+    short: 'Confirmation',
     description: 'Sent to the visitor immediately after they book a discovery call.',
     audience: 'Visitor',
   },
   booking_reminder: {
     title: 'Booking Reminder',
+    short: 'Reminder',
     description: 'Sent to the visitor 2 hours before the meeting (or ASAP if booked closer).',
     audience: 'Visitor',
   },
@@ -46,68 +49,62 @@ export default function DashboardEmails() {
   useEffect(() => { fetchList() }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 max-w-5xl">
       <div>
         <h1 className="text-xl font-bold text-slate-800">Email Templates</h1>
-        <p className="text-sm text-slate-400 mt-0.5">Subject + body for every email the site sends. Variables wrapped in <code className="text-xs bg-slate-100 px-1 py-0.5 rounded">{`{{name}}`}</code> are substituted at send time.</p>
+        <p className="text-sm text-slate-400 mt-0.5">
+          Subject + body for the emails the site sends. Variables wrapped in{' '}
+          <code className="text-[11px] bg-slate-100 px-1 py-0.5 rounded">{`{{name}}`}</code>{' '}
+          are substituted at send time.
+        </p>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-2.5 text-sm text-red-600 flex items-center gap-2">
-          <AlertCircle size={14} /> {error}
+        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-2.5 text-sm text-red-600 flex items-start gap-2">
+          <AlertCircle size={14} className="mt-0.5 flex-shrink-0" />
+          <span>{error}</span>
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-5">
-        {/* ── Template list ── */}
-        <aside className="space-y-2">
-          {loading && !list.length ? (
-            <div className="flex items-center gap-2 text-sm text-slate-500"><Loader2 size={14} className="animate-spin" /> Loading…</div>
-          ) : (
-            list.map((t) => {
-              const label = TEMPLATE_LABELS[t.templateKey] || { title: t.templateKey, audience: '' }
-              const isSelected = t.templateKey === selectedKey
-              return (
-                <button
-                  key={t.templateKey}
-                  onClick={() => setSelectedKey(t.templateKey)}
-                  className={`w-full text-left bg-white border rounded-xl px-4 py-3 transition-colors ${isSelected ? 'border-navara-blue ring-2 ring-navara-blue/10' : 'border-slate-200 hover:border-slate-300'}`}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-semibold text-slate-800">{label.title}</span>
-                    <div className="flex items-center gap-1.5">
-                      {!t.enabled && <EyeOff size={12} className="text-amber-500" title="Disabled" />}
-                      <ChevronRight size={14} className="text-slate-400" />
-                    </div>
-                  </div>
-                  <div className="text-[11px] text-slate-400 mt-0.5 truncate">{t.subject}</div>
-                  <div className="flex items-center gap-2 mt-1.5">
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${label.audience === 'Visitor' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'}`}>
-                      {label.audience}
-                    </span>
-                    {t.enabled ? (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded font-medium bg-emerald-50 text-emerald-700">Enabled</span>
-                    ) : (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded font-medium bg-amber-50 text-amber-700">Disabled</span>
-                    )}
-                  </div>
-                </button>
-              )
-            })
-          )}
-        </aside>
-
-        {/* ── Editor ── */}
-        <section>
-          {selectedKey && (
-            <TemplateEditor
-              key={selectedKey}
-              templateKey={selectedKey}
-              onSaved={fetchList}
-            />
-          )}
-        </section>
+      {/* Tab bar — horizontal, scrollable on tight viewports */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+        {loading && !list.length ? (
+          <div className="flex items-center gap-2 text-sm text-slate-500 py-2">
+            <Loader2 size={14} className="animate-spin" /> Loading templates…
+          </div>
+        ) : (
+          list.map((t) => {
+            const label = TEMPLATE_LABELS[t.templateKey] || { title: t.templateKey, audience: '' }
+            const isSelected = t.templateKey === selectedKey
+            return (
+              <button
+                key={t.templateKey}
+                onClick={() => setSelectedKey(t.templateKey)}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                  isSelected
+                    ? 'bg-navara-blue text-white shadow-sm'
+                    : 'bg-white border border-slate-200 text-slate-600 hover:border-slate-300'
+                }`}
+              >
+                <span>{label.title}</span>
+                {!t.enabled && (
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded ${isSelected ? 'bg-white/20' : 'bg-amber-50 text-amber-700'}`}>
+                    Off
+                  </span>
+                )}
+              </button>
+            )
+          })
+        )}
       </div>
+
+      {selectedKey && (
+        <TemplateEditor
+          key={selectedKey}
+          templateKey={selectedKey}
+          onSaved={fetchList}
+        />
+      )}
     </div>
   )
 }
@@ -120,7 +117,7 @@ function TemplateEditor({ templateKey, onSaved }) {
   const [saved, setSaved] = useState(false)
   const [testing, setTesting] = useState(false)
   const [testResult, setTestResult] = useState(null)
-  const [showPreview, setShowPreview] = useState(false)
+  const [htmlMode, setHtmlMode] = useState('code') // 'code' | 'preview'
 
   async function fetchOne() {
     setLoading(true)
@@ -189,7 +186,11 @@ function TemplateEditor({ templateKey, onSaved }) {
   }
 
   if (loading && !data) {
-    return <div className="flex items-center gap-2 text-sm text-slate-500"><Loader2 size={14} className="animate-spin" /> Loading template…</div>
+    return (
+      <div className="flex items-center gap-2 text-sm text-slate-500 py-6">
+        <Loader2 size={14} className="animate-spin" /> Loading template…
+      </div>
+    )
   }
   if (!data) return null
 
@@ -197,15 +198,28 @@ function TemplateEditor({ templateKey, onSaved }) {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-bold text-slate-800">{label.title}</h2>
-          <p className="text-sm text-slate-500 mt-0.5">{label.description}</p>
-        </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
+      {/* Header strip */}
+      <div className="bg-white rounded-xl border border-slate-200 px-5 py-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-base font-bold text-slate-800">{label.title}</h2>
+              <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${label.audience === 'Visitor' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'}`}>
+                {label.audience}
+              </span>
+              {!data.fromDb && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded font-medium bg-slate-100 text-slate-500">
+                  Default (unsaved)
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-slate-500 mt-1 max-w-xl">{label.description}</p>
+          </div>
           <button
             onClick={() => setData((d) => ({ ...d, enabled: !d.enabled }))}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${data.enabled ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'}`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex-shrink-0 ${
+              data.enabled ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'
+            }`}
             title={data.enabled ? 'Click to disable this template' : 'Click to enable this template'}
           >
             <Power size={12} /> {data.enabled ? 'Enabled' : 'Disabled'}
@@ -213,87 +227,87 @@ function TemplateEditor({ templateKey, onSaved }) {
         </div>
       </div>
 
+      {/* Inline messages */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-2.5 text-sm text-red-600 flex items-center gap-2">
-          <AlertCircle size={14} /> {error}
+        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-2.5 text-sm text-red-600 flex items-start gap-2">
+          <AlertCircle size={14} className="mt-0.5 flex-shrink-0" /> <span>{error}</span>
         </div>
       )}
       {testResult && (
-        <div className={`border rounded-lg px-4 py-2.5 text-sm flex items-center gap-2 ${testResult.ok ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-red-50 border-red-200 text-red-600'}`}>
-          {testResult.ok ? <Check size={14} /> : <AlertCircle size={14} />} {testResult.message}
+        <div className={`border rounded-lg px-4 py-2.5 text-sm flex items-start gap-2 ${
+          testResult.ok ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-red-50 border-red-200 text-red-600'
+        }`}>
+          {testResult.ok ? <Check size={14} className="mt-0.5" /> : <AlertCircle size={14} className="mt-0.5" />}
+          <span>{testResult.message}</span>
         </div>
       )}
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div className="px-5 py-3.5 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
-          <h3 className="text-xs font-bold text-slate-600 uppercase tracking-widest">Subject</h3>
-        </div>
-        <div className="p-5">
-          <input
-            className={INPUT}
-            value={data.subject || ''}
-            onChange={(e) => setData((d) => ({ ...d, subject: e.target.value }))}
-            placeholder="e.g. Your call with Navara is confirmed — {{meetingDay}}"
-          />
-        </div>
-      </div>
+      {/* Subject */}
+      <Card title="Subject">
+        <input
+          className={INPUT}
+          value={data.subject || ''}
+          onChange={(e) => setData((d) => ({ ...d, subject: e.target.value }))}
+          placeholder="e.g. Your call with Navara is confirmed — {{meetingDay}}"
+        />
+      </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-5">
-        <div className="space-y-5">
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-            <div className="px-5 py-3.5 border-b border-slate-100 bg-slate-50">
-              <h3 className="text-xs font-bold text-slate-600 uppercase tracking-widest">Plain Text Body</h3>
-              <p className="text-[11px] text-slate-400 mt-0.5">Sent to email clients that don't render HTML. Also used by spam filters to verify content.</p>
-            </div>
-            <div className="p-5">
-              <textarea
-                className={`${INPUT} font-mono text-xs leading-relaxed`}
-                rows={12}
-                value={data.bodyText || ''}
-                onChange={(e) => setData((d) => ({ ...d, bodyText: e.target.value }))}
-              />
-            </div>
-          </div>
+      {/* Variable palette — horizontal row, scrollable on narrow screens */}
+      <VariableStrip variables={data.variables || []} />
 
-          {data.htmlSupported && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-              <div className="px-5 py-3.5 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
-                <div>
-                  <h3 className="text-xs font-bold text-slate-600 uppercase tracking-widest">HTML Body</h3>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Inner content only — header logo + footer are added automatically. You can use inline HTML tags.</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowPreview((v) => !v)}
-                  className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-navara-blue transition-colors"
-                  title="Render preview with sample data"
-                >
-                  {showPreview ? <EyeOff size={12} /> : <Eye size={12} />}
-                  {showPreview ? 'Hide preview' : 'Show preview'}
-                </button>
-              </div>
-              <div className="p-5">
-                {showPreview ? (
-                  <HtmlPreview html={data.bodyHtml || ''} variables={data.variables || []} />
-                ) : (
-                  <textarea
-                    className={`${INPUT} font-mono text-xs leading-relaxed`}
-                    rows={18}
-                    value={data.bodyHtml || ''}
-                    onChange={(e) => setData((d) => ({ ...d, bodyHtml: e.target.value }))}
-                  />
-                )}
-              </div>
+      {/* Plain-text body */}
+      <Card title="Plain Text Body" hint="Sent to email clients that don't render HTML. Also used by spam filters to verify content.">
+        <textarea
+          className={`${INPUT} font-mono text-xs leading-relaxed`}
+          rows={10}
+          value={data.bodyText || ''}
+          onChange={(e) => setData((d) => ({ ...d, bodyText: e.target.value }))}
+        />
+      </Card>
+
+      {/* HTML body */}
+      {data.htmlSupported && (
+        <Card
+          title="HTML Body"
+          hint="Inner content only — header logo and footer are added automatically. You can use inline HTML tags."
+          actions={
+            <div className="flex items-center gap-1 bg-slate-100 rounded-md p-0.5">
+              <button
+                type="button"
+                onClick={() => setHtmlMode('code')}
+                className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] font-semibold transition-colors ${
+                  htmlMode === 'code' ? 'bg-white text-slate-700 shadow-sm' : 'text-slate-500'
+                }`}
+              >
+                <Code2 size={11} /> Code
+              </button>
+              <button
+                type="button"
+                onClick={() => setHtmlMode('preview')}
+                className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] font-semibold transition-colors ${
+                  htmlMode === 'preview' ? 'bg-white text-slate-700 shadow-sm' : 'text-slate-500'
+                }`}
+              >
+                <Eye size={11} /> Preview
+              </button>
             </div>
+          }
+        >
+          {htmlMode === 'code' ? (
+            <textarea
+              className={`${INPUT} font-mono text-xs leading-relaxed`}
+              rows={16}
+              value={data.bodyHtml || ''}
+              onChange={(e) => setData((d) => ({ ...d, bodyHtml: e.target.value }))}
+            />
+          ) : (
+            <HtmlPreview html={data.bodyHtml || ''} />
           )}
-        </div>
+        </Card>
+      )}
 
-        <aside>
-          <VariablePalette variables={data.variables || []} />
-        </aside>
-      </div>
-
-      <div className="flex flex-wrap items-center gap-3">
+      {/* Actions */}
+      <div className="flex flex-wrap items-center gap-3 pt-2">
         <button
           onClick={save}
           disabled={saving}
@@ -326,8 +340,23 @@ function TemplateEditor({ templateKey, onSaved }) {
   )
 }
 
-// Right-rail variable palette — click any pill to copy the {{name}} to clipboard.
-function VariablePalette({ variables }) {
+function Card({ title, hint, actions, children }) {
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="px-5 py-3 border-b border-slate-100 bg-slate-50 flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-xs font-bold text-slate-600 uppercase tracking-widest">{title}</h3>
+          {hint && <p className="text-[11px] text-slate-400 mt-0.5">{hint}</p>}
+        </div>
+        {actions}
+      </div>
+      <div className="p-4">{children}</div>
+    </div>
+  )
+}
+
+// Horizontal scrollable strip of {{var}} pills. Click a pill to copy it to clipboard.
+function VariableStrip({ variables }) {
   const [copied, setCopied] = useState(null)
   if (!variables.length) return null
 
@@ -338,40 +367,40 @@ function VariablePalette({ variables }) {
       setCopied(name)
       setTimeout(() => setCopied(null), 1500)
     } catch {
-      // older browsers — fall back to no-op rather than throwing
+      // older browsers — no-op fallback
     }
   }
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden sticky top-4">
-      <div className="px-4 py-3 border-b border-slate-100 bg-slate-50">
+    <div className="bg-white rounded-xl border border-slate-200">
+      <div className="px-5 py-3 border-b border-slate-100 bg-slate-50">
         <h3 className="text-xs font-bold text-slate-600 uppercase tracking-widest">Variables</h3>
-        <p className="text-[11px] text-slate-400 mt-0.5">Click to copy.</p>
+        <p className="text-[11px] text-slate-400 mt-0.5">Click a pill to copy the placeholder. Paste it into the subject or body where you want the value substituted.</p>
       </div>
-      <ul className="p-3 space-y-1.5 max-h-[420px] overflow-y-auto">
+      <div className="p-3 flex flex-wrap gap-1.5">
         {variables.map((v) => (
-          <li key={v.name}>
-            <button
-              type="button"
-              onClick={() => copy(v.name)}
-              className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-slate-50 transition-colors group"
-            >
-              <code className={`text-[11px] font-mono ${copied === v.name ? 'text-emerald-600' : 'text-navara-blue'}`}>
-                {`{{${v.name}}}`}
-              </code>
-              {copied === v.name && <span className="text-[10px] text-emerald-600 ml-1.5">Copied!</span>}
-              <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">{v.description}</p>
-            </button>
-          </li>
+          <button
+            key={v.name}
+            type="button"
+            onClick={() => copy(v.name)}
+            title={v.description}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-mono border transition-colors ${
+              copied === v.name
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
+            }`}
+          >
+            <Copy size={10} className="opacity-60" />
+            {`{{${v.name}}}`}
+          </button>
         ))}
-      </ul>
+      </div>
     </div>
   )
 }
 
-// Renders HTML with placeholder substitutions filled by sample values, inside a sandboxed
-// iframe so the preview can't escape into the dashboard styles.
-function HtmlPreview({ html, variables }) {
+// Sandboxed iframe preview with sample data substituted in.
+function HtmlPreview({ html }) {
   const sample = useMemo(() => ({
     leadName: 'Aisha Ali', leadCompany: 'Acme Co', leadEmail: 'aisha@example.com',
     leadPhone: '+201001234567', leadMarket: 'Egypt', leadIndustry: 'Healthcare',
@@ -385,7 +414,9 @@ function HtmlPreview({ html, variables }) {
   }), [])
 
   const substituted = useMemo(() => {
-    const escape = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+    const escape = (s) => String(s ?? '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;')
     return (html || '').replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g, (_m, k) => escape(sample[k]))
   }, [html, sample])
 
