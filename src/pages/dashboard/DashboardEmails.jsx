@@ -1,6 +1,9 @@
-import { useState, useEffect, useMemo } from 'react'
-import { Save, Check, Loader2, AlertCircle, Send, RotateCcw, Power, Eye, Code2, Copy } from 'lucide-react'
-import { api } from '../../lib/api'
+import { useState, useEffect, useMemo, useRef } from 'react'
+import {
+  Save, Check, Loader2, AlertCircle, Send, RotateCcw, Power, Eye, Code2, Copy,
+  Paperclip, Upload, Trash2, FileText, ExternalLink,
+} from 'lucide-react'
+import { api, uploadWithProgress } from '../../lib/api'
 
 const INPUT = 'w-full bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-navara-blue/30'
 
@@ -144,6 +147,13 @@ function TemplateEditor({ templateKey, onSaved }) {
         bodyText: data.bodyText,
         bodyHtml: data.bodyHtml,
         enabled: data.enabled,
+        toAddress: data.toAddress ?? null,
+        ccAddress: data.ccAddress ?? null,
+        bccAddress: data.bccAddress ?? null,
+        replyToAddress: data.replyToAddress ?? null,
+        fromName: data.fromName ?? null,
+        fromEmail: data.fromEmail ?? null,
+        attachments: data.attachments || [],
       })
       setData((d) => ({ ...d, ...res, fromDb: true }))
       setSaved(true)
@@ -241,6 +251,18 @@ function TemplateEditor({ templateKey, onSaved }) {
           <span>{testResult.message}</span>
         </div>
       )}
+
+      {/* Recipients */}
+      <RecipientsCard
+        data={data}
+        onChange={(patch) => setData((d) => ({ ...d, ...patch }))}
+      />
+
+      {/* Attachments */}
+      <AttachmentsCard
+        attachments={data.attachments || []}
+        onChange={(next) => setData((d) => ({ ...d, attachments: next }))}
+      />
 
       {/* Subject */}
       <Card title="Subject">
@@ -397,6 +419,243 @@ function VariableStrip({ variables }) {
       </div>
     </div>
   )
+}
+
+function RecipientsCard({ data, onChange }) {
+  const defaultsHint = useMemo(() => {
+    if (data.templateKey === 'lead_notification') return 'Defaults to your admin Notify Email.'
+    return 'Defaults to the visitor\'s email; CC defaults to your admin Notify Email.'
+  }, [data.templateKey])
+
+  const FieldRow = ({ label, hint, value, onValueChange, placeholder }) => (
+    <div>
+      <div className="flex items-baseline justify-between gap-2">
+        <label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">{label}</label>
+        {hint && <span className="text-[10px] text-slate-400">{hint}</span>}
+      </div>
+      <input
+        className={`${INPUT} mt-1`}
+        value={value || ''}
+        onChange={(e) => onValueChange(e.target.value)}
+        placeholder={placeholder}
+      />
+    </div>
+  )
+
+  // Show recipient-extra variables as clickable pills.
+  const recipientVars = data.recipientVariables || []
+
+  return (
+    <Card title="Recipients & Sender" hint={`Override who this email is sent to and who it appears from. Leave blank to use defaults. ${defaultsHint}`}>
+      <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FieldRow
+            label="To"
+            hint="comma-separated"
+            value={data.toAddress}
+            onValueChange={(v) => onChange({ toAddress: v })}
+            placeholder={data.templateKey === 'lead_notification' ? '{{notifyEmail}}' : '{{visitorEmail}}'}
+          />
+          <FieldRow
+            label="CC"
+            hint="comma-separated"
+            value={data.ccAddress}
+            onValueChange={(v) => onChange({ ccAddress: v })}
+            placeholder={data.templateKey !== 'lead_notification' ? '{{notifyEmail}}' : 'optional'}
+          />
+          <FieldRow
+            label="BCC"
+            hint="comma-separated"
+            value={data.bccAddress}
+            onValueChange={(v) => onChange({ bccAddress: v })}
+            placeholder="optional"
+          />
+          <FieldRow
+            label="Reply-To"
+            value={data.replyToAddress}
+            onValueChange={(v) => onChange({ replyToAddress: v })}
+            placeholder="optional"
+          />
+          <FieldRow
+            label="From Name"
+            value={data.fromName}
+            onValueChange={(v) => onChange({ fromName: v })}
+            placeholder="defaults to Email Config"
+          />
+          <FieldRow
+            label="From Email"
+            value={data.fromEmail}
+            onValueChange={(v) => onChange({ fromEmail: v })}
+            placeholder="defaults to Email Config"
+          />
+        </div>
+
+        {recipientVars.length > 0 && (
+          <div className="border-t border-slate-100 pt-3">
+            <p className="text-[11px] text-slate-500 mb-2">
+              Variables you can paste into recipient fields (in addition to the template variables below):
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {recipientVars.map((v) => (
+                <RecipientVarPill key={v.name} name={v.name} description={v.description} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </Card>
+  )
+}
+
+function RecipientVarPill({ name, description }) {
+  const [copied, setCopied] = useState(false)
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(`{{${name}}}`)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    } catch { /* no-op */ }
+  }
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      title={description}
+      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-mono border transition-colors ${
+        copied
+          ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+          : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
+      }`}
+    >
+      <Copy size={10} className="opacity-60" />
+      {`{{${name}}}`}
+    </button>
+  )
+}
+
+function AttachmentsCard({ attachments, onChange }) {
+  const fileInputRef = useRef(null)
+  const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [uploadError, setUploadError] = useState(null)
+
+  async function handleFiles(files) {
+    setUploadError(null)
+    for (const file of files) {
+      if (file.size > 10 * 1024 * 1024) {
+        setUploadError(`${file.name} exceeds the 10 MB limit. Most SMTP servers reject larger attachments.`)
+        continue
+      }
+      setUploading(true)
+      setUploadProgress(0)
+      try {
+        const res = await uploadWithProgress('/api/upload', file, {
+          type: 'attachment',
+          onProgress: setUploadProgress,
+        })
+        const next = [...attachments, {
+          filename: res.filename || file.name,
+          url: res.url,
+          publicId: res.publicId || null,
+          contentType: res.contentType || file.type || null,
+          sizeBytes: res.sizeBytes || file.size,
+        }]
+        onChange(next)
+      } catch (err) {
+        setUploadError(err?.body?.error || err.message || 'Upload failed')
+      } finally {
+        setUploading(false)
+        setUploadProgress(0)
+      }
+    }
+    // Reset the file input so re-uploading the same file fires onChange again
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  function removeAt(idx) {
+    onChange(attachments.filter((_, i) => i !== idx))
+  }
+
+  return (
+    <Card
+      title="Attachments"
+      hint="Files attached to every send of this template. Max 10 MB per file. PDF, DOC/DOCX, XLS/XLSX, PPT/PPTX, CSV, TXT, JPG/PNG."
+    >
+      <div className="space-y-3">
+        {attachments.length > 0 && (
+          <ul className="divide-y divide-slate-100 border border-slate-200 rounded-lg bg-slate-50/40">
+            {attachments.map((a, i) => (
+              <li key={`${a.url}-${i}`} className="flex items-center gap-3 px-3 py-2.5">
+                <div className="w-8 h-8 rounded-md bg-white border border-slate-200 flex items-center justify-center flex-shrink-0">
+                  <FileText size={14} className="text-slate-500" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium text-slate-800 truncate">{a.filename || 'attachment'}</div>
+                  <div className="text-[11px] text-slate-500">
+                    {a.contentType || 'file'} · {formatBytes(a.sizeBytes)}
+                  </div>
+                </div>
+                <a
+                  href={a.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-400 hover:text-navara-blue transition-colors"
+                  title="Open file"
+                >
+                  <ExternalLink size={14} />
+                </a>
+                <button
+                  type="button"
+                  onClick={() => removeAt(i)}
+                  className="text-slate-400 hover:text-red-500 transition-colors"
+                  title="Remove from this template"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="flex items-center gap-2 bg-white border border-slate-200 text-slate-700 text-sm font-semibold px-3 py-2 rounded-lg hover:border-slate-300 transition-colors disabled:opacity-50"
+          >
+            {uploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+            {uploading ? `Uploading… ${uploadProgress}%` : 'Add attachment'}
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            className="hidden"
+            onChange={(e) => handleFiles(Array.from(e.target.files || []))}
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv,.txt,.jpg,.jpeg,.png"
+          />
+          {attachments.length === 0 && !uploading && (
+            <span className="text-xs text-slate-400 flex items-center gap-1"><Paperclip size={11} /> No files attached</span>
+          )}
+        </div>
+
+        {uploadError && (
+          <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-xs text-red-600 flex items-start gap-2">
+            <AlertCircle size={12} className="mt-0.5 flex-shrink-0" />
+            <span>{uploadError}</span>
+          </div>
+        )}
+      </div>
+    </Card>
+  )
+}
+
+function formatBytes(bytes) {
+  if (!bytes && bytes !== 0) return '—'
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
 }
 
 // Sandboxed iframe preview with sample data substituted in.

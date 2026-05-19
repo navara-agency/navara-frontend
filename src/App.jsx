@@ -33,6 +33,8 @@ const DashboardFAQ         = lazy(() => import('./pages/dashboard/DashboardFAQ')
 const DashboardSiteConfig  = lazy(() => import('./pages/dashboard/DashboardSiteConfig'))
 const DashboardTranslations= lazy(() => import('./pages/dashboard/DashboardTranslations'))
 const DashboardEmails      = lazy(() => import('./pages/dashboard/DashboardEmails'))
+const DashboardEmailServer = lazy(() => import('./pages/dashboard/DashboardEmailServer'))
+const DashboardAccount     = lazy(() => import('./pages/dashboard/DashboardAccount'))
 const DashboardLogin       = lazy(() => import('./pages/dashboard/DashboardLogin'))
 
 function AnimatedRoutes() {
@@ -103,6 +105,8 @@ function DashboardRoot() {
           <Route path="site-config"   element={<DashboardSiteConfig />} />
           <Route path="translations"  element={<DashboardTranslations />} />
           <Route path="emails"        element={<DashboardEmails />} />
+          <Route path="email-server"  element={<DashboardEmailServer />} />
+          <Route path="account"       element={<DashboardAccount />} />
         </Route>
       </Routes>
     </Suspense>
