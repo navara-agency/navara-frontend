@@ -3,7 +3,7 @@ import { NavLink, Outlet, Link, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Inbox, Folder, MessageSquare, Image,
   HelpCircle, Settings, Globe, LogOut, Menu, X, Bell, User,
-  ChevronRight, ArrowLeft,
+  ChevronRight, ArrowLeft, Mail,
 } from 'lucide-react'
 import logo from '../../assets/images/navara-logo-white-200w.png'
 import { useAuth } from '../../contexts/AuthContext'
@@ -30,6 +30,7 @@ const NAV_GROUPS = [
     items: [
       { to: '/dashboard/site-config', label: 'Site Config', icon: Settings },
       { to: '/dashboard/translations', label: 'Translations', icon: Globe },
+      { to: '/dashboard/emails', label: 'Email Templates', icon: Mail },
     ],
   },
 ]
