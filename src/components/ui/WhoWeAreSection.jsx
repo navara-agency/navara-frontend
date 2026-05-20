@@ -1,5 +1,21 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import { useApi } from '../../hooks/useApi'
+
+// In-code default the card falls back to when the API is unreachable or the trustCard
+// field hasn't been customised. Mirrors backend's DEFAULT_TRUST_CARD.
+const FALLBACK_TRUST_CARD = {
+  enabled: true,
+  pillLabel: 'Navara Growth',
+  metric: '+30%',
+  metricCaption: 'avg. revenue increase',
+  metricSubcaption: 'within first 90 days',
+  stats: [
+    { label: 'Clients', value: '50+' },
+    { label: 'Countries', value: '3' },
+    { label: 'Avg. ROAS', value: '4.2×' },
+  ],
+}
 
 const stagger = (reduced) => ({
   hidden: {},
@@ -21,6 +37,14 @@ export default function WhoWeAreSection() {
   const reduced = useReducedMotion()
 
   const blocks = t('homeV2.whoWeAre.blocks', { returnObjects: true })
+
+  // Trust card config from site-config — falls back to in-code defaults if API errors or
+  // the trustCard field hasn't been set yet (e.g. fresh DB before first dashboard save).
+  const { data: siteConfig } = useApi('/api/site-config')
+  const trustCard = { ...FALLBACK_TRUST_CARD, ...(siteConfig?.trustCard || {}) }
+  const trustStats = Array.isArray(trustCard.stats) && trustCard.stats.length
+    ? trustCard.stats
+    : FALLBACK_TRUST_CARD.stats
 
   return (
     <section
@@ -45,6 +69,7 @@ export default function WhoWeAreSection() {
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
 
           {/* ── Left: animated phone-wrap frame ── */}
+          {trustCard.enabled && (
           <motion.div
             className="flex-shrink-0 w-full lg:w-auto flex justify-center"
             variants={fadeLeft}
@@ -110,7 +135,7 @@ export default function WhoWeAreSection() {
                   {/* Logo pill */}
                   <div className="inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-full border border-white/20 bg-white/10">
                     <span className="w-1.5 h-1.5 rounded-full bg-primary-cyan" aria-hidden="true" />
-                    <span className="font-somar text-white text-xs font-medium">Navara Growth</span>
+                    <span className="font-somar text-white text-xs font-medium">{trustCard.pillLabel}</span>
                   </div>
 
                   {/* Center metric */}
@@ -125,21 +150,18 @@ export default function WhoWeAreSection() {
                         backgroundClip: 'text',
                       }}
                     >
-                      +30%
+                      {trustCard.metric}
                     </div>
-                    <p className="font-somar text-white/70 text-sm">avg. revenue increase</p>
-                    <p className="font-somar text-white/50 text-xs mt-1">within first 90 days</p>
+                    <p className="font-somar text-white/70 text-sm">{trustCard.metricCaption}</p>
+                    <p className="font-somar text-white/50 text-xs mt-1">{trustCard.metricSubcaption}</p>
                   </div>
 
-                  {/* Bottom stats */}
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { label: 'Clients', value: '50+' },
-                      { label: 'Countries', value: '3' },
-                      { label: 'Avg. ROAS', value: '4.2×' },
-                    ].map((s) => (
+                  {/* Bottom stats — admin-controlled. Show up to 4 in a single row; the
+                      grid scales columns so a smaller list still looks balanced. */}
+                  <div className={`grid gap-2 ${trustStats.length >= 4 ? 'grid-cols-4' : trustStats.length === 2 ? 'grid-cols-2' : trustStats.length === 1 ? 'grid-cols-1' : 'grid-cols-3'}`}>
+                    {trustStats.slice(0, 4).map((s, idx) => (
                       <div
-                        key={s.label}
+                        key={`${s.label}-${idx}`}
                         className="rounded-xl p-2 text-center"
                         style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}
                       >
@@ -152,6 +174,7 @@ export default function WhoWeAreSection() {
               </div>
             </div>
           </motion.div>
+          )}
 
           {/* ── Right: content ── */}
           <div className="flex-1 min-w-0">
