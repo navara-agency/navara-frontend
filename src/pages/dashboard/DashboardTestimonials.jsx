@@ -59,6 +59,19 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
   const [testVideo, setTestVideo] = useState(false)
   const [uploading, setUploading] = useState(null) // 'photo' | 'video' | 'thumb' | null
   const [uploadError, setUploadError] = useState(null)
+
+  function handleSubmit() {
+    if (!form.quote.trim()) {
+      setUploadError('Quote text is required.')
+      return
+    }
+    if (!form.videoUrl) {
+      setUploadError('A video is required — upload a file or paste a URL.')
+      return
+    }
+    setUploadError(null)
+    onSave(form)
+  }
   const photoRef = useRef()
   const videoRef = useRef()
   const thumbRef = useRef()
@@ -131,15 +144,15 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
         </button>
       </div>
 
-      <Field label="Quote Text">
+      <Field label={<>Quote Text <span className="text-red-500">*</span></>}>
         <textarea className={`${INPUT} h-24 resize-none`} value={form.quote} onChange={set('quote')} placeholder='"Navara brought real structure to our monthly operations..."' />
       </Field>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Client Name"><input className={INPUT} value={form.author} onChange={set('author')} placeholder="Dr. Sara K." /></Field>
-        <Field label="Title"><input className={INPUT} value={form.title} onChange={set('title')} placeholder="CEO" /></Field>
-        <Field label="Company"><input className={INPUT} value={form.company} onChange={set('company')} placeholder="Clinica Pro" /></Field>
-        <Field label="Industry"><input className={INPUT} value={form.industry} onChange={set('industry')} placeholder="Healthcare" /></Field>
+        <Field label="Client Name (optional)"><input className={INPUT} value={form.author} onChange={set('author')} placeholder="Dr. Sara K." /></Field>
+        <Field label="Title (optional)"><input className={INPUT} value={form.title} onChange={set('title')} placeholder="CEO" /></Field>
+        <Field label="Company (optional)"><input className={INPUT} value={form.company} onChange={set('company')} placeholder="Clinica Pro" /></Field>
+        <Field label="Industry (optional)"><input className={INPUT} value={form.industry} onChange={set('industry')} placeholder="Healthcare" /></Field>
         <Field label="Status">
           <select className={INPUT} value={form.status} onChange={set('status')}>
             <option value="draft">Draft</option>
@@ -157,7 +170,7 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
         <StarRating value={form.rating || 5} onChange={(v) => setForm((f) => ({ ...f, rating: v }))} />
       </Field>
 
-      <Field label="Photo (optional)">
+      <Field label="Client Photo (optional)">
         <div
           className={`border-2 border-dashed border-slate-200 rounded-lg p-4 text-center transition-colors ${uploading === 'photo' ? 'opacity-60' : 'cursor-pointer hover:border-navara-blue/40 hover:bg-blue-50/30'}`}
           onClick={() => uploading !== 'photo' && photoRef.current?.click()}
@@ -176,7 +189,7 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
         </div>
       </Field>
 
-      <Field label="Video — upload an MP4/MOV/WEBM (preferred) or paste an external URL">
+      <Field label={<>Video <span className="text-red-500">*</span> — upload an MP4/MOV/WEBM or paste a YouTube/external URL</>}>
         <div
           className={`border-2 border-dashed border-slate-200 rounded-lg p-4 text-center transition-colors ${uploading === 'video' ? 'opacity-60' : 'cursor-pointer hover:border-navara-blue/40 hover:bg-blue-50/30'} mb-2`}
           onClick={() => uploading !== 'video' && videoRef.current?.click()}
@@ -269,7 +282,7 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
 
       <div className="flex gap-2 pt-1">
         <button
-          onClick={() => onSave(form)}
+          onClick={handleSubmit}
           disabled={busy || !!uploading}
           className="flex items-center gap-2 px-4 py-2 rounded-lg bg-navara-blue text-white text-sm font-semibold hover:bg-blue-800 transition-colors disabled:opacity-50"
         >
@@ -287,12 +300,14 @@ function buildPayload(form) {
   const photo = form.photo || null
   const photoPublicId = form.photoPublicId || null
   const videoUrl = form.videoUrl || null
-  const videoPublicId = form.videoPublicId || (videoUrl && form.thumbnailUrl ? `external/${Date.now()}` : null)
+  // Only pass videoPublicId/thumbnailUrl for Cloudinary uploads (both are set by the uploader).
+  // External/YouTube URLs have no publicId or thumbnail — the backend now allows this.
+  const videoPublicId = form.videoPublicId || null
   const thumbnailUrl = form.thumbnailUrl || null
 
   return {
     quote: form.quote,
-    author: form.author,
+    author: form.author || null,
     title: form.title || null,
     company: form.company || null,
     industry: form.industry || null,

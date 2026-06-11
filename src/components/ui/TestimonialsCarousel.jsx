@@ -34,12 +34,14 @@ function directVideoUrl(url) {
 }
 
 function ClientFooter({ item }) {
+  const hasName = Boolean(item.clientName)
+  const hasTitle = Boolean(item.clientTitle)
   return (
     <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
       {item.clientPhoto ? (
         <img
           src={item.clientPhoto}
-          alt={item.clientName}
+          alt={item.clientName || 'Client'}
           className="w-10 h-10 rounded-full object-cover flex-shrink-0 ring-1 ring-gray-100"
         />
       ) : (
@@ -51,14 +53,20 @@ function ClientFooter({ item }) {
           {getInitials(item.clientName)}
         </div>
       )}
-      <div>
-        <p className="font-somar font-semibold text-primary-dark-blue text-sm leading-tight">
-          {item.clientName}
-        </p>
-        <p className="font-somar text-text-gray text-xs leading-tight mt-0.5">
-          {item.clientTitle}
-        </p>
-      </div>
+      {(hasName || hasTitle) && (
+        <div>
+          {hasName && (
+            <p className="font-somar font-semibold text-primary-dark-blue text-sm leading-tight">
+              {item.clientName}
+            </p>
+          )}
+          {hasTitle && (
+            <p className="font-somar text-text-gray text-xs leading-tight mt-0.5">
+              {item.clientTitle}
+            </p>
+          )}
+        </div>
+      )}
     </div>
   )
 }
@@ -101,7 +109,7 @@ function VideoCard({ item, isActive, onActivate }) {
       onKeyDown={handleCardKey}
       tabIndex={handleCardClick ? 0 : -1}
       role={handleCardClick ? 'button' : undefined}
-      aria-label={handleCardClick ? `Activate ${item.clientName} testimonial` : undefined}
+      aria-label={handleCardClick ? `View${item.clientName ? ` ${item.clientName}'s` : ''} testimonial` : undefined}
       style={{
         border: isActive ? '1.5px solid rgba(3,201,224,0.45)' : '1px solid rgba(0,0,0,0.07)',
         boxShadow: isActive
@@ -252,13 +260,19 @@ export default function TestimonialsCarousel({ testimonials }) {
 
   const total = testimonials.length
 
-  // Clone array: [last CLONES items] + [real items] + [first CLONES items]
-  // This lets us slide in either direction and snap-back invisibly.
-  const extended = useMemo(() => [
-    ...testimonials.slice(-CLONES),
-    ...testimonials,
-    ...testimonials.slice(0, CLONES),
-  ], [testimonials])
+  // Clone array: exactly CLONES head clones + real items + CLONES tail clones.
+  // We cycle through items when total < CLONES so rawIndex === CLONES always
+  // points to the first real item regardless of how many testimonials there are.
+  const extended = useMemo(() => {
+    if (total === 0) return []
+    const head = Array.from({ length: CLONES }, (_, i) =>
+      testimonials[((total - CLONES + i) % total + total) % total]
+    )
+    const tail = Array.from({ length: CLONES }, (_, i) =>
+      testimonials[i % total]
+    )
+    return [...head, ...testimonials, ...tail]
+  }, [testimonials, total])
 
   // rawIndex is the position in `extended`. Real items occupy [CLONES, CLONES+total).
   const [rawIndex, setRawIndex] = useState(CLONES)
@@ -270,6 +284,14 @@ export default function TestimonialsCarousel({ testimonials }) {
   const [visibleCount, setVisibleCount] = useState(getVisibleCount)
   const [trackWidth, setTrackWidth] = useState(0)
   const [paused, setPaused] = useState(false)
+
+  // Reset carousel to the first item whenever the testimonials list changes size.
+  // This prevents rawIndex from pointing outside the new extended array.
+  useEffect(() => {
+    targetRef.current = CLONES
+    setRawIndex(CLONES)
+    isAnimating.current = false
+  }, [total])
 
   const trackRef = useRef(null)
   const touchStartX = useRef(null)
