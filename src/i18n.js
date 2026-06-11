@@ -97,9 +97,17 @@ async function loadLiveTranslations() {
   }
 }
 
-// Fire-and-forget on app startup — bundled values render immediately; live values swap in
-// as soon as the API responds. Wrapped so any failure in this side-effect never crashes the app.
-Promise.resolve().then(() => loadLiveTranslations()).catch(() => { /* ignore */ })
+// Defer live translation fetch until the browser is idle so it doesn't compete
+// with critical resources on initial load. Falls back to a 3 s timeout on browsers
+// that don't support requestIdleCallback (e.g. older Safari).
+if (typeof window !== 'undefined') {
+  const run = () => loadLiveTranslations().catch(() => { /* ignore */ })
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(run, { timeout: 3000 })
+  } else {
+    setTimeout(run, 3000)
+  }
+}
 
 // Expose a manual reload hook so the dashboard's translation save can flush the cache
 // without forcing a full page reload (we still recommend hard-refresh in dev for clarity).

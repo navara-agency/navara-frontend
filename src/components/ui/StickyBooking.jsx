@@ -23,11 +23,17 @@ export default function StickyBooking() {
   }
 
   useEffect(() => {
+    let ticking = false
     const onScroll = () => {
-      const scrollY = window.scrollY
-      const nearBottom =
-        window.innerHeight + scrollY >= document.documentElement.scrollHeight - 200
-      setVisible(scrollY > 400 && !nearBottom)
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY
+        const nearBottom =
+          window.innerHeight + scrollY >= document.documentElement.scrollHeight - 200
+        setVisible(scrollY > 400 && !nearBottom)
+        ticking = false
+      })
     }
 
     window.addEventListener('scroll', onScroll, { passive: true })

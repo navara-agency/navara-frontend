@@ -102,7 +102,15 @@ export default function FloatingContacts() {
   const instagramUrl = siteConfig?.global?.instagramUrl || INSTAGRAM_URL
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > SCROLL_THRESHOLD)
+    let ticking = false
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        setVisible(window.scrollY > SCROLL_THRESHOLD)
+        ticking = false
+      })
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])

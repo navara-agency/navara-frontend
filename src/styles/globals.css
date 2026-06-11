@@ -249,10 +249,15 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: translateX(-50%); }
 }
 
+.marquee-wrapper {
+  contain: layout style;
+}
+
 .marquee-track {
   display: flex;
   width: max-content;
   animation: marqueeScroll 30s linear infinite;
+  will-change: transform;
 }
 
 .marquee-wrapper:hover .marquee-track {
