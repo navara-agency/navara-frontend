@@ -500,7 +500,7 @@ export default function TestimonialsCarousel({ testimonials }) {
           </p>
         </motion.div>
 
-        {/* Static layout when fewer cards than visible slots — show real cards + placeholders */}
+        {/* Static layout when fewer cards than visible slots */}
         {total < visibleCount ? (
           <motion.div
             className="py-4"
@@ -509,24 +509,32 @@ export default function TestimonialsCarousel({ testimonials }) {
             viewport={{ once: true, amount: 0.15 }}
             transition={reduced ? { duration: 0 } : { duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="flex" style={{ gap: GAP }}>
-              {testimonials.map((item) => (
-                <div
-                  key={item.id}
-                  style={{ flex: `0 0 calc((100% - ${GAP * (visibleCount - 1)}px) / ${visibleCount})`, minWidth: 0 }}
-                >
-                  <VideoCard item={item} isActive={true} onActivate={null} />
-                </div>
-              ))}
-              {Array.from({ length: visibleCount - total }).map((_, i) => (
-                <div
-                  key={`ph-${i}`}
-                  style={{ flex: `0 0 calc((100% - ${GAP * (visibleCount - 1)}px) / ${visibleCount})`, minWidth: 0 }}
-                >
+            {total === 1 ? (
+              // Single card: placeholder | real | placeholder — card sits in the centre slot
+              <div className="flex" style={{ gap: GAP }}>
+                <div style={{ flex: `0 0 calc((100% - ${GAP * (visibleCount - 1)}px) / ${visibleCount})`, minWidth: 0 }}>
                   <PlaceholderCard />
                 </div>
-              ))}
-            </div>
+                <div style={{ flex: `0 0 calc((100% - ${GAP * (visibleCount - 1)}px) / ${visibleCount})`, minWidth: 0 }}>
+                  <VideoCard item={testimonials[0]} isActive={true} onActivate={null} />
+                </div>
+                <div style={{ flex: `0 0 calc((100% - ${GAP * (visibleCount - 1)}px) / ${visibleCount})`, minWidth: 0 }}>
+                  <PlaceholderCard />
+                </div>
+              </div>
+            ) : (
+              // 2 cards (visibleCount=3): centre them side-by-side, no placeholder
+              <div className="flex justify-center" style={{ gap: GAP }}>
+                {testimonials.map((item) => (
+                  <div
+                    key={item.id}
+                    style={{ flex: `0 0 calc((100% - ${GAP * (visibleCount - 1)}px) / ${visibleCount})`, minWidth: 0 }}
+                  >
+                    <VideoCard item={item} isActive={true} onActivate={null} />
+                  </div>
+                ))}
+              </div>
+            )}
           </motion.div>
         ) : (
         <motion.div
