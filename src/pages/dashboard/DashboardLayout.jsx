@@ -19,7 +19,7 @@ const NAV_GROUPS = [
   {
     label: 'Website Content',
     items: [
-      { to: '/dashboard/case-studies', label: 'Case Studies', icon: Folder },
+      { to: '/dashboard/case-studies', label: 'Case Studies', icon: Folder, disabled: true },
       { to: '/dashboard/testimonials', label: 'Testimonials', icon: MessageSquare },
       { to: '/dashboard/logos', label: 'Client Logos', icon: Image },
       { to: '/dashboard/faq', label: 'FAQ', icon: HelpCircle },
@@ -37,7 +37,16 @@ const NAV_GROUPS = [
   },
 ]
 
-function SidebarLink({ to, label, icon: Icon, end }) {
+function SidebarLink({ to, label, icon: Icon, end, disabled }) {
+  if (disabled) {
+    return (
+      <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/30 cursor-not-allowed select-none">
+        <Icon size={16} className="flex-shrink-0" />
+        <span>{label}</span>
+        <span className="ml-auto text-[10px] font-semibold bg-white/10 text-white/40 px-1.5 py-0.5 rounded-full">Soon</span>
+      </div>
+    )
+  }
   return (
     <NavLink
       to={to}

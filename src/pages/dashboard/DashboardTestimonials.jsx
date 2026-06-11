@@ -91,9 +91,14 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
     }
   }
 
+  const VIDEO_MAX_BYTES = 100 * 1024 * 1024 // 100 MB — matches server-side limit
   const [videoProgress, setVideoProgress] = useState(0)
   async function handleVideo(file) {
     if (!file) return
+    if (file.size > VIDEO_MAX_BYTES) {
+      setUploadError('File is too large. Maximum video size is 100 MB.')
+      return
+    }
     setUploading('video')
     setUploadError(null)
     setVideoProgress(0)
@@ -222,7 +227,7 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
             <>
               <Upload size={18} className="mx-auto text-slate-400 mb-1" />
               <p className="text-xs text-slate-500">Click or drag a video file to upload</p>
-              <p className="text-xs text-slate-400 mt-0.5">MP4, MOV, WEBM</p>
+              <p className="text-xs text-slate-400 mt-0.5">MP4, MOV, WEBM · Max 100 MB</p>
             </>
           )}
         </div>

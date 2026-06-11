@@ -1,7 +1,7 @@
 import { useState, useLayoutEffect, useEffect, useRef, useCallback, useMemo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Star, Play, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Star, Play, ChevronLeft, ChevronRight, User, Clock } from 'lucide-react'
 
 const GAP = 24
 const AUTO_MS = 4800
@@ -15,7 +15,7 @@ function getVisibleCount() {
 }
 
 function getInitials(name) {
-  if (!name) return '?'
+  if (!name) return null
   return name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
 }
 
@@ -50,7 +50,9 @@ function ClientFooter({ item }) {
           style={{ background: 'linear-gradient(135deg, #03c9e0, #52379f)' }}
           aria-hidden="true"
         >
-          {getInitials(item.clientName)}
+          {getInitials(item.clientName)
+            ? getInitials(item.clientName)
+            : <User size={16} className="text-white/90" />}
         </div>
       )}
       {(hasName || hasTitle) && (
@@ -234,6 +236,54 @@ function ArrowButton({ onClick, label, children }) {
     >
       {children}
     </button>
+  )
+}
+
+function PlaceholderCard() {
+  const { t } = useTranslation()
+  return (
+    <article
+      className="flex flex-col rounded-2xl overflow-hidden h-full bg-white"
+      style={{
+        border: '1px dashed rgba(0,0,0,0.12)',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.03)',
+        minHeight: 280,
+      }}
+    >
+      <div className="h-1 w-full flex-shrink-0" style={{ background: 'linear-gradient(to right, #e2e8f0, #f1f5f9)' }} />
+      <div
+        className="relative w-full flex-shrink-0 flex flex-col items-center justify-center gap-3"
+        style={{ paddingTop: '56.25%' }}
+      >
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-slate-50">
+          <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
+            <Clock size={20} className="text-slate-300" />
+          </div>
+          <span className="font-somar text-slate-400 text-xs font-medium">
+            {t('homeV2.testimonials.comingSoon', 'Coming soon')}
+          </span>
+        </div>
+      </div>
+      <div className="flex flex-col flex-1 p-5">
+        <div className="flex gap-0.5 mb-3">
+          {[...Array(5)].map((_, i) => (
+            <Star key={i} size={13} className="text-slate-200" aria-hidden="true" />
+          ))}
+        </div>
+        <div className="flex-1 mb-4 space-y-2">
+          <div className="h-3 rounded-full bg-slate-100 w-full" />
+          <div className="h-3 rounded-full bg-slate-100 w-5/6" />
+          <div className="h-3 rounded-full bg-slate-100 w-4/6" />
+        </div>
+        <div className="pt-4 border-t border-gray-100 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-slate-100 flex-shrink-0" />
+          <div className="space-y-1.5">
+            <div className="h-2.5 rounded-full bg-slate-100 w-24" />
+            <div className="h-2 rounded-full bg-slate-100 w-16" />
+          </div>
+        </div>
+      </div>
+    </article>
   )
 }
 
@@ -450,7 +500,35 @@ export default function TestimonialsCarousel({ testimonials }) {
           </p>
         </motion.div>
 
-        {/* Carousel */}
+        {/* Static layout when fewer cards than visible slots — show real cards + placeholders */}
+        {total < visibleCount ? (
+          <motion.div
+            className="py-4"
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={reduced ? { duration: 0 } : { duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="flex" style={{ gap: GAP }}>
+              {testimonials.map((item) => (
+                <div
+                  key={item.id}
+                  style={{ flex: `0 0 calc((100% - ${GAP * (visibleCount - 1)}px) / ${visibleCount})`, minWidth: 0 }}
+                >
+                  <VideoCard item={item} isActive={true} onActivate={null} />
+                </div>
+              ))}
+              {Array.from({ length: visibleCount - total }).map((_, i) => (
+                <div
+                  key={`ph-${i}`}
+                  style={{ flex: `0 0 calc((100% - ${GAP * (visibleCount - 1)}px) / ${visibleCount})`, minWidth: 0 }}
+                >
+                  <PlaceholderCard />
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        ) : (
         <motion.div
           className="relative"
           initial={{ opacity: 0, y: 32 }}
@@ -514,9 +592,10 @@ export default function TestimonialsCarousel({ testimonials }) {
             </>
           )}
         </motion.div>
+        )} {/* end total >= visibleCount carousel */}
 
-        {/* Dots + progress */}
-        {total > 1 && (
+        {/* Dots + progress — only when the full carousel is active */}
+        {total >= visibleCount && total > 1 && (
           <div className="flex flex-col items-center gap-3 mt-8">
             <div className="flex items-center gap-2" role="tablist" aria-label="Testimonial slides">
               {testimonials.map((_, i) => (
