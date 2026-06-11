@@ -1,15 +1,24 @@
 import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
 import { motion, useReducedMotion } from 'framer-motion'
+import useLiteMotion from '../../hooks/useLiteMotion'
 
 export default function IndustryCard({ titleKey, bodyKey, icon: Icon, glowDelay = 0 }) {
   const { t } = useTranslation()
   const reduced = useReducedMotion()
+  const lite = useLiteMotion()
 
   return (
     <motion.div
       className="relative rounded-2xl p-8 h-full overflow-hidden group cursor-default"
-      style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(82,55,159,0.06)' }}
+      style={{
+        background: lite ? 'rgba(255,255,255,0.94)' : 'rgba(255,255,255,0.85)',
+        // backdrop-filter forces a re-sample of everything behind the card on
+        // every scrolled frame — skip it on mobile
+        backdropFilter: lite ? 'none' : 'blur(8px)',
+        border: '1px solid rgba(255,255,255,0.9)',
+        boxShadow: '0 2px 16px rgba(82,55,159,0.06)',
+      }}
       whileHover={reduced ? {} : { y: -8, boxShadow: '0 16px 48px rgba(3,201,224,0.13)' }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
     >
@@ -17,7 +26,7 @@ export default function IndustryCard({ titleKey, bodyKey, icon: Icon, glowDelay 
       <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] overflow-hidden pointer-events-none">
         <div className="h-full w-full"
           style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
-        {!reduced && (
+        {!lite && (
           <motion.div className="absolute top-0 h-full w-14 pointer-events-none"
             style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%)' }}
             animate={{ left: ['-20%', '120%'] }}
@@ -34,7 +43,7 @@ export default function IndustryCard({ titleKey, bodyKey, icon: Icon, glowDelay 
       <motion.div aria-hidden="true"
         className="absolute -bottom-1 -end-1 opacity-[0.04] pointer-events-none group-hover:opacity-[0.08] transition-opacity duration-500"
         style={{ color: 'rgba(82,55,159,1)' }}
-        animate={reduced ? {} : { y: [0, -8, 0], x: [0, -4, 0] }}
+        animate={lite ? {} : { y: [0, -8, 0], x: [0, -4, 0] }}
         transition={{ duration: 5 + glowDelay * 2, repeat: Infinity, ease: 'easeInOut' }}
       >
         <Icon size={84} strokeWidth={1} />
@@ -45,7 +54,7 @@ export default function IndustryCard({ titleKey, bodyKey, icon: Icon, glowDelay 
         <motion.div
           className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
           style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.15) 0%, rgba(82,55,159,0.12) 100%)', border: '1px solid rgba(3,201,224,0.28)' }}
-          animate={reduced ? {} : {
+          animate={lite ? {} : {
             boxShadow: [
               '0 0 0px rgba(3,201,224,0)',
               '0 0 14px rgba(3,201,224,0.25)',

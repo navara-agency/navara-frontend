@@ -1,7 +1,11 @@
 import { motion, useReducedMotion } from 'framer-motion'
+import useLiteMotion from '../../hooks/useLiteMotion'
 
 export default function LiquidButton({ children, calLink, onClick, className = '' }) {
   const reduced = useReducedMotion()
+  // The liquid blobs animate width/height-scale paths continuously — too
+  // expensive for mobile GPUs, so they render only on desktop.
+  const lite = useLiteMotion()
 
   const extraProps = calLink
     ? { 'data-cal-link': calLink, 'data-cal-config': '{"layout":"month_view"}' }
@@ -26,7 +30,7 @@ export default function LiquidButton({ children, calLink, onClick, className = '
       onClick={onClick}
       {...extraProps}
     >
-      {!reduced && (
+      {!lite && (
         <motion.div
           aria-hidden="true"
           style={{
@@ -42,7 +46,7 @@ export default function LiquidButton({ children, calLink, onClick, className = '
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
       )}
-      {!reduced && (
+      {!lite && (
         <motion.div
           aria-hidden="true"
           style={{
@@ -58,7 +62,7 @@ export default function LiquidButton({ children, calLink, onClick, className = '
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
         />
       )}
-      {!reduced && (
+      {!lite && (
         <motion.div
           aria-hidden="true"
           style={{

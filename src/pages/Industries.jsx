@@ -8,6 +8,7 @@ import FadeUp from '../components/animations/FadeUp'
 import IndustryCard from '../components/ui/IndustryCard'
 import CTABanner from '../components/ui/CTABanner'
 import PhotoBackdrop from '../components/ui/PhotoBackdrop'
+import useLiteMotion from '../hooks/useLiteMotion'
 
 const PageWrapper = ({ children }) => (
   <motion.div
@@ -64,13 +65,13 @@ const SectionAccent = () => (
 
 /* Live pulsing badge */
 function LiveBadge({ children }) {
-  const reduced = useReducedMotion()
+  const lite = useLiteMotion()
   return (
     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-somar text-xs font-semibold"
       style={{ background: 'rgba(3,201,224,0.08)', border: '1px solid rgba(3,201,224,0.22)', color: '#03c9e0' }}>
       <span className="relative flex w-2 h-2">
         <span className="absolute inset-0 rounded-full bg-primary-cyan" />
-        {!reduced && (
+        {!lite && (
           <motion.span className="absolute inset-0 rounded-full bg-primary-cyan"
             animate={{ scale: [1, 2.2, 1], opacity: [0.8, 0, 0.8] }}
             transition={{ duration: 1.8, repeat: Infinity }} />
@@ -84,6 +85,7 @@ function LiveBadge({ children }) {
 export default function Industries() {
   const { t } = useTranslation()
   const reduced = useReducedMotion()
+  const lite = useLiteMotion()
   const heroRef = useRef(null)
   const [isMobile] = useState(() =>
     typeof window !== 'undefined' && window.innerWidth < 768
@@ -112,7 +114,7 @@ export default function Industries() {
           style={{ background: 'linear-gradient(155deg, rgba(6,0,120,0.9) 0%, rgba(4,0,78,0.85) 55%, rgba(20,5,100,0.9) 100%)' }} />
 
         {/* ── Pulsing concentric rings ── */}
-        {!reduced && !isMobile && [0, 1, 2].map(i => (
+        {!lite && !isMobile && [0, 1, 2].map(i => (
           <motion.div key={i} aria-hidden="true"
             className="absolute rounded-full pointer-events-none"
             style={{
@@ -128,20 +130,20 @@ export default function Industries() {
         {!isMobile && <>
         <Orb
           style={{ top: '5%', right: '8%', width: 380, height: 380, background: 'radial-gradient(circle, rgba(3,201,224,0.13) 0%, transparent 70%)', filter: 'blur(70px)' }}
-          animate={reduced ? {} : { y: [0, -28, 0], x: [0, 14, 0] }}
+          animate={lite ? {} : { y: [0, -28, 0], x: [0, 14, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }} />
         <Orb
           style={{ bottom: '4%', left: '4%', width: 310, height: 310, background: 'radial-gradient(circle, rgba(82,55,159,0.18) 0%, transparent 70%)', filter: 'blur(60px)' }}
-          animate={reduced ? {} : { y: [0, 22, 0], x: [0, -10, 0] }}
+          animate={lite ? {} : { y: [0, 22, 0], x: [0, -10, 0] }}
           transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2.5 }} />
         <Orb
           style={{ top: '38%', right: '2%', width: 200, height: 200, background: 'radial-gradient(circle, rgba(255,165,205,0.1) 0%, transparent 70%)', filter: 'blur(45px)' }}
-          animate={reduced ? {} : { y: [0, -14, 0], opacity: [0.6, 1, 0.6] }}
+          animate={lite ? {} : { y: [0, -14, 0], opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }} />
         </>}
 
         {/* ── Diagonal shimmer sweep ── */}
-        {!reduced && !isMobile && (
+        {!lite && !isMobile && (
           <motion.div aria-hidden="true" className="absolute pointer-events-none"
             style={{ width: 3, height: '220%', top: '-60%', background: 'linear-gradient(to bottom, transparent 0%, rgba(3,201,224,0.15) 50%, transparent 100%)', rotate: 28, transformOrigin: 'center' }}
             animate={{ left: ['-10%', '115%'] }}
@@ -149,7 +151,7 @@ export default function Industries() {
         )}
 
         {/* ── Floating ghost industry icons — desktop only ── */}
-        {!reduced && !isMobile && HERO_GHOSTS.map(({ Icon, size, left, top, dur, dx, dy, rotA, delay }, i) => (
+        {!lite && !isMobile && HERO_GHOSTS.map(({ Icon, size, left, top, dur, dx, dy, rotA, delay }, i) => (
           <motion.div key={i} aria-hidden="true"
             className="absolute pointer-events-none"
             style={{ left, top, color: i % 2 === 0 ? 'rgba(3,201,224,0.07)' : 'rgba(82,55,159,0.07)' }}
@@ -161,7 +163,7 @@ export default function Industries() {
         ))}
 
         {/* RefreshCw continuously spins — desktop only */}
-        {!reduced && !isMobile && (
+        {!lite && !isMobile && (
           <motion.div aria-hidden="true"
             className="absolute pointer-events-none"
             style={{ left: SPIN_GHOST.left, top: SPIN_GHOST.top, color: 'rgba(3,201,224,0.07)' }}
@@ -173,7 +175,7 @@ export default function Industries() {
         )}
 
         {/* ── Micro-particles ── */}
-        {!reduced && [
+        {!lite && [
           { cx: '16%', cy: '35%', color: 'rgba(3,201,224,0.7)',  size: 3, dur: 4.5, delay: 0 },
           { cx: '32%', cy: '72%', color: 'rgba(82,55,159,0.65)', size: 2, dur: 6,   delay: 1 },
           { cx: '54%', cy: '22%', color: 'rgba(255,165,205,0.6)',size: 2.5,dur: 5, delay: 0.6 },
@@ -229,15 +231,15 @@ export default function Industries() {
         {/* Animated atmosphere blobs */}
         <Orb
           style={{ top: '-10%', left: '-4%', width: 560, height: 560, background: 'radial-gradient(circle, rgba(3,201,224,0.06) 0%, transparent 70%)', filter: 'blur(90px)' }}
-          animate={reduced ? {} : { scale: [1, 1.1, 1], opacity: [0.7, 1, 0.7] }}
+          animate={lite ? {} : { scale: [1, 1.1, 1], opacity: [0.7, 1, 0.7] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }} />
         <Orb
           style={{ bottom: '-8%', right: '-3%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(82,55,159,0.07) 0%, transparent 70%)', filter: 'blur(85px)' }}
-          animate={reduced ? {} : { scale: [1, 1.12, 1] }}
+          animate={lite ? {} : { scale: [1, 1.12, 1] }}
           transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 4 }} />
         <Orb
           style={{ top: '45%', left: '48%', width: 300, height: 300, background: 'radial-gradient(circle, rgba(3,201,224,0.05) 0%, transparent 70%)', filter: 'blur(70px)', transform: 'translate(-50%,-50%)' }}
-          animate={reduced ? {} : { scale: [1, 1.2, 1] }}
+          animate={lite ? {} : { scale: [1, 1.2, 1] }}
           transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 7 }} />
 
         <div className="max-w-[1200px] mx-auto px-6 md:px-8 relative z-10">
@@ -284,11 +286,11 @@ export default function Industries() {
 
         <Orb
           style={{ top: '-8%', right: '-4%', width: 520, height: 520, background: 'radial-gradient(circle, rgba(82,55,159,0.09) 0%, transparent 70%)', filter: 'blur(90px)' }}
-          animate={reduced ? {} : { scale: [1, 1.1, 1], opacity: [0.7, 1, 0.7] }}
+          animate={lite ? {} : { scale: [1, 1.1, 1], opacity: [0.7, 1, 0.7] }}
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }} />
         <Orb
           style={{ bottom: '-6%', left: '-3%', width: 440, height: 440, background: 'radial-gradient(circle, rgba(3,201,224,0.07) 0%, transparent 70%)', filter: 'blur(80px)' }}
-          animate={reduced ? {} : { scale: [1, 1.12, 1] }}
+          animate={lite ? {} : { scale: [1, 1.12, 1] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 3.5 }} />
 
         <div className="max-w-[1200px] mx-auto px-6 md:px-8 relative z-10">
@@ -303,7 +305,7 @@ export default function Industries() {
           <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
 
             {/* Animated connecting line between cards — desktop only */}
-            {!reduced && (
+            {!lite && (
               <div aria-hidden="true" className="hidden sm:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 items-center justify-center pointer-events-none" style={{ width: 48, zIndex: 20 }}>
                 <motion.div className="w-full h-px"
                   style={{ background: 'linear-gradient(90deg, rgba(3,201,224,0.4), rgba(82,55,159,0.4))' }}
@@ -313,7 +315,7 @@ export default function Industries() {
                   transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }} />
                 <motion.div className="absolute w-2 h-2 rounded-full"
                   style={{ background: 'linear-gradient(135deg, #03c9e0, #52379f)' }}
-                  animate={reduced ? {} : { scale: [1, 1.6, 1], opacity: [0.8, 0.3, 0.8] }}
+                  animate={lite ? {} : { scale: [1, 1.6, 1], opacity: [0.8, 0.3, 0.8] }}
                   transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} />
               </div>
             )}
@@ -327,7 +329,7 @@ export default function Industries() {
               >
                 <motion.div
                   className="relative rounded-2xl p-10 text-center overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 24px rgba(82,55,159,0.07)' }}
+                  style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 24px rgba(82,55,159,0.07)' }}
                   whileHover={reduced ? {} : { y: -7, boxShadow: '0 16px 48px rgba(82,55,159,0.14)' }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 >
@@ -346,7 +348,7 @@ export default function Industries() {
                           width: 18 + ring * 16, height: 18 + ring * 16,
                           border: `1px solid rgba(${ring === 0 ? '3,201,224' : '82,55,159'},0.35)`,
                         }}
-                        animate={reduced ? {} : { scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
+                        animate={lite ? {} : { scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
                         transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut', delay: ring * 0.8 + i * 0.4 }} />
                     ))}
                     <div className="relative w-3 h-3 rounded-full z-10"

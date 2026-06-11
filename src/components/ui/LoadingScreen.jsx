@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import useLiteMotion from '../../hooks/useLiteMotion'
 
 const HOLD_MS = 1600
 
 export default function LoadingScreen() {
   const reduced = useReducedMotion()
+  // Pulsing rings compete with page hydration for the main thread right when
+  // the app is busiest — skip them on mobile.
+  const lite = useLiteMotion()
   const [done, setDone] = useState(false)
 
   useEffect(() => {
@@ -30,7 +34,7 @@ export default function LoadingScreen() {
           />
 
           {/* Outer pulsing ring */}
-          {!reduced && (
+          {!lite && (
             <motion.div
               className="absolute rounded-full pointer-events-none"
               style={{ width: 180, height: 180, border: '1px solid rgba(3,201,224,0.18)' }}
@@ -39,7 +43,7 @@ export default function LoadingScreen() {
               aria-hidden="true"
             />
           )}
-          {!reduced && (
+          {!lite && (
             <motion.div
               className="absolute rounded-full pointer-events-none"
               style={{ width: 260, height: 260, border: '1px solid rgba(82,55,159,0.12)' }}

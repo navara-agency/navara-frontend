@@ -10,6 +10,7 @@ import IntlPhoneInput from '../components/ui/IntlPhoneInput'
 import { api, ApiError } from '../lib/api'
 import { useGeo } from '../contexts/GeoContext'
 import { useApi } from '../hooks/useApi'
+import useLiteMotion from '../hooks/useLiteMotion'
 
 const PageWrapper = ({ children }) => (
   <motion.div
@@ -217,6 +218,7 @@ function ThreeDayDateTimePicker({ dateValue, onDateChange, slotValue, onSlotChan
 export default function Contact() {
   const { t } = useTranslation()
   const reduced = useReducedMotion()
+  const lite = useLiteMotion()
   const [submitStatus, setSubmitStatus] = useState('idle')
   const [submitError, setSubmitError] = useState(null)
   const heroRef = useRef(null)
@@ -381,7 +383,7 @@ export default function Contact() {
             </h1>
 
             {/* Primary wandering spark */}
-            {!reduced && (
+            {!lite && (
               <motion.span
                 aria-hidden="true"
                 className="absolute pointer-events-none block"
@@ -407,7 +409,7 @@ export default function Contact() {
             )}
 
             {/* Secondary spark */}
-            {!reduced && (
+            {!lite && (
               <motion.span
                 aria-hidden="true"
                 className="absolute pointer-events-none block"
@@ -444,7 +446,7 @@ export default function Contact() {
           style={{ backgroundImage: 'radial-gradient(rgba(82,55,159,0.04) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
 
         {/* Ambient orbs */}
-        {!reduced && (
+        {!lite && (
           <>
             <motion.div aria-hidden="true"
               className="absolute -top-32 -start-24 w-[500px] h-[500px] rounded-full pointer-events-none"
@@ -488,7 +490,7 @@ export default function Contact() {
                 {/* Email card */}
                 <motion.div
                   className="relative rounded-xl p-4 overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(82,55,159,0.06)' }}
+                  style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: lite ? 'none' : 'blur(10px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(82,55,159,0.06)' }}
                   whileHover={reduced ? {} : { y: -3, boxShadow: '0 8px 28px rgba(3,201,224,0.12)' }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
@@ -514,7 +516,7 @@ export default function Contact() {
                 {/* Office card */}
                 <motion.div
                   className="relative rounded-xl p-4 overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(82,55,159,0.06)' }}
+                  style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: lite ? 'none' : 'blur(10px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(82,55,159,0.06)' }}
                   whileHover={reduced ? {} : { y: -3, boxShadow: '0 8px 28px rgba(3,201,224,0.12)' }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
@@ -531,7 +533,7 @@ export default function Contact() {
                 {/* Hours card */}
                 <motion.div
                   className="relative rounded-xl p-4 overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(82,55,159,0.06)' }}
+                  style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: lite ? 'none' : 'blur(10px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(82,55,159,0.06)' }}
                   whileHover={reduced ? {} : { y: -3, boxShadow: '0 8px 28px rgba(3,201,224,0.12)' }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
@@ -554,7 +556,7 @@ export default function Contact() {
             {/* Right — contact form */}
             <FadeUp delay={0.1}>
               <div className="relative rounded-2xl p-8 overflow-hidden"
-                style={{ background: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 32px rgba(82,55,159,0.08)' }}>
+                style={{ background: 'rgba(255,255,255,0.88)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 32px rgba(82,55,159,0.08)' }}>
                 {/* Top accent */}
                 <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
                   style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />

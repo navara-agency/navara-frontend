@@ -6,6 +6,7 @@ import { Eye, CheckSquare, Shield } from 'lucide-react'
 import FadeUp from '../components/animations/FadeUp'
 import ProcessStep from '../components/ui/ProcessStep'
 import CTABanner from '../components/ui/CTABanner'
+import useLiteMotion from '../hooks/useLiteMotion'
 
 const PageWrapper = ({ children }) => (
   <motion.div
@@ -47,6 +48,7 @@ const SectionAccent = () => (
 export default function HowWeWork() {
   const { t } = useTranslation()
   const reduced = useReducedMotion()
+  const lite = useLiteMotion()
   const processRef = useRef(null)
   const videoRef = useRef(null)
   // Start at 0 — bumped to 0.42 once the video has buffered enough to play smoothly.
@@ -109,7 +111,7 @@ export default function HowWeWork() {
           style={{ background: 'radial-gradient(ellipse at 50% 60%, rgba(3,201,224,0.12) 0%, transparent 55%)' }} />
 
         {/* Radar rings */}
-        {!reduced && [0, 1, 2].map(i => (
+        {!lite && [0, 1, 2].map(i => (
           <motion.div key={i} aria-hidden="true"
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
             style={{
@@ -123,7 +125,7 @@ export default function HowWeWork() {
         ))}
 
         {/* Horizontal data-flow streaks */}
-        {!reduced && FLOW_LINES.map(({ top, delay, dur }) => (
+        {!lite && FLOW_LINES.map(({ top, delay, dur }) => (
           <div key={top} aria-hidden="true"
             className="absolute inset-x-0 pointer-events-none overflow-hidden"
             style={{ top, height: '1px' }}>
@@ -137,7 +139,7 @@ export default function HowWeWork() {
         ))}
 
         {/* Particles */}
-        {!reduced && [...Array(9)].map((_, i) => (
+        {!lite && [...Array(9)].map((_, i) => (
           <motion.div key={i} aria-hidden="true"
             className="absolute rounded-full pointer-events-none"
             style={{
@@ -174,7 +176,7 @@ export default function HowWeWork() {
           </motion.p>
 
           {/* Animated step-indicator row */}
-          {!reduced && (
+          {!lite && (
             <motion.div
               className="flex items-center justify-center gap-2 sm:gap-3"
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={fade(0.65, reduced)}
@@ -218,7 +220,7 @@ export default function HowWeWork() {
           style={{ backgroundImage: 'radial-gradient(rgba(82,55,159,0.055) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
 
         {/* Animated atmosphere blobs */}
-        {!reduced && (
+        {!lite && (
           <>
             <motion.div aria-hidden="true"
               className="absolute -top-32 -start-24 w-[500px] h-[500px] rounded-full pointer-events-none"
@@ -266,7 +268,7 @@ export default function HowWeWork() {
             </div>
 
             {/* Glowing dot traveling along the connector path */}
-            {!reduced && (
+            {!lite && (
               <div aria-hidden="true"
                 className="absolute pointer-events-none hidden lg:block"
                 style={{ top: '3rem', left: '5%', right: '5%', height: '2px' }}>
@@ -285,7 +287,7 @@ export default function HowWeWork() {
       {/* ── What This Means for Clients ───────────────────────────── */}
       <section className="relative overflow-hidden py-28 bg-white">
         {/* Animated blobs */}
-        {!reduced && (
+        {!lite && (
           <>
             <motion.div aria-hidden="true"
               className="absolute -top-20 -end-20 w-[480px] h-[480px] rounded-full pointer-events-none"
@@ -328,7 +330,7 @@ export default function HowWeWork() {
                   <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] overflow-hidden pointer-events-none">
                     <div className="h-full w-full"
                       style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
-                    {!reduced && (
+                    {!lite && (
                       <motion.div className="absolute top-0 h-full w-14 pointer-events-none"
                         style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.7) 50%, transparent 100%)' }}
                         animate={{ left: ['-20%', '120%'] }}
@@ -345,7 +347,7 @@ export default function HowWeWork() {
                   <motion.div aria-hidden="true"
                     className="absolute -bottom-2 -end-2 opacity-[0.04] pointer-events-none group-hover:opacity-[0.08] transition-opacity duration-500"
                     style={{ color: 'rgba(82,55,159,1)' }}
-                    animate={reduced ? {} : { y: [0, -10, 0], x: [0, -5, 0] }}
+                    animate={lite ? {} : { y: [0, -10, 0], x: [0, -5, 0] }}
                     transition={{ duration: 5 + i * 1.5, repeat: Infinity, ease: 'easeInOut' }}
                   >
                     <Icon size={80} strokeWidth={1} />
@@ -355,7 +357,7 @@ export default function HowWeWork() {
                     {/* Radar-sweep icon box */}
                     <div className="relative w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5 overflow-hidden group-hover:scale-110 transition-transform duration-300"
                       style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.14) 0%, rgba(82,55,159,0.1) 100%)', border: '1px solid rgba(3,201,224,0.25)' }}>
-                      {!reduced && (
+                      {!lite && (
                         <motion.div
                           className="absolute inset-0 rounded-xl pointer-events-none"
                           style={{ background: 'conic-gradient(from 0deg, rgba(3,201,224,0.28), transparent 50%)' }}
@@ -408,7 +410,7 @@ export default function HowWeWork() {
               />
               <motion.div
                 className="w-2 h-2 rounded-full bg-primary-cyan"
-                animate={reduced ? {} : { scale: [1, 1.5, 1], opacity: [0.6, 1, 0.6] }}
+                animate={lite ? {} : { scale: [1, 1.5, 1], opacity: [0.6, 1, 0.6] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
               <motion.div

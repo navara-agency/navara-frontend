@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import useLiteMotion from '../../hooks/useLiteMotion'
 
 const NAV_LINKS = [
   { key: 'nav.links.services', href: '/services' },
@@ -103,6 +104,10 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const shouldReduceMotion = useReducedMotion()
+  // Animating the header height/gap forces a layout reflow on every scrolled
+  // frame — fine on desktop, a major scroll-jank source on mobile. The
+  // compression effect only exists for the lg+ nav anyway.
+  const lite = useLiteMotion()
   const { scrollY, scrollYProgress } = useScroll()
   const isRTL = i18n.language === 'ar'
 
@@ -154,15 +159,15 @@ export default function Navbar() {
   return (
     <>
     <header
-      className={`fixed top-0 inset-x-0 z-[1000] transition-all duration-500 ${
+      className={`fixed top-0 inset-x-0 z-[1000] transition-[background-color,box-shadow] duration-500 ${
         scrolled
-          ? 'bg-primary-dark-blue/90 backdrop-blur-md shadow-lg shadow-primary-dark-blue/30'
+          ? 'bg-primary-dark-blue/95 lg:bg-primary-dark-blue/90 lg:backdrop-blur-md shadow-lg shadow-primary-dark-blue/30'
           : 'bg-transparent'
       }`}
     >
       <motion.nav
         className="max-w-[1200px] mx-auto px-6 md:px-8 flex items-center justify-between"
-        style={!shouldReduceMotion ? { height: navHeight } : { height: 64 }}
+        style={!lite ? { height: navHeight } : { height: 64 }}
         aria-label={t('nav.aria')}
       >
         {/* Logo */}
@@ -178,7 +183,7 @@ export default function Navbar() {
         {/* Desktop links */}
         <motion.div
           className="hidden lg:flex items-center"
-          style={!shouldReduceMotion ? { gap: navGap } : { gap: 24 }}
+          style={!lite ? { gap: navGap } : { gap: 24 }}
         >
           {NAV_LINKS.map(({ key, href }) => (
             <NavLinkAnimated key={key} to={href} label={t(key)} />
@@ -281,7 +286,7 @@ export default function Navbar() {
 
           {/* Mobile links */}
           <nav className="flex flex-col items-center gap-8 mt-8">
-            {NAV_LINKS.map(({ key, href }, i) => (
+            {NAV_LINKS.map(({ key, href }) => (
               <motion.div
                 key={key}
                 variants={mobileLinkVariants}

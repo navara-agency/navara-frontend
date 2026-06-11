@@ -2,6 +2,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useRef } from 'react'
+import useLiteMotion from '../../hooks/useLiteMotion'
 
 function renderEmphasis(text, reduced) {
   const parts = text.split(/(90 days|90 يوم|completely free|مجانًا تمامًا)/g)
@@ -143,6 +144,9 @@ function GlowDivider({ reduced }) {
 export default function RiskReversal({ onCtaClick }) {
   const { t } = useTranslation()
   const reduced = useReducedMotion()
+  // Decorative infinite animations (orbs, glow pulses, shine) are disabled on
+  // mobile via `lite`; entrance animations stay tied to `reduced`.
+  const lite = useLiteMotion()
   const navigate = useNavigate()
   const handleCta = onCtaClick ?? (() => navigate('/contact#contact-form'))
 
@@ -164,15 +168,15 @@ export default function RiskReversal({ onCtaClick }) {
         aria-hidden="true"
         className="absolute inset-0 bg-cover bg-center pointer-events-none"
         style={{
-          backgroundImage: "url('/brand/dark-picton-blue-abstract-creative-background-design.jpg.jpeg')",
+          backgroundImage: "url('/brand/risk-reversal-bg.webp')",
           opacity: 0.12,
         }}
       />
 
       {/* Scroll-parallax orbs */}
-      <BackgroundOrb cx="10%" cy="20%" size={420} color="rgba(3,201,224,0.18)" duration={11} parallaxY={orb1Y} reduced={reduced} />
-      <BackgroundOrb cx="88%" cy="65%" size={380} color="rgba(82,55,159,0.22)" duration={14} parallaxY={orb2Y} reduced={reduced} />
-      <BackgroundOrb cx="55%" cy="90%" size={300} color="rgba(3,201,224,0.12)" duration={9}  parallaxY={orb3Y} reduced={reduced} />
+      <BackgroundOrb cx="10%" cy="20%" size={420} color="rgba(3,201,224,0.18)" duration={11} parallaxY={orb1Y} reduced={lite} />
+      <BackgroundOrb cx="88%" cy="65%" size={380} color="rgba(82,55,159,0.22)" duration={14} parallaxY={orb2Y} reduced={lite} />
+      <BackgroundOrb cx="55%" cy="90%" size={300} color="rgba(3,201,224,0.12)" duration={9}  parallaxY={orb3Y} reduced={lite} />
 
       <div className="relative z-10">
 
@@ -188,7 +192,7 @@ export default function RiskReversal({ onCtaClick }) {
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              animation: reduced ? 'none' : 'headingShine 5s linear infinite',
+              animation: lite ? 'none' : 'headingShine 5s linear infinite',
             }}
             initial={reduced ? false : { opacity: 0, y: 30 }}
             whileInView={reduced ? false : { opacity: 1, y: 0 }}
@@ -220,7 +224,7 @@ export default function RiskReversal({ onCtaClick }) {
           </div>
 
           {/* Divider draws from center */}
-          <GlowDivider reduced={reduced} />
+          <GlowDivider reduced={lite} />
 
           {/* Subheading */}
           <motion.p
@@ -240,7 +244,7 @@ export default function RiskReversal({ onCtaClick }) {
             whileInView={reduced ? false : { opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
             transition={reduced ? { duration: 0 } : { duration: 0.65, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            animate={reduced ? {} : {
+            animate={lite ? {} : {
               boxShadow: [
                 '0 0 30px rgba(3,201,224,0.06), inset 0 1px 0 rgba(255,255,255,0.04)',
                 '0 0 55px rgba(3,201,224,0.18), inset 0 1px 0 rgba(255,255,255,0.07)',
@@ -269,7 +273,7 @@ export default function RiskReversal({ onCtaClick }) {
                 className="font-somar text-white/85 leading-relaxed"
                 style={{ fontSize: 'clamp(0.9rem, 1.4vw, 1rem)' }}
               >
-                {renderEmphasis(t('homeV2.riskReversal.guarantee.promise'), reduced)}
+                {renderEmphasis(t('homeV2.riskReversal.guarantee.promise'), lite)}
               </p>
               <p
                 className="font-somar text-white/55 italic leading-relaxed"
@@ -288,8 +292,8 @@ export default function RiskReversal({ onCtaClick }) {
             viewport={{ once: true }}
             transition={reduced ? { duration: 0 } : { duration: 0.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           >
-            {reduced ? (
-              /* Static layout for reduced-motion users */
+            {lite ? (
+              /* Static layout for reduced-motion users and touch devices */
               <div className="flex flex-col items-center gap-3">
                 <button
                   type="button"

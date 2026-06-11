@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import PropTypes from 'prop-types'
+import useLiteMotion from '../../hooks/useLiteMotion'
 
 /**
  * LineShadeWrapper — decorative thin gradient lines inside a section.
@@ -65,6 +66,8 @@ export default function LineShadeWrapper({
   density = 'sparse',
 }) {
   const shouldReduceMotion = useReducedMotion()
+  // On mobile every line is its own animated layer — render them static there.
+  const lite = useLiteMotion()
   const containerRef = useRef(null)
 
   const [isDesktop, setIsDesktop] = useState(() => {
@@ -108,6 +111,12 @@ export default function LineShadeWrapper({
       {Array.from({ length: lineCount }).map((_, i) => {
         const top = `${(i / lineCount) * 100}%`
         const duration = 10 + (i % 5)
+
+        if (lite) {
+          return (
+            <div key={i} className={baseClass} style={{ top, background: gradient }} />
+          )
+        }
 
         if (scrollLinked && !shouldReduceMotion) {
           return (

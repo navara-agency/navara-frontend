@@ -1,9 +1,11 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import useLiteMotion from '../../hooks/useLiteMotion'
 
 export default function ProcessStep({ number, titleKey, bodyKey, isLast = false, animationDelay = 0 }) {
   const { t } = useTranslation()
   const reduced = useReducedMotion()
+  const lite = useLiteMotion()
 
   return (
     <motion.div
@@ -33,7 +35,7 @@ export default function ProcessStep({ number, titleKey, bodyKey, isLast = false,
         <motion.div
           className="w-14 h-14 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300"
           style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.18) 0%, rgba(82,55,159,0.14) 100%)', border: '2px solid rgba(3,201,224,0.4)' }}
-          animate={reduced ? {} : {
+          animate={lite ? {} : {
             boxShadow: [
               '0 0 0px rgba(3,201,224,0)',
               '0 0 16px rgba(3,201,224,0.38)',
@@ -63,7 +65,7 @@ export default function ProcessStep({ number, titleKey, bodyKey, isLast = false,
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: reduced ? 0 : 0.7, delay: reduced ? 0 : animationDelay + 0.35 }}
           />
-          {!reduced && (
+          {!lite && (
             <motion.div
               className="absolute top-0 h-full w-8 pointer-events-none"
               style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.65), transparent)' }}

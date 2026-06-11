@@ -7,6 +7,7 @@ import Section from '../components/layout/Section'
 import FadeUp from '../components/animations/FadeUp'
 import CTABanner from '../components/ui/CTABanner'
 import PhotoBackdrop from '../components/ui/PhotoBackdrop'
+import useLiteMotion from '../hooks/useLiteMotion'
 
 /* ─── Animated stat counter (handles decimals) ─────────────── */
 function StatCount({ to, suffix = '', decimals = 0, duration = 2, className = '' }) {
@@ -97,11 +98,13 @@ const Card = ({ children, delay = 0, className = '' }) => (
 )
 
 /* ─── Glassmorphism card for violet sections ───────────────── */
-const GlassCard = ({ children, delay = 0, className = '' }) => (
+const GlassCard = ({ children, delay = 0, className = '' }) => {
+  const lite = useLiteMotion()
+  return (
   <FadeUp delay={delay}>
     <motion.div
       className={`relative rounded-2xl overflow-hidden group ${className}`}
-      style={{ background: 'rgba(255,255,255,0.72)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.88)', boxShadow: '0 4px 24px rgba(82,55,159,0.07)' }}
+      style={{ background: lite ? 'rgba(255,255,255,0.92)' : 'rgba(255,255,255,0.72)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.88)', boxShadow: '0 4px 24px rgba(82,55,159,0.07)' }}
       whileHover={{ y: -6, boxShadow: '0 16px 48px rgba(82,55,159,0.14)' }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
     >
@@ -110,7 +113,8 @@ const GlassCard = ({ children, delay = 0, className = '' }) => (
       {children}
     </motion.div>
   </FadeUp>
-)
+  )
+}
 
 const IconBox = ({ icon: Icon, size = 22, boxClass = 'w-12 h-12 rounded-xl mb-5' }) => (
   <div className={`${boxClass} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
@@ -122,6 +126,7 @@ const IconBox = ({ icon: Icon, size = 22, boxClass = 'w-12 h-12 rounded-xl mb-5'
 export default function About() {
   const { t } = useTranslation()
   const reduced = useReducedMotion()
+  const lite = useLiteMotion()
 
   return (
     <PageWrapper>
@@ -145,7 +150,7 @@ export default function About() {
           style={{ background: 'linear-gradient(155deg, rgba(6,0,120,0.9) 0%, rgba(4,0,78,0.85) 60%, rgba(20,5,100,0.9) 100%)' }} />
 
         {/* Pulsing concentric rings */}
-        {!reduced && [0, 1, 2].map(i => (
+        {!lite && [0, 1, 2].map(i => (
           <motion.div key={i} aria-hidden="true"
             className="absolute rounded-full pointer-events-none"
             style={{
@@ -160,17 +165,17 @@ export default function About() {
 
         {/* Floating orbs */}
         <Orb style={{ top: '10%', right: '10%', width: 340, height: 340, background: 'radial-gradient(circle, rgba(3,201,224,0.12) 0%, transparent 70%)', filter: 'blur(65px)' }}
-          animate={reduced ? {} : { y: [0, -26, 0], x: [0, 16, 0] }}
+          animate={lite ? {} : { y: [0, -26, 0], x: [0, 16, 0] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }} />
         <Orb style={{ bottom: '8%', left: '5%', width: 280, height: 280, background: 'radial-gradient(circle, rgba(82,55,159,0.18) 0%, transparent 70%)', filter: 'blur(55px)' }}
-          animate={reduced ? {} : { y: [0, 20, 0], x: [0, -12, 0] }}
+          animate={lite ? {} : { y: [0, 20, 0], x: [0, -12, 0] }}
           transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 3 }} />
         <Orb style={{ top: '45%', left: '2%', width: 180, height: 180, background: 'radial-gradient(circle, rgba(255,165,205,0.09) 0%, transparent 70%)', filter: 'blur(40px)' }}
-          animate={reduced ? {} : { y: [0, -16, 0], opacity: [0.6, 1, 0.6] }}
+          animate={lite ? {} : { y: [0, -16, 0], opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }} />
 
         {/* Diagonal shimmer sweep */}
-        {!reduced && (
+        {!lite && (
           <motion.div aria-hidden="true" className="absolute pointer-events-none"
             style={{ width: 3, height: '220%', top: '-60%', background: 'linear-gradient(to bottom, transparent 0%, rgba(3,201,224,0.16) 50%, transparent 100%)', rotate: 28, transformOrigin: 'center' }}
             animate={{ left: ['-10%', '115%'] }}
@@ -178,7 +183,7 @@ export default function About() {
         )}
 
         {/* Micro-particles */}
-        {!reduced && [
+        {!lite && [
           { cx: '20%', cy: '32%', color: 'rgba(3,201,224,0.7)', size: 3, dur: 4.5, delay: 0 },
           { cx: '38%', cy: '68%', color: 'rgba(82,55,159,0.6)', size: 2, dur: 6, delay: 1 },
           { cx: '58%', cy: '28%', color: 'rgba(255,165,205,0.6)', size: 2.5, dur: 5, delay: 0.7 },
@@ -275,7 +280,7 @@ export default function About() {
           >
             {/* Continuous float */}
             <motion.div
-              animate={reduced ? {} : { y: [0, -12, 0] }}
+              animate={lite ? {} : { y: [0, -12, 0] }}
               transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
               className="relative"
             >
@@ -283,7 +288,7 @@ export default function About() {
               <motion.div aria-hidden="true"
                 className="absolute inset-0 rounded-2xl pointer-events-none"
                 style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(3,201,224,0.12) 0%, transparent 70%)', filter: 'blur(20px)', zIndex: 0 }}
-                animate={reduced ? {} : { opacity: [0.5, 1, 0.5], scale: [0.95, 1.05, 0.95] }}
+                animate={lite ? {} : { opacity: [0.5, 1, 0.5], scale: [0.95, 1.05, 0.95] }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }} />
 
               <div className="relative rounded-2xl overflow-hidden z-10"
@@ -291,7 +296,7 @@ export default function About() {
                 <div className="absolute inset-0 rounded-2xl z-10 pointer-events-none"
                   style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.07) 0%, transparent 50%)' }}
                   aria-hidden="true" />
-                <img src="/brand/Artboard 2@4x.png" alt="" aria-hidden="true"
+                <img src="/brand/about-story.webp" alt="" aria-hidden="true"
                   className="w-full object-contain rounded-2xl" loading="lazy" />
               </div>
             </motion.div>
@@ -300,12 +305,12 @@ export default function About() {
             <motion.div aria-hidden="true"
               className="absolute -bottom-4 -start-4 w-8 h-8 rounded-full pointer-events-none"
               style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.4), rgba(82,55,159,0.3))', border: '2px solid rgba(3,201,224,0.3)' }}
-              animate={reduced ? {} : { scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
+              animate={lite ? {} : { scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
               transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} />
             <motion.div aria-hidden="true"
               className="absolute -top-3 -end-3 w-5 h-5 rounded-full pointer-events-none"
               style={{ background: 'rgba(255,165,205,0.5)', border: '1px solid rgba(255,165,205,0.4)' }}
-              animate={reduced ? {} : { scale: [1, 1.4, 1], opacity: [0.5, 1, 0.5] }}
+              animate={lite ? {} : { scale: [1, 1.4, 1], opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }} />
           </motion.div>
         </div>
@@ -453,13 +458,13 @@ export default function About() {
         style={{ background: 'linear-gradient(160deg, #f8f9ff 0%, #f0ebff 40%, #f5f8ff 70%, #ece6ff 100%)' }}>
 
         <Orb style={{ top: '-8%', right: '-4%', width: 580, height: 580, background: 'radial-gradient(circle, rgba(82,55,159,0.09) 0%, transparent 70%)', filter: 'blur(90px)' }}
-          animate={reduced ? {} : { scale: [1, 1.1, 1], opacity: [0.7, 1, 0.7] }}
+          animate={lite ? {} : { scale: [1, 1.1, 1], opacity: [0.7, 1, 0.7] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }} />
         <Orb style={{ bottom: '-6%', left: '-3%', width: 480, height: 480, background: 'radial-gradient(circle, rgba(3,201,224,0.07) 0%, transparent 70%)', filter: 'blur(80px)' }}
-          animate={reduced ? {} : { scale: [1, 1.12, 1] }}
+          animate={lite ? {} : { scale: [1, 1.12, 1] }}
           transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 4 }} />
         <Orb style={{ top: '50%', left: '50%', width: 320, height: 320, background: 'radial-gradient(circle, rgba(82,55,159,0.055) 0%, transparent 70%)', filter: 'blur(70px)', transform: 'translate(-50%, -50%)' }}
-          animate={reduced ? {} : { scale: [1, 1.2, 1] }}
+          animate={lite ? {} : { scale: [1, 1.2, 1] }}
           transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 7 }} />
 
         <div className="max-w-[1200px] mx-auto px-6 md:px-8 relative z-10">
@@ -485,7 +490,7 @@ export default function About() {
                 >
                   <motion.div
                     className="relative rounded-2xl p-7 h-full overflow-hidden group"
-                    style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 24px rgba(82,55,159,0.07)' }}
+                    style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 24px rgba(82,55,159,0.07)' }}
                     whileHover={reduced ? {} : { y: -6, boxShadow: '0 16px 48px rgba(82,55,159,0.14)' }}
                     transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                   >
@@ -569,7 +574,7 @@ export default function About() {
                         width: 20 + ring * 16, height: 20 + ring * 16,
                         border: '1px solid rgba(3,201,224,0.35)',
                       }}
-                      animate={reduced ? {} : { scale: [1, 1.6, 1], opacity: [0.5, 0, 0.5] }}
+                      animate={lite ? {} : { scale: [1, 1.6, 1], opacity: [0.5, 0, 0.5] }}
                       transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut', delay: ring * 1 + i * 0.4 }}
                     />
                   ))}
