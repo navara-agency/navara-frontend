@@ -38,7 +38,7 @@
    ============================================================ */
 @font-face {
   font-family: 'Glancyr';
-  src: url('../assets/fonts/Old-Fonts/Glancyr Variable-VF.ttf') format('truetype');
+  src: url('../assets/fonts/Old-Fonts/Glancyr Variable-VF.woff2') format('woff2');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -49,7 +49,7 @@
    ============================================================ */
 @font-face {
   font-family: 'Sherika';
-  src: url('../assets/fonts/Old-Fonts/sherika/Sherika Variable.ttf') format('truetype');
+  src: url('../assets/fonts/Old-Fonts/sherika/Sherika Variable.woff2') format('woff2');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -57,7 +57,7 @@
 
 @font-face {
   font-family: 'Sherika';
-  src: url('../assets/fonts/Old-Fonts/sherika/Sherika Italic Variable.ttf') format('truetype');
+  src: url('../assets/fonts/Old-Fonts/sherika/Sherika Italic Variable.woff2') format('woff2');
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;
@@ -87,7 +87,7 @@
    ============================================================ */
 @font-face {
   font-family: 'The Year of Handicrafts';
-  src: url('../assets/fonts/TheYearofHandicrafts-Regular.otf') format('opentype');
+  src: url('../assets/fonts/TheYearofHandicrafts-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -95,7 +95,7 @@
 
 @font-face {
   font-family: 'The Year of Handicrafts';
-  src: url('../assets/fonts/TheYearofHandicrafts-Medium.otf') format('opentype');
+  src: url('../assets/fonts/TheYearofHandicrafts-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -103,7 +103,7 @@
 
 @font-face {
   font-family: 'The Year of Handicrafts';
-  src: url('../assets/fonts/TheYearofHandicrafts-SemiBold.otf') format('opentype');
+  src: url('../assets/fonts/TheYearofHandicrafts-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -111,7 +111,7 @@
 
 @font-face {
   font-family: 'The Year of Handicrafts';
-  src: url('../assets/fonts/TheYearofHandicrafts-Bold.otf') format('opentype');
+  src: url('../assets/fonts/TheYearofHandicrafts-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -119,7 +119,7 @@
 
 @font-face {
   font-family: 'The Year of Handicrafts';
-  src: url('../assets/fonts/TheYearofHandicrafts-Black.otf') format('opentype');
+  src: url('../assets/fonts/TheYearofHandicrafts-Black.woff2') format('woff2');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -131,7 +131,7 @@
    ============================================================ */
 @font-face {
   font-family: 'Somar Sans';
-  src: url('../assets/fonts/somar-sans which will be used frequently under the headlines/SomarSans-Regular.otf') format('opentype');
+  src: url('../assets/fonts/somar-sans which will be used frequently under the headlines/SomarSans-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -139,7 +139,7 @@
 
 @font-face {
   font-family: 'Somar Sans';
-  src: url('../assets/fonts/somar-sans which will be used frequently under the headlines/SomarSans-Medium.otf') format('opentype');
+  src: url('../assets/fonts/somar-sans which will be used frequently under the headlines/SomarSans-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -147,7 +147,7 @@
 
 @font-face {
   font-family: 'Somar Sans';
-  src: url('../assets/fonts/somar-sans which will be used frequently under the headlines/SomarSans-SemiBold.otf') format('opentype');
+  src: url('../assets/fonts/somar-sans which will be used frequently under the headlines/SomarSans-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -155,7 +155,7 @@
 
 @font-face {
   font-family: 'Somar Sans';
-  src: url('../assets/fonts/somar-sans which will be used frequently under the headlines/SomarSans-Bold.otf') format('opentype');
+  src: url('../assets/fonts/somar-sans which will be used frequently under the headlines/SomarSans-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -167,7 +167,7 @@
    ============================================================ */
 @font-face {
   font-family: 'Palestine';
-  src: url('../assets/fonts/ALFONT_COM_PALESTINE-REGULAR (2).TTF') format('truetype');
+  src: url('../assets/fonts/ALFONT_COM_PALESTINE-REGULAR (2).woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;

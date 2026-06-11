@@ -56,6 +56,17 @@ function AnimatedRoutes() {
   )
 }
 
+// Warm the public route chunks while the browser is idle so in-app navigation
+// renders immediately instead of waiting on a network fetch for the page's JS.
+// Dynamic import() is deduped by the browser, so the lazy() routes reuse these.
+function prefetchPublicRoutes() {
+  import('./pages/About')
+  import('./pages/Services')
+  import('./pages/Industries')
+  import('./pages/HowWeWork')
+  import('./pages/Contact')
+}
+
 function PublicSite() {
   const { i18n } = useTranslation()
 
@@ -65,6 +76,15 @@ function PublicSite() {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
     document.documentElement.lang = lang
   }, [i18n.language])
+
+  useEffect(() => {
+    if ('requestIdleCallback' in window) {
+      const id = requestIdleCallback(prefetchPublicRoutes, { timeout: 4000 })
+      return () => cancelIdleCallback(id)
+    }
+    const id = setTimeout(prefetchPublicRoutes, 4000)
+    return () => clearTimeout(id)
+  }, [])
 
   return (
     <div className="flex flex-col min-h-screen">
