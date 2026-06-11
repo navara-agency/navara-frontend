@@ -8,6 +8,7 @@ import FadeUp from '../components/animations/FadeUp'
 import CTABanner from '../components/ui/CTABanner'
 import PhotoBackdrop from '../components/ui/PhotoBackdrop'
 import useLiteMotion from '../hooks/useLiteMotion'
+import PageWrapper from '../components/layout/PageWrapper'
 
 /* ─── Animated stat counter (handles decimals) ─────────────── */
 function StatCount({ to, suffix = '', decimals = 0, duration = 2, className = '' }) {
@@ -30,16 +31,6 @@ function StatCount({ to, suffix = '', decimals = 0, duration = 2, className = ''
   return <span ref={ref} className={className}>{val}{suffix}</span>
 }
 
-const PageWrapper = ({ children }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    transition={{ duration: 0.4 }}
-  >
-    {children}
-  </motion.div>
-)
 
 const fade = (delay, reduced) =>
   reduced ? { duration: 0 } : { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }
@@ -125,8 +116,10 @@ const IconBox = ({ icon: Icon, size = 22, boxClass = 'w-12 h-12 rounded-xl mb-5'
 
 export default function About() {
   const { t } = useTranslation()
-  const reduced = useReducedMotion()
   const lite = useLiteMotion()
+  // On mobile, entrance animations render final-state instantly: staggered
+  // reveals on a phone read as slow loading, not polish.
+  const reduced = useReducedMotion() || lite
 
   return (
     <PageWrapper>

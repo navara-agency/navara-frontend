@@ -6,15 +6,17 @@ export default function ProcessStep({ number, titleKey, bodyKey, isLast = false,
   const { t } = useTranslation()
   const reduced = useReducedMotion()
   const lite = useLiteMotion()
+  // On mobile, cards render visible immediately — see useLiteMotion
+  const instant = reduced || lite
 
   return (
     <motion.div
       className="flex flex-col items-center text-center relative bg-white border border-gray-100 rounded-2xl px-5 py-8 shadow-sm overflow-hidden group"
-      initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
+      initial={instant ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       whileHover={reduced ? {} : { y: -5 }}
       viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: reduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1], delay: reduced ? 0 : animationDelay }}
+      transition={{ duration: instant ? 0 : 0.5, ease: [0.16, 1, 0.3, 1], delay: instant ? 0 : animationDelay }}
     >
       {/* Gradient top accent */}
       <div
@@ -60,10 +62,10 @@ export default function ProcessStep({ number, titleKey, bodyKey, isLast = false,
               transformOrigin: 'left center',
               background: 'linear-gradient(90deg, rgba(3,201,224,0.5), rgba(82,55,159,0.3))',
             }}
-            initial={reduced ? { scaleX: 1 } : { scaleX: 0 }}
+            initial={instant ? { scaleX: 1 } : { scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: reduced ? 0 : 0.7, delay: reduced ? 0 : animationDelay + 0.35 }}
+            transition={{ duration: instant ? 0 : 0.7, delay: instant ? 0 : animationDelay + 0.35 }}
           />
           {!lite && (
             <motion.div

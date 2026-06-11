@@ -3,18 +3,20 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import useLiteMotion from '../../hooks/useLiteMotion'
 
 const HOLD_MS = 1600
+const HOLD_MS_MOBILE = 700
 
 export default function LoadingScreen() {
   const reduced = useReducedMotion()
   // Pulsing rings compete with page hydration for the main thread right when
-  // the app is busiest — skip them on mobile.
+  // the app is busiest — skip them on mobile. The brand hold is also shorter
+  // there: mobile loads already feel slower, so don't add artificial wait.
   const lite = useLiteMotion()
   const [done, setDone] = useState(false)
 
   useEffect(() => {
-    const id = setTimeout(() => setDone(true), reduced ? 0 : HOLD_MS)
+    const id = setTimeout(() => setDone(true), reduced ? 0 : lite ? HOLD_MS_MOBILE : HOLD_MS)
     return () => clearTimeout(id)
-  }, [reduced])
+  }, [reduced, lite])
 
   return (
     <AnimatePresence>
@@ -24,7 +26,7 @@ export default function LoadingScreen() {
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
           style={{ background: 'linear-gradient(155deg, #060078 0%, #04004e 55%, #140564 100%)' }}
           exit={{ opacity: 0, scale: 1.03 }}
-          transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: lite ? 0.3 : 0.55, ease: [0.4, 0, 0.2, 1] }}
         >
           {/* Static ambient glow */}
           <div
@@ -95,7 +97,7 @@ export default function LoadingScreen() {
               style={{ background: 'linear-gradient(to right, #060078, #03c9e0, #52379f)' }}
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              transition={{ duration: HOLD_MS / 1000, ease: 'linear' }}
+              transition={{ duration: (lite ? HOLD_MS_MOBILE : HOLD_MS) / 1000, ease: 'linear' }}
             />
           </motion.div>
         </motion.div>

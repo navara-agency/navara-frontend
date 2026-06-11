@@ -7,17 +7,8 @@ import FadeUp from '../components/animations/FadeUp'
 import ProcessStep from '../components/ui/ProcessStep'
 import CTABanner from '../components/ui/CTABanner'
 import useLiteMotion from '../hooks/useLiteMotion'
+import PageWrapper from '../components/layout/PageWrapper'
 
-const PageWrapper = ({ children }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    transition={{ duration: 0.4 }}
-  >
-    {children}
-  </motion.div>
-)
 
 const fade = (delay, reduced) =>
   reduced ? { duration: 0 } : { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }
@@ -47,8 +38,10 @@ const SectionAccent = () => (
 
 export default function HowWeWork() {
   const { t } = useTranslation()
-  const reduced = useReducedMotion()
   const lite = useLiteMotion()
+  // On mobile, entrance animations render final-state instantly: staggered
+  // reveals on a phone read as slow loading, not polish.
+  const reduced = useReducedMotion() || lite
   const processRef = useRef(null)
   const videoRef = useRef(null)
   // Start at 0 — bumped to 0.42 once the video has buffered enough to play smoothly.
@@ -388,10 +381,10 @@ export default function HowWeWork() {
             <motion.div
               className="font-handicrafts font-black leading-none mb-2 select-none"
               style={{ fontSize: '5rem', color: 'rgba(6,0,120,0.12)' }}
-              initial={{ opacity: 0, y: -12 }}
+              initial={reduced ? false : { opacity: 0, y: -12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: reduced ? 0 : 0.8, ease: [0.16, 1, 0.3, 1] }}
               aria-hidden="true"
             >&ldquo;</motion.div>
 
@@ -403,10 +396,10 @@ export default function HowWeWork() {
             <div className="flex items-center justify-center gap-3 mt-8" aria-hidden="true">
               <motion.div
                 className="h-px"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(6,0,120,0.25))', width: 0 }}
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(6,0,120,0.25))', width: reduced ? 48 : 0 }}
                 whileInView={{ width: 48 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4 }}
+                transition={{ duration: reduced ? 0 : 0.8, delay: reduced ? 0 : 0.4 }}
               />
               <motion.div
                 className="w-2 h-2 rounded-full bg-primary-cyan"
@@ -415,10 +408,10 @@ export default function HowWeWork() {
               />
               <motion.div
                 className="h-px"
-                style={{ background: 'linear-gradient(270deg, transparent, rgba(6,0,120,0.25))', width: 0 }}
+                style={{ background: 'linear-gradient(270deg, transparent, rgba(6,0,120,0.25))', width: reduced ? 48 : 0 }}
                 whileInView={{ width: 48 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4 }}
+                transition={{ duration: reduced ? 0 : 0.8, delay: reduced ? 0 : 0.4 }}
               />
             </div>
           </FadeUp>

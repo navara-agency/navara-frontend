@@ -1,14 +1,20 @@
 import { motion, useReducedMotion } from 'framer-motion'
+import useLiteMotion from '../../hooks/useLiteMotion'
 
 /**
  * Reusable scroll-triggered fade-up animation wrapper.
  * Respects prefers-reduced-motion: collapses all motion to instant state.
+ * On mobile (lite) the reveal is fast, undelayed, and triggers as soon as the
+ * element touches the viewport — long staggered reveals read as "slow loading"
+ * on small screens.
  */
 export default function FadeUp({ children, delay = 0, className = '', once = true }) {
   const shouldReduceMotion = useReducedMotion()
+  const lite = useLiteMotion()
+  const instant = shouldReduceMotion || lite
 
   const variants = {
-    hidden: shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 },
+    hidden: instant ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0 },
   }
 
@@ -19,9 +25,9 @@ export default function FadeUp({ children, delay = 0, className = '', once = tru
       whileInView="visible"
       viewport={{ once, amount: 0.2 }}
       transition={{
-        duration: shouldReduceMotion ? 0 : 0.6,
+        duration: instant ? 0 : 0.6,
         ease: 'easeOut',
-        delay: shouldReduceMotion ? 0 : delay,
+        delay: instant ? 0 : delay,
       }}
       variants={variants}
     >

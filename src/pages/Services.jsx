@@ -8,17 +8,8 @@ import FadeUp from '../components/animations/FadeUp'
 import CTABanner from '../components/ui/CTABanner'
 import PhotoBackdrop from '../components/ui/PhotoBackdrop'
 import useLiteMotion from '../hooks/useLiteMotion'
+import PageWrapper from '../components/layout/PageWrapper'
 
-const PageWrapper = ({ children }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    transition={{ duration: 0.4 }}
-  >
-    {children}
-  </motion.div>
-)
 
 const fade = (delay, reduced) =>
   reduced ? { duration: 0 } : { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }
@@ -53,8 +44,10 @@ function Orb({ style, animate, transition }) {
 
 export default function Services() {
   const { t } = useTranslation()
-  const reduced = useReducedMotion()
   const lite = useLiteMotion()
+  // On mobile, entrance animations render final-state instantly: staggered
+  // reveals on a phone read as slow loading, not polish.
+  const reduced = useReducedMotion() || lite
   const heroRef = useRef(null)
   // Blur-filtered orbs + repeat-Infinity animations are too expensive on mobile GPU.
   // Detect once on mount; SSR-safe.

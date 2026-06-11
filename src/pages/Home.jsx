@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
@@ -12,17 +11,8 @@ import ProcessTimeline from '../components/ui/ProcessTimeline'
 import FAQAccordion from '../components/ui/FAQAccordion'
 import { useApi } from '../hooks/useApi'
 import { TESTIMONIALS as FALLBACK_TESTIMONIALS } from '../data/mockDashboard'
+import PageWrapper from '../components/layout/PageWrapper'
 
-const PageWrapper = ({ children }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    transition={{ duration: 0.4 }}
-  >
-    {children}
-  </motion.div>
-)
 
 // Carousel shape: { id, clientName, clientTitle, clientPhoto, quote, resultsBadge, videoUrl }
 // Backend testimonials shape: { id, quote, author, title, company, photo, resultsBadge, videoUrl }
