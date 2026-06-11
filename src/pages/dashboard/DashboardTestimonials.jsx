@@ -75,8 +75,8 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
       setUploadError('Quote text is required.')
       return
     }
-    if (!form.videoUrl && !form.photo) {
-      setUploadError('Please add a video or a client photo — at least one is required.')
+    if (!form.videoUrl && !form.thumbnailUrl) {
+      setUploadError('Please add a video or a thumbnail image — at least one is required.')
       return
     }
     setUploadError(null)
@@ -185,7 +185,7 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
         <StarRating value={form.rating || 5} onChange={(v) => setForm((f) => ({ ...f, rating: v }))} />
       </Field>
 
-      <Field label={<>Client Photo <span className="text-slate-400 font-normal">(required if no video)</span></>}>
+      <Field label="Client Photo (optional)">
         <div
           className={`border-2 border-dashed border-slate-200 rounded-lg p-4 text-center transition-colors ${uploading === 'photo' ? 'opacity-60' : 'cursor-pointer hover:border-navara-blue/40 hover:bg-blue-50/30'}`}
           onClick={() => uploading !== 'photo' && photoRef.current?.click()}
@@ -204,7 +204,7 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
         </div>
       </Field>
 
-      <Field label={<>Video — upload an MP4/MOV/WEBM or paste a YouTube/external URL <span className="text-slate-400 font-normal">(required if no photo)</span></>}>
+      <Field label={<>Video — upload an MP4/MOV/WEBM or paste a YouTube/external URL <span className="text-slate-400 font-normal">(required if no thumbnail)</span></>}>
         <div
           className={`border-2 border-dashed border-slate-200 rounded-lg p-4 text-center transition-colors ${uploading === 'video' ? 'opacity-60' : 'cursor-pointer hover:border-navara-blue/40 hover:bg-blue-50/30'} mb-2`}
           onClick={() => uploading !== 'video' && videoRef.current?.click()}
@@ -265,7 +265,7 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
         </div>
       </Field>
 
-      <Field label="Custom Thumbnail (auto-derived from uploaded video — only override if needed)">
+      <Field label={<>Thumbnail Image <span className="text-slate-400 font-normal">(required if no video — auto-derived from Cloudinary uploads)</span></>}>
         <div
           className={`border-2 border-dashed border-slate-200 rounded-lg p-4 text-center transition-colors ${uploading === 'thumb' ? 'opacity-60' : 'cursor-pointer hover:border-navara-blue/40 hover:bg-blue-50/30'}`}
           onClick={() => uploading !== 'thumb' && thumbRef.current?.click()}

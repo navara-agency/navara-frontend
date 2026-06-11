@@ -155,11 +155,11 @@ function VideoCard({ item, isActive, onActivate }) {
             aria-label={`${item.clientName} testimonial video`}
             style={{ pointerEvents: isActive ? 'auto' : 'none' }}
           />
-        ) : item.clientPhoto ? (
-          // Photo-only testimonial — show portrait in the card header
+        ) : item.thumbnailUrl ? (
+          // Thumbnail-only testimonial — show the image in the card header
           <img
-            src={item.clientPhoto}
-            alt={item.clientName || 'Client'}
+            src={item.thumbnailUrl}
+            alt={item.clientName ? `${item.clientName} testimonial` : 'Testimonial'}
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
         ) : (
