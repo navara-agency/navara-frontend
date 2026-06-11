@@ -182,7 +182,7 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
       </Field>
 
       <Field label="Star Rating (optional — click a star to set, click again to clear)">
-        <StarRating value={form.rating || 5} onChange={(v) => setForm((f) => ({ ...f, rating: v }))} />
+        <StarRating value={form.rating} onChange={(v) => setForm((f) => ({ ...f, rating: v }))} />
       </Field>
 
       <Field label="Client Photo (optional)">
@@ -334,7 +334,7 @@ function buildPayload(form) {
     photoPublicId: photo ? photoPublicId : null,
     videoUrl,
     videoPublicId: videoUrl ? videoPublicId : null,
-    thumbnailUrl: videoUrl ? thumbnailUrl : null,
+    thumbnailUrl: thumbnailUrl || null,
   }
 }
 
