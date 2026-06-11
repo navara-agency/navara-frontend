@@ -9,7 +9,7 @@ const INPUT = 'w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 t
 function emptyTestimonial(count = 0) {
   return {
     quote: '', author: '', title: '', company: '',
-    industry: '', rating: 5, status: 'draft', sortOrder: count,
+    industry: '', rating: null, status: 'draft', sortOrder: count,
     resultsBadge: '',
     photo: null, photoPublicId: null,
     videoUrl: '', videoPublicId: null, thumbnailUrl: null,
@@ -29,12 +29,22 @@ function Field({ label, children }) {
 
 function StarRating({ value, onChange }) {
   return (
-    <div className="flex gap-1">
+    <div className="flex items-center gap-1">
       {[1, 2, 3, 4, 5].map((n) => (
-        <button key={n} type="button" onClick={() => onChange(n)} className="transition-transform hover:scale-110">
-          <Star size={20} className={n <= value ? 'text-amber-400 fill-amber-400' : 'text-slate-300'} />
+        <button key={n} type="button"
+          onClick={() => onChange(value === n ? null : n)}
+          className="transition-transform hover:scale-110"
+          title={value === n ? 'Click to remove rating' : `${n} stars`}
+        >
+          <Star size={20} className={n <= (value || 0) ? 'text-amber-400 fill-amber-400' : 'text-slate-300'} />
         </button>
       ))}
+      {value && (
+        <button type="button" onClick={() => onChange(null)}
+          className="ml-2 text-xs text-slate-400 hover:text-slate-600 transition-colors">
+          clear
+        </button>
+      )}
     </div>
   )
 }
@@ -65,8 +75,8 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
       setUploadError('Quote text is required.')
       return
     }
-    if (!form.videoUrl) {
-      setUploadError('A video is required — upload a file or paste a URL.')
+    if (!form.videoUrl && !form.photo) {
+      setUploadError('Please add a video or a client photo — at least one is required.')
       return
     }
     setUploadError(null)
@@ -171,11 +181,11 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
         <input className={INPUT} value={form.resultsBadge || ''} onChange={set('resultsBadge')} />
       </Field>
 
-      <Field label="Star Rating">
+      <Field label="Star Rating (optional — click a star to set, click again to clear)">
         <StarRating value={form.rating || 5} onChange={(v) => setForm((f) => ({ ...f, rating: v }))} />
       </Field>
 
-      <Field label="Client Photo (optional)">
+      <Field label={<>Client Photo <span className="text-slate-400 font-normal">(required if no video)</span></>}>
         <div
           className={`border-2 border-dashed border-slate-200 rounded-lg p-4 text-center transition-colors ${uploading === 'photo' ? 'opacity-60' : 'cursor-pointer hover:border-navara-blue/40 hover:bg-blue-50/30'}`}
           onClick={() => uploading !== 'photo' && photoRef.current?.click()}
@@ -194,7 +204,7 @@ function TestimonialForm({ initial, onSave, onCancel, busy }) {
         </div>
       </Field>
 
-      <Field label={<>Video <span className="text-red-500">*</span> — upload an MP4/MOV/WEBM or paste a YouTube/external URL</>}>
+      <Field label={<>Video — upload an MP4/MOV/WEBM or paste a YouTube/external URL <span className="text-slate-400 font-normal">(required if no photo)</span></>}>
         <div
           className={`border-2 border-dashed border-slate-200 rounded-lg p-4 text-center transition-colors ${uploading === 'video' ? 'opacity-60' : 'cursor-pointer hover:border-navara-blue/40 hover:bg-blue-50/30'} mb-2`}
           onClick={() => uploading !== 'video' && videoRef.current?.click()}
@@ -316,7 +326,7 @@ function buildPayload(form) {
     title: form.title || null,
     company: form.company || null,
     industry: form.industry || null,
-    rating: Number(form.rating) || 5,
+    rating: form.rating != null ? Number(form.rating) : null,
     status: form.status,
     sortOrder: Number(form.sortOrder) || 0,
     resultsBadge: form.resultsBadge || null,

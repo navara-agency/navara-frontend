@@ -155,6 +155,13 @@ function VideoCard({ item, isActive, onActivate }) {
             aria-label={`${item.clientName} testimonial video`}
             style={{ pointerEvents: isActive ? 'auto' : 'none' }}
           />
+        ) : item.clientPhoto ? (
+          // Photo-only testimonial — show portrait in the card header
+          <img
+            src={item.clientPhoto}
+            alt={item.clientName || 'Client'}
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
         ) : (
           <div
             className="absolute inset-0 flex flex-col items-center justify-center gap-3"
@@ -177,31 +184,27 @@ function VideoCard({ item, isActive, onActivate }) {
       </div>
 
       <div className="flex flex-col flex-1 p-5">
-        <div className="flex items-center justify-between mb-3">
-          {(() => {
-            const rating = Math.max(0, Math.min(5, Number(item.rating) || 5))
-            return (
-              <div className="flex gap-0.5" aria-label={`${rating} out of 5 stars`}>
-                {[...Array(5)].map((_, i) => {
-                  const filled = i < rating
-                  return (
-                    <Star
-                      key={i}
-                      size={13}
-                      className={filled ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'}
-                      aria-hidden="true"
-                    />
-                  )
-                })}
+        {(item.rating > 0 || (item.resultsBadge && (vid || directSrc))) && (
+          <div className="flex items-center justify-between mb-3">
+            {item.rating > 0 && (
+              <div className="flex gap-0.5" aria-label={`${item.rating} out of 5 stars`}>
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    size={13}
+                    className={i < item.rating ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'}
+                    aria-hidden="true"
+                  />
+                ))}
               </div>
-            )
-          })()}
-          {item.resultsBadge && (vid || directSrc) && (
-            <span className="font-somar text-xs font-semibold text-primary-cyan">
-              {item.resultsBadge}
-            </span>
-          )}
-        </div>
+            )}
+            {item.resultsBadge && (vid || directSrc) && (
+              <span className="font-somar text-xs font-semibold text-primary-cyan">
+                {item.resultsBadge}
+              </span>
+            )}
+          </div>
+        )}
         <blockquote
           className="font-somar text-text-gray leading-relaxed flex-1 mb-4 italic"
           style={{ fontSize: 'clamp(0.85rem, 1.3vw, 0.97rem)' }}
@@ -509,7 +512,16 @@ export default function TestimonialsCarousel({ testimonials }) {
             viewport={{ once: true, amount: 0.15 }}
             transition={reduced ? { duration: 0 } : { duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           >
-            {total === 1 ? (
+            {total === 0 ? (
+              // No testimonials: fill all slots with placeholders
+              <div className="flex" style={{ gap: GAP }}>
+                {Array.from({ length: visibleCount }).map((_, i) => (
+                  <div key={i} style={{ flex: `0 0 calc((100% - ${GAP * (visibleCount - 1)}px) / ${visibleCount})`, minWidth: 0 }}>
+                    <PlaceholderCard />
+                  </div>
+                ))}
+              </div>
+            ) : total === 1 ? (
               // Single card: placeholder | real | placeholder — card sits in the centre slot
               <div className="flex" style={{ gap: GAP }}>
                 <div style={{ flex: `0 0 calc((100% - ${GAP * (visibleCount - 1)}px) / ${visibleCount})`, minWidth: 0 }}>

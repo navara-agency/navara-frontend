@@ -36,7 +36,7 @@ function mapApiTestimonialToCarousel(item) {
     resultsBadge: item.resultsBadge || null,
     videoUrl: item.videoUrl || null,
     thumbnailUrl: item.thumbnailUrl || null,
-    rating: typeof item.rating === 'number' ? item.rating : 5,
+    rating: typeof item.rating === 'number' && item.rating > 0 ? item.rating : null,
     industry: item.industry || null,
   }
 }
@@ -112,21 +112,22 @@ export default function Home() {
     : null
   const FAQ_ITEMS = (apiFaqItems && apiFaqItems.length > 0) ? apiFaqItems : FALLBACK_FAQ_ITEMS
 
-  // Fetch testimonials from the backend; fall back to mock then translation array.
+  // Fetch testimonials from the backend.
+  // Once the API responds (even with an empty array) we use that result directly
+  // so the dashboard is the single source of truth — no dummy fallback data.
+  // While loading (apiTestimonials still null) we show locale / placeholder data.
   const { data: apiTestimonials, error: testimonialsError } = useApi('/api/testimonials')
-  const fallbackPublished = FALLBACK_TESTIMONIALS.filter(t => t.status === 'published')
-  const apiList = Array.isArray(apiTestimonials) ? apiTestimonials : null
-  const sourceList = (apiList && apiList.length > 0)
-    ? apiList
-    : (testimonialsError && fallbackPublished.length > 0 ? fallbackPublished : null)
+  const apiResolved = Array.isArray(apiTestimonials)  // API has responded
 
   const localeTestimonials = t('homeV2.testimonials.items', { returnObjects: true })
 
-  const CAROUSEL_TESTIMONIALS = sourceList
-    ? sourceList.map(mapApiTestimonialToCarousel)
-    : Array.isArray(localeTestimonials)
-      ? localeTestimonials
-      : PLACEHOLDER_TESTIMONIALS
+  const CAROUSEL_TESTIMONIALS = apiResolved
+    ? apiTestimonials.map(mapApiTestimonialToCarousel)
+    : testimonialsError
+      ? []  // network error → empty (show placeholder cards)
+      : Array.isArray(localeTestimonials)
+        ? localeTestimonials
+        : PLACEHOLDER_TESTIMONIALS
 
   return (
     <PageWrapper>
