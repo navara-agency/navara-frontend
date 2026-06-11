@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Helmet } from 'react-helmet-async'
@@ -54,6 +54,11 @@ export default function Services() {
   const { t } = useTranslation()
   const reduced = useReducedMotion()
   const heroRef = useRef(null)
+  // Blur-filtered orbs + repeat-Infinity animations are too expensive on mobile GPU.
+  // Detect once on mount; SSR-safe.
+  const [isMobile] = useState(() =>
+    typeof window !== 'undefined' && window.innerWidth < 768
+  )
 
   return (
     <PageWrapper>
@@ -81,7 +86,7 @@ export default function Services() {
         {/* ── Continuous hero animations ── */}
 
         {/* Pulsing concentric rings around the content */}
-        {!reduced && [0, 1, 2].map(i => (
+        {!reduced && !isMobile && [0, 1, 2].map(i => (
           <motion.div key={i} aria-hidden="true"
             className="absolute rounded-full pointer-events-none"
             style={{
@@ -96,7 +101,8 @@ export default function Services() {
           />
         ))}
 
-        {/* Floating orb — cyan, drifts top-right */}
+        {/* Floating orbs + shimmer — desktop only (blur filters are too costly on mobile) */}
+        {!isMobile && <>
         <Orb
           style={{
             top: '8%', right: '12%', width: 360, height: 360,
@@ -106,8 +112,6 @@ export default function Services() {
           animate={reduced ? {} : { y: [0, -28, 0], x: [0, 18, 0], scale: [1, 1.08, 1] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
         />
-
-        {/* Floating orb — violet, drifts bottom-left */}
         <Orb
           style={{
             bottom: '5%', left: '6%', width: 300, height: 300,
@@ -117,8 +121,6 @@ export default function Services() {
           animate={reduced ? {} : { y: [0, 22, 0], x: [0, -14, 0], scale: [1, 1.1, 1] }}
           transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 2.5 }}
         />
-
-        {/* Floating orb — pink accent, center-left */}
         <Orb
           style={{
             top: '40%', left: '3%', width: 200, height: 200,
@@ -128,9 +130,10 @@ export default function Services() {
           animate={reduced ? {} : { y: [0, -18, 0], opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
         />
+        </>}
 
         {/* Diagonal shimmer sweep */}
-        {!reduced && (
+        {!reduced && !isMobile && (
           <motion.div aria-hidden="true"
             className="absolute pointer-events-none"
             style={{
@@ -144,7 +147,7 @@ export default function Services() {
         )}
 
         {/* Floating micro-particles */}
-        {!reduced && [
+        {!reduced && !isMobile && [
           { cx: '18%', cy: '30%', color: 'rgba(3,201,224,0.7)', size: 3, dur: 4.5, delay: 0 },
           { cx: '35%', cy: '65%', color: 'rgba(82,55,159,0.6)', size: 2, dur: 6, delay: 1 },
           { cx: '55%', cy: '25%', color: 'rgba(255,165,205,0.6)', size: 2.5, dur: 5, delay: 0.8 },
@@ -188,7 +191,8 @@ export default function Services() {
       <section className="relative py-24 overflow-hidden" aria-label="Service packages"
         style={{ background: 'linear-gradient(160deg, #f8f9ff 0%, #f0ebff 40%, #f5f8ff 70%, #ece6ff 100%)' }}>
 
-        {/* Breathing violet blob — top-end */}
+        {/* Animated blobs — desktop only */}
+        {!isMobile && <>
         <Orb
           style={{
             top: '-10%', right: '-5%', width: 600, height: 600,
@@ -198,8 +202,6 @@ export default function Services() {
           animate={reduced ? {} : { scale: [1, 1.12, 1], opacity: [0.7, 1, 0.7] }}
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
-
-        {/* Breathing cyan blob — bottom-start */}
         <Orb
           style={{
             bottom: '-8%', left: '-4%', width: 500, height: 500,
@@ -209,8 +211,6 @@ export default function Services() {
           animate={reduced ? {} : { scale: [1, 1.1, 1], opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
         />
-
-        {/* Mid violet accent blob */}
         <Orb
           style={{
             top: '40%', left: '45%', width: 350, height: 350,
@@ -221,6 +221,7 @@ export default function Services() {
           animate={reduced ? {} : { scale: [1, 1.15, 1] }}
           transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
         />
+        </>}
 
         <div className="max-w-[1200px] mx-auto px-6 md:px-8 relative z-10">
           <FadeUp>

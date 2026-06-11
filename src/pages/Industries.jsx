@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Helmet } from 'react-helmet-async'
@@ -85,6 +85,9 @@ export default function Industries() {
   const { t } = useTranslation()
   const reduced = useReducedMotion()
   const heroRef = useRef(null)
+  const [isMobile] = useState(() =>
+    typeof window !== 'undefined' && window.innerWidth < 768
+  )
 
   return (
     <PageWrapper>
@@ -109,7 +112,7 @@ export default function Industries() {
           style={{ background: 'linear-gradient(155deg, rgba(6,0,120,0.9) 0%, rgba(4,0,78,0.85) 55%, rgba(20,5,100,0.9) 100%)' }} />
 
         {/* ── Pulsing concentric rings ── */}
-        {!reduced && [0, 1, 2].map(i => (
+        {!reduced && !isMobile && [0, 1, 2].map(i => (
           <motion.div key={i} aria-hidden="true"
             className="absolute rounded-full pointer-events-none"
             style={{
@@ -121,7 +124,8 @@ export default function Industries() {
             transition={{ duration: 5.5, repeat: Infinity, ease: 'easeOut', delay: i * 1.8 }} />
         ))}
 
-        {/* ── Floating ambient orbs ── */}
+        {/* ── Floating ambient orbs + shimmer — desktop only ── */}
+        {!isMobile && <>
         <Orb
           style={{ top: '5%', right: '8%', width: 380, height: 380, background: 'radial-gradient(circle, rgba(3,201,224,0.13) 0%, transparent 70%)', filter: 'blur(70px)' }}
           animate={reduced ? {} : { y: [0, -28, 0], x: [0, 14, 0] }}
@@ -134,17 +138,18 @@ export default function Industries() {
           style={{ top: '38%', right: '2%', width: 200, height: 200, background: 'radial-gradient(circle, rgba(255,165,205,0.1) 0%, transparent 70%)', filter: 'blur(45px)' }}
           animate={reduced ? {} : { y: [0, -14, 0], opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }} />
+        </>}
 
         {/* ── Diagonal shimmer sweep ── */}
-        {!reduced && (
+        {!reduced && !isMobile && (
           <motion.div aria-hidden="true" className="absolute pointer-events-none"
             style={{ width: 3, height: '220%', top: '-60%', background: 'linear-gradient(to bottom, transparent 0%, rgba(3,201,224,0.15) 50%, transparent 100%)', rotate: 28, transformOrigin: 'center' }}
             animate={{ left: ['-10%', '115%'] }}
             transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 5.5, ease: 'easeInOut' }} />
         )}
 
-        {/* ── Floating ghost industry icons ── */}
-        {!reduced && HERO_GHOSTS.map(({ Icon, size, left, top, dur, dx, dy, rotA, delay }, i) => (
+        {/* ── Floating ghost industry icons — desktop only ── */}
+        {!reduced && !isMobile && HERO_GHOSTS.map(({ Icon, size, left, top, dur, dx, dy, rotA, delay }, i) => (
           <motion.div key={i} aria-hidden="true"
             className="absolute pointer-events-none"
             style={{ left, top, color: i % 2 === 0 ? 'rgba(3,201,224,0.07)' : 'rgba(82,55,159,0.07)' }}
@@ -155,8 +160,8 @@ export default function Industries() {
           </motion.div>
         ))}
 
-        {/* RefreshCw continuously spins */}
-        {!reduced && (
+        {/* RefreshCw continuously spins — desktop only */}
+        {!reduced && !isMobile && (
           <motion.div aria-hidden="true"
             className="absolute pointer-events-none"
             style={{ left: SPIN_GHOST.left, top: SPIN_GHOST.top, color: 'rgba(3,201,224,0.07)' }}

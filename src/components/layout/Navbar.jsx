@@ -118,7 +118,15 @@ export default function Navbar() {
   const progressOpacity = useTransform(scrollY, [0, 80], [0, 1])
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    let ticking = false
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 40)
+        ticking = false
+      })
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -136,17 +144,11 @@ export default function Navbar() {
     exit: { x: isRTL ? '-100%' : '100%' },
   }
 
+  // No per-link stagger on mobile — animating 7 elements simultaneously on a low-end
+  // device while the panel itself is also sliding in causes visible jank.
   const mobileLinkVariants = {
-    hidden: shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 },
-    visible: (i) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: shouldReduceMotion ? 0 : i * 0.07,
-        duration: 0.3,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    }),
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.18, ease: 'easeOut' } },
   }
 
   return (
@@ -282,7 +284,6 @@ export default function Navbar() {
             {NAV_LINKS.map(({ key, href }, i) => (
               <motion.div
                 key={key}
-                custom={i}
                 variants={mobileLinkVariants}
                 initial="hidden"
                 animate="visible"
@@ -301,7 +302,6 @@ export default function Navbar() {
             ))}
 
             <motion.div
-              custom={NAV_LINKS.length}
               variants={mobileLinkVariants}
               initial="hidden"
               animate="visible"

@@ -587,12 +587,12 @@ export default function TestimonialsCarousel({ testimonials }) {
           {/* Arrows */}
           {total > 1 && (
             <>
-              <div className="absolute top-1/2 -translate-y-1/2 -start-6">
+              <div className="absolute top-1/2 -translate-y-1/2 start-2 lg:-start-6">
                 <ArrowButton onClick={retreat} label="Previous testimonial">
                   <ChevronLeft size={20} className="text-primary-dark-blue" />
                 </ArrowButton>
               </div>
-              <div className="absolute top-1/2 -translate-y-1/2 -end-6">
+              <div className="absolute top-1/2 -translate-y-1/2 end-2 lg:-end-6">
                 <ArrowButton onClick={advance} label="Next testimonial">
                   <ChevronRight size={20} className="text-primary-dark-blue" />
                 </ArrowButton>
