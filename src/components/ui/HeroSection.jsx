@@ -112,12 +112,12 @@ export default function HeroSection({ onCtaClick }) {
           ))}
         </motion.h1>
 
-        {/* Subheadline */}
+        {/* Subheadline — no opacity animation so Chrome can record LCP immediately */}
         <motion.p
           className="font-somar font-semibold text-white/75 uppercase tracking-[0.08em] mb-10"
           style={{ fontSize: 'clamp(0.8rem, 1.4vw, 0.97rem)' }}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ y: 16 }}
+          animate={{ y: 0 }}
           transition={fade(0.75, reduced)}
         >
           {t('homeV2.hero.subheadline')}
