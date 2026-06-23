@@ -59,26 +59,41 @@ function ThreeDayDateTimePicker({ dateValue, onDateChange, slotValue, onSlotChan
   useEffect(() => {
     let cancelled = false
     setScanLoading(true)
-    Promise.all(candidates.map(async (d) => {
-      const ds = fmtLocalDate(d)
-      try {
-        const res = await api.get('/api/calcom/slots', { query: { date: ds, market: market || '', timezone } })
-        return { ds, slots: Array.isArray(res?.slots) ? res.slots : [], configured: res?.configured !== false }
-      } catch {
-        return { ds, slots: [], configured: true }
-      }
-    })).then((results) => {
-      if (cancelled) return
+
+    async function scan() {
       const map = {}
       let anyConfigured = false
-      for (const r of results) {
-        map[r.ds] = r.slots
-        if (r.configured) anyConfigured = true
+      // Scan 5 days at a time and stop as soon as TARGET_AVAILABLE_DAYS are found.
+      // Avoids firing all 22 requests at once — typical Mon–Fri schedule resolves
+      // in the first batch of 5 calendar days.
+      const batchSize = 5
+      for (let i = 0; i < candidates.length; i += batchSize) {
+        if (cancelled) return
+        const batch = candidates.slice(i, i + batchSize)
+        const results = await Promise.all(batch.map(async (d) => {
+          const ds = fmtLocalDate(d)
+          try {
+            const res = await api.get('/api/calcom/slots', { query: { date: ds, market: market || '', timezone } })
+            return { ds, slots: Array.isArray(res?.slots) ? res.slots : [], configured: res?.configured !== false }
+          } catch {
+            return { ds, slots: [], configured: true }
+          }
+        }))
+        if (cancelled) return
+        for (const r of results) {
+          map[r.ds] = r.slots
+          if (r.configured) anyConfigured = true
+        }
+        if (Object.values(map).filter(s => s.length > 0).length >= TARGET_AVAILABLE_DAYS) break
       }
-      setSlotsByDate(map)
-      setCalConfigured(anyConfigured)
-      setScanLoading(false)
-    })
+      if (!cancelled) {
+        setSlotsByDate({ ...map })
+        setCalConfigured(anyConfigured)
+        setScanLoading(false)
+      }
+    }
+
+    scan()
     return () => { cancelled = true }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [market, timezone])
