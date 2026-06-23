@@ -79,10 +79,10 @@ function PublicSite() {
 
   useEffect(() => {
     if ('requestIdleCallback' in window) {
-      const id = requestIdleCallback(prefetchPublicRoutes, { timeout: 4000 })
+      const id = requestIdleCallback(prefetchPublicRoutes, { timeout: 1000 })
       return () => cancelIdleCallback(id)
     }
-    const id = setTimeout(prefetchPublicRoutes, 4000)
+    const id = setTimeout(prefetchPublicRoutes, 1000)
     return () => clearTimeout(id)
   }, [])
 

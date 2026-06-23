@@ -327,7 +327,7 @@ export default function Contact() {
         className="relative min-h-[65vh] flex items-center overflow-hidden bg-primary-dark-blue pt-32 pb-24"
         aria-label="Contact hero"
       >
-        <PhotoBackdrop src="/brand/AbstractBG/ab2.jpg" opacity={0.15} parallax sectionRef={heroRef} />
+        <PhotoBackdrop src="/brand/AbstractBG/ab2.jpg" opacity={0.15} parallax={!lite} sectionRef={heroRef} />
         <div
           aria-hidden="true"
           className="absolute inset-0 pointer-events-none"

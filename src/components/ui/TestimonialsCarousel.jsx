@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useEffect, useRef, useCallback, useMemo } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Star, Play, ChevronLeft, ChevronRight, User, Clock } from 'lucide-react'
@@ -363,17 +363,15 @@ export default function TestimonialsCarousel({ testimonials }) {
   const springTransition = { type: 'spring', stiffness: 280, damping: 30 }
   const instantTransition = { duration: 0 }
 
-  // Measure track width
-  useLayoutEffect(() => {
-    const measure = () => { if (trackRef.current) setTrackWidth(trackRef.current.offsetWidth) }
-    measure()
-    window.addEventListener('resize', measure, { passive: true })
-    return () => window.removeEventListener('resize', measure)
-  }, [])
-
+  // Measure track width — ResizeObserver avoids the synchronous offsetWidth read
+  // that useLayoutEffect would force, which was blocking paint for ~280ms.
   useEffect(() => {
-    if (trackRef.current) setTrackWidth(trackRef.current.offsetWidth)
-  }, [visibleCount])
+    const el = trackRef.current
+    if (!el) return
+    const ro = new ResizeObserver(([entry]) => setTrackWidth(entry.contentRect.width))
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
   useEffect(() => {
     const onResize = () => {

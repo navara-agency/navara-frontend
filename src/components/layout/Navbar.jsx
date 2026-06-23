@@ -149,13 +149,6 @@ export default function Navbar() {
     exit: { x: isRTL ? '-100%' : '100%' },
   }
 
-  // No per-link stagger on mobile — animating 7 elements simultaneously on a low-end
-  // device while the panel itself is also sliding in causes visible jank.
-  const mobileLinkVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.18, ease: 'easeOut' } },
-  }
-
   return (
     <>
     <header
@@ -287,12 +280,7 @@ export default function Navbar() {
           {/* Mobile links */}
           <nav className="flex flex-col items-center gap-8 mt-8">
             {NAV_LINKS.map(({ key, href }) => (
-              <motion.div
-                key={key}
-                variants={mobileLinkVariants}
-                initial="hidden"
-                animate="visible"
-              >
+              <div key={key}>
                 <Link
                   to={href}
                   className={`text-2xl font-somar font-semibold ${
@@ -303,14 +291,10 @@ export default function Navbar() {
                 >
                   {t(key)}
                 </Link>
-              </motion.div>
+              </div>
             ))}
 
-            <motion.div
-              variants={mobileLinkVariants}
-              initial="hidden"
-              animate="visible"
-            >
+            <div>
               <Link
                 to="/contact#contact-form"
                 onClick={() => setMobileOpen(false)}
@@ -318,7 +302,7 @@ export default function Navbar() {
               >
                 {t('nav.cta')}
               </Link>
-            </motion.div>
+            </div>
           </nav>
         </motion.div>
         </>
