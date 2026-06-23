@@ -6,11 +6,15 @@
     },
     {
       "source": "/brand/logos/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
+      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=0, max-age=3600" }]
     },
     {
       "source": "/brand/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }]
+      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=0, max-age=86400" }]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=0, max-age=3600" }]
     }
   ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
