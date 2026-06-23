@@ -175,8 +175,7 @@ export const TESTIMONIALS = [
   },
 ]
 
-// Simple Icons via jsDelivr — free CDN, no API key, colored SVGs (grayscale filter applied in marquee)
-const si = (slug) => `https://cdn.simpleicons.org/${slug}`
+const si = (slug) => `/brand/logos/${slug}.svg`
 
 export const LOGOS = [
   { id: 1,  name: 'Nike',       type: 'client',  image: si('nike'),       url: '', order: 1  },
