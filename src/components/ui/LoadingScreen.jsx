@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import useLiteMotion from '../../hooks/useLiteMotion'
 
-const HOLD_MS = 1600
-const HOLD_MS_MOBILE = 700
+const HOLD_MS = 900
+const HOLD_MS_MOBILE = 350
 
 export default function LoadingScreen() {
   const reduced = useReducedMotion()

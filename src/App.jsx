@@ -91,7 +91,7 @@ function PublicSite() {
       <LoadingScreen />
       <ScrollToTop />
       <Navbar />
-      <main className="flex-1">
+      <main className="flex-1 min-h-screen">
         <AnimatedRoutes />
       </main>
       <Footer />

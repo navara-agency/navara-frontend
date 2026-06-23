@@ -188,7 +188,7 @@ export const LOGOS = [
   { id: 7,  name: 'Carrefour',  type: 'client',  image: si('carrefour'),  url: '', order: 7  },
   { id: 8,  name: 'Spotify',    type: 'client',  image: si('spotify'),    url: '', order: 8  },
   { id: 9,  name: 'Zara',       type: 'client',  image: si('zara'),       url: '', order: 9  },
-  { id: 10, name: 'Amazon',     type: 'client',  image: si('amazon'),     url: '', order: 10 },
+  { id: 10, name: 'Amazon',     type: 'client',  image: null,             url: '', order: 10 },
   { id: 11, name: 'Google Ads', type: 'partner', image: si('googleads'),  url: 'https://ads.google.com',    order: 1 },
   { id: 12, name: 'Meta',       type: 'partner', image: si('meta'),       url: 'https://business.meta.com', order: 2 },
 ]

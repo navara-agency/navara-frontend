@@ -54,6 +54,8 @@ export default function Footer() {
               src="/brand/navara-logo-icon-white.png"
               alt="Navara"
               className="h-10 w-auto mb-4"
+              width="40"
+              height="40"
               loading="lazy"
             />
             <p className="font-somar text-sm font-medium text-white mb-2">
