@@ -28,31 +28,79 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/nv-apple-touch.png" />
     <meta name="theme-color" content="#001192" />
 
+    <!-- Baseline meta description. React Helmet overrides this per route once
+         the app hydrates; this value is what non-rendering crawlers and social
+         scrapers see. Previously absent entirely. -->
+    <meta
+      name="description"
+      content="Navara is Egypt and Saudi Arabia's integrated growth marketing agency — strategy, creative, media buying, and analytics under one roof."
+    />
+
     <!-- Open Graph (social link previews) -->
     <meta property="og:title" content="Navara | Integrated Growth Marketing" />
     <meta property="og:description" content="Navara is Egypt and Saudi Arabia's integrated growth marketing agency — strategy, creative, media buying, and analytics under one roof." />
     <meta property="og:image" content="https://navaraagency.com/og-image.png" />
     <meta property="og:url" content="https://navaraagency.com" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Navara" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="ar_SA" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <title>Navara | Integrated Growth Marketing</title>
 
-    <!-- Schema.org organisation — helps Google show the logo in search results & knowledge panels -->
+    <!-- Schema.org organisation.
+         Two jobs here:
+           1. Get the logo into search results / knowledge panels.
+           2. Teach Google that the Arabic string "نافارا للتسويق الإلكتروني"
+              refers to THIS domain. Right now Google resolves "نافارا" to the
+              Nissan Navara pickup truck, because no page anywhere connects the
+              Arabic name to navaraagency.com.
+
+         Note the bare "نافارا" is intentionally absent from alternateName.
+         Nissan + Arabic Wikipedia own that entity and it is not winnable; the
+         compound brand names below are. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Navara",
-      "alternateName": "Navara Agency",
+      "alternateName": [
+        "Navara Agency",
+        "نافارا ايجنسي",
+        "نافارا للتسويق الإلكتروني",
+        "شركة نافارا للتسويق الإلكتروني",
+        "نافارا للتسويق الرقمي"
+      ],
       "url": "https://navaraagency.com",
       "logo": "https://navaraagency.com/nv-icon-512.png",
       "image": "https://navaraagency.com/og-image.png",
       "description": "Egypt and Saudi Arabia's integrated growth marketing agency — strategy, creative, media buying, and analytics under one roof.",
-      "areaServed": ["Egypt", "Saudi Arabia"],
-      "sameAs": [
-        "https://linkedin.com/company/navara",
-        "https://instagram.com/navara"
+      "knowsLanguage": ["ar", "en"],
+      "areaServed": [
+        { "@type": "Country", "name": "SA" },
+        { "@type": "Country", "name": "EG" }
+      ]
+    }
+    </script>
+
+    <!-- Arabic-language description of the same entity. Kept as a separate
+         node so the Arabic string is unambiguous to parsers rather than being
+         buried in a mixed-language field. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://navaraagency.com/#organization",
+      "name": "نافارا للتسويق الإلكتروني",
+      "alternateName": "Navara Agency",
+      "url": "https://navaraagency.com",
+      "logo": "https://navaraagency.com/nv-icon-512.png",
+      "description": "نافارا للتسويق الإلكتروني — وكالة تسويق رقمي متكاملة في السعودية ومصر. استراتيجية، تصميم وبرمجة المواقع والمتاجر الإلكترونية، إدارة الحملات الإعلانية، والتحليلات تحت سقف واحد.",
+      "inLanguage": "ar",
+      "areaServed": [
+        { "@type": "Country", "name": "SA" },
+        { "@type": "Country", "name": "EG" }
       ]
     }
     </script>
