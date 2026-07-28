@@ -1,4 +1,6 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
   "headers": [
     {
       "source": "/assets/(.*)",
@@ -17,5 +19,11 @@
       "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=0, max-age=3600" }]
     }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "comment": "SPA fallback only. Vercel resolves the filesystem first, so the prerendered /services/index.html and /en/services/index.html are served directly; this catches client-only routes that were not prerendered.",
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
