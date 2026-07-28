@@ -2,21 +2,22 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import en from './locales/en.json'
 import ar from './locales/ar.json'
+import { localeFromPath, DEFAULT_LOCALE } from './lib/locale'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'
 
-// Persist language choice across reloads. Without this, refreshing the page reverts
-// to the default (`en`) even after the user clicked AR, which is bad UX.
-const LANG_KEY = 'navara_lang'
-const VALID_LANGS = ['en', 'ar']
-
-function readSavedLang() {
-  if (typeof window === 'undefined') return 'en'
+// The URL is the single source of truth for language.
+//
+// This used to read localStorage, which meant the language was invisible to
+// crawlers and un-shareable (sending someone a link never preserved the
+// language they saw). `/` is Arabic, `/en/...` is English. App.jsx keeps i18n
+// in sync on every navigation; this only seeds the very first render.
+function readInitialLang() {
+  if (typeof window === 'undefined') return DEFAULT_LOCALE
   try {
-    const saved = window.localStorage.getItem(LANG_KEY)
-    return VALID_LANGS.includes(saved) ? saved : 'en'
+    return localeFromPath(window.location.pathname)
   } catch {
-    return 'en'
+    return DEFAULT_LOCALE
   }
 }
 
@@ -34,18 +35,11 @@ i18n
       en: { translation: en },
       ar: { translation: ar },
     },
-    lng: readSavedLang(),
-    fallbackLng: 'en',
+    lng: readInitialLang(),
+    fallbackLng: DEFAULT_LOCALE,
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
   })
-
-// Save every language change so reloads preserve the user's choice.
-i18n.on('languageChanged', (lng) => {
-  if (typeof window === 'undefined') return
-  if (!VALID_LANGS.includes(lng)) return
-  try { window.localStorage.setItem(LANG_KEY, lng) } catch { /* quota / blocked storage */ }
-})
 
 // Repair leftover JSON-stringified arrays/objects from earlier saves where flatten()
 // turned arrays into strings. Strings shaped like "[...]" or "{...}" that parse cleanly

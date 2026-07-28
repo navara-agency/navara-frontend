@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
-import { HelmetProvider } from 'react-helmet-async'
+import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
@@ -13,6 +13,7 @@ import { GeoProvider } from './contexts/GeoContext'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './components/dashboard/ProtectedRoute'
 import GeoDevBadge from './components/dev/GeoDevBadge'
+import { stripLocale, absoluteUrl } from './lib/locale'
 
 // Public site pages — route-level code splitting (T041)
 const Home = lazy(() => import('./pages/Home'))
@@ -40,19 +41,45 @@ const DashboardLogin       = lazy(() => import('./pages/dashboard/DashboardLogin
 function AnimatedRoutes() {
   const location = useLocation()
 
+  // Paths are relative so the same route table resolves under both the Arabic
+  // root (`/services`) and the English prefix (`/en/services`).
   return (
     <AnimatePresence mode="wait">
       <Suspense fallback={null}>
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/industries" element={<Industries />} />
-          <Route path="/how-we-work" element={<HowWeWork />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+          <Route path="services" element={<Services />} />
+          <Route path="industries" element={<Industries />} />
+          <Route path="how-we-work" element={<HowWeWork />} />
+          <Route path="contact" element={<Contact />} />
         </Routes>
       </Suspense>
     </AnimatePresence>
+  )
+}
+
+/**
+ * Per-route canonical + reciprocal hreflang.
+ *
+ * Rendered *after* <main> so it wins over the canonical each page sets in its
+ * own <Helmet> (react-helmet-async resolves later-mounted tags last). Once the
+ * page-level canonicals are made locale-aware this can move anywhere.
+ */
+function LocaleSeo({ locale }) {
+  const { pathname } = useLocation()
+  const neutral = stripLocale(pathname)
+  const ar = absoluteUrl(neutral, 'ar')
+  const en = absoluteUrl(neutral, 'en')
+
+  return (
+    <Helmet>
+      <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} />
+      <link rel="canonical" href={locale === 'en' ? en : ar} />
+      <link rel="alternate" hrefLang="ar" href={ar} />
+      <link rel="alternate" hrefLang="en" href={en} />
+      <link rel="alternate" hrefLang="x-default" href={en} />
+    </Helmet>
   )
 }
 
@@ -67,15 +94,15 @@ function prefetchPublicRoutes() {
   import('./pages/Contact')
 }
 
-function PublicSite() {
+function PublicSite({ locale }) {
   const { i18n } = useTranslation()
 
-  // Sync <html> dir and lang attributes whenever language changes (US5)
+  // The URL drives the language, not the other way round.
   useEffect(() => {
-    const lang = i18n.language
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = lang
-  }, [i18n.language])
+    if (i18n.language !== locale) i18n.changeLanguage(locale)
+    document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr'
+    document.documentElement.lang = locale
+  }, [locale, i18n])
 
   useEffect(() => {
     if ('requestIdleCallback' in window) {
@@ -94,6 +121,7 @@ function PublicSite() {
       <main className="flex-1 min-h-screen">
         <AnimatedRoutes />
       </main>
+      <LocaleSeo locale={locale} />
       <Footer />
       <StickyBooking />
       <FloatingContacts />
@@ -143,8 +171,10 @@ export default function App() {
             <Routes>
               {/* Dashboard — own layout, no public Navbar/Footer */}
               <Route path="/dashboard/*" element={<DashboardRoot />} />
-              {/* Public marketing site */}
-              <Route path="/*" element={<PublicSite />} />
+              {/* English site — prefixed */}
+              <Route path="/en/*" element={<PublicSite locale="en" />} />
+              {/* Arabic site — default, unprefixed */}
+              <Route path="/*" element={<PublicSite locale="ar" />} />
             </Routes>
           </GeoProvider>
         </AuthProvider>
