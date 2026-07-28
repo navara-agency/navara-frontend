@@ -1,30 +1,33 @@
 /**
  * Single source of truth for the site's language-aware URL shape.
  *
- * English stays at the root; Arabic is prefixed with /ar.
+ * Arabic is the default language and lives at the root. English is prefixed.
  *
- *   /            /about        /services       ...  -> English
- *   /ar          /ar/about     /ar/services    ...  -> Arabic
+ *   /            /about        /services       ...  -> Arabic
+ *   /en          /en/about     /en/services    ...  -> English
  *
- * The root was NOT given to Arabic, even though SA/EG is the primary market and
- * root URLs carry more weight. Every English page is already indexed and the
- * site ranks #1 for "navara agency"; handing the root to Arabic would change
- * what those indexed URLs serve and strand the English pages on new URLs with
- * no accumulated authority. /ar is purely additive — nothing that currently
- * ranks moves or changes language. Revisit once /ar has authority of its own.
+ * The root belongs to Arabic because SA/EG is the primary market and the
+ * Arabic pages are the ones that should carry the site's authority long-term.
+ *
+ * Known cost of this shape: the English pages were previously at the root and
+ * are already indexed (the site ranks #1 for "navara agency"). Moving them to
+ * /en means they re-index as new URLs and English rankings will move, and
+ * probably dip, for a few weeks. Accepted deliberately — do not "fix" this by
+ * redirecting /about to /en/about, which would put English back at the root
+ * and undo the whole change.
  */
 
 export const ORIGIN = 'https://navaraagency.com'
 
 /** The language served from the root, i.e. with no prefix. */
-export const DEFAULT_LANG = 'en'
+export const DEFAULT_LANG = 'ar'
 /** The language served from a URL prefix. */
-export const PREFIXED_LANG = 'ar'
+export const PREFIXED_LANG = 'en'
 export const VALID_LANGS = ['en', 'ar']
 
 /**
  * Public route slugs without a language prefix. '' is the home page.
- * App.jsx renders each of these twice (bare + /ar), so adding a public page
+ * App.jsx renders each of these twice (bare + /en), so adding a public page
  * means adding it here and to PUBLIC_ROUTES in App.jsx — nowhere else.
  */
 export const PUBLIC_SLUGS = ['', 'about', 'services', 'industries', 'how-we-work', 'contact']
@@ -41,13 +44,13 @@ export function isDashboardPath(pathname = '/') {
  * was never indexable.
  */
 export function langFromPath(pathname = '/') {
-  return pathname === '/ar' || pathname.startsWith('/ar/') ? PREFIXED_LANG : DEFAULT_LANG
+  return pathname === '/en' || pathname.startsWith('/en/') ? PREFIXED_LANG : DEFAULT_LANG
 }
 
-/** Remove the /ar prefix, returning the English path. */
+/** Remove the /en prefix, returning the canonical Arabic path. */
 export function stripLang(pathname = '/') {
-  if (pathname === '/ar') return '/'
-  if (pathname.startsWith('/ar/')) return pathname.slice(3) || '/'
+  if (pathname === '/en') return '/'
+  if (pathname.startsWith('/en/')) return pathname.slice(3) || '/'
   return pathname || '/'
 }
 
@@ -55,7 +58,7 @@ export function stripLang(pathname = '/') {
 export function localizedPath(pathname = '/', lang = DEFAULT_LANG) {
   const base = stripLang(pathname)
   if (lang !== PREFIXED_LANG) return base
-  return base === '/' ? '/ar' : `/ar${base}`
+  return base === '/' ? '/en' : `/en${base}`
 }
 
 /** The same page in the other language — powers the navbar switcher + hreflang. */
