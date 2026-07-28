@@ -2,31 +2,23 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import en from './locales/en.json'
 import ar from './locales/ar.json'
+import { DEFAULT_LOCALE } from './config/locales'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'
 
-// Persist language choice across reloads. Without this, refreshing the page reverts
-// to the default (`en`) even after the user clicked AR, which is bad UX.
 const LANG_KEY = 'navara_lang'
 const VALID_LANGS = ['en', 'ar']
 
-function readSavedLang() {
-  if (typeof window === 'undefined') return 'en'
-  try {
-    const saved = window.localStorage.getItem(LANG_KEY)
-    return VALID_LANGS.includes(saved) ? saved : 'en'
-  } catch {
-    return 'en'
-  }
-}
-
-// Initialise with bundled JSON for instant render. Then asynchronously fetch the live
-// translations from /api/translations/:lang and overwrite the bundles, so dashboard edits
-// take effect on the next hard-refresh of the public site.
+// NOTE: startup language is NOT read from localStorage any more.
 //
-// We don't use i18next-http-backend's auto-fetch flow because it skips namespaces that
-// are already registered via the `resources` option — which means it would never actually
-// hit our API in this configuration.
+// It used to be, with an `en` fallback — which meant every visitor without a
+// stored preference was served English. Crawlers never have localStorage, so
+// Google only ever saw the English site and the Arabic pages could not be
+// indexed at all.
+//
+// The URL is now the source of truth (see src/config/locales.js and
+// LocaleProvider). We initialise with the default locale and LocaleProvider
+// immediately reconciles it with the path on mount.
 i18n
   .use(initReactI18next)
   .init({
@@ -34,13 +26,14 @@ i18n
       en: { translation: en },
       ar: { translation: ar },
     },
-    lng: readSavedLang(),
-    fallbackLng: 'en',
+    lng: DEFAULT_LOCALE,
+    fallbackLng: DEFAULT_LOCALE,
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
   })
 
-// Save every language change so reloads preserve the user's choice.
+// Still recorded, purely so we can offer a "you were last reading in X" hint
+// later if we want one. It no longer decides what gets rendered.
 i18n.on('languageChanged', (lng) => {
   if (typeof window === 'undefined') return
   if (!VALID_LANGS.includes(lng)) return
@@ -100,7 +93,10 @@ async function loadLiveTranslations() {
 // Defer live translation fetch until the browser is idle so it doesn't compete
 // with critical resources on initial load. Falls back to a 3 s timeout on browsers
 // that don't support requestIdleCallback (e.g. older Safari).
-if (typeof window !== 'undefined') {
+//
+// Skipped during prerendering: the build-time crawl should serialise the bundled
+// translations deterministically rather than whatever the API happens to return.
+if (typeof window !== 'undefined' && !window.__PRERENDER__) {
   const run = () => loadLiveTranslations().catch(() => { /* ignore */ })
   if ('requestIdleCallback' in window) {
     requestIdleCallback(run, { timeout: 3000 })

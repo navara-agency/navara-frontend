@@ -2,7 +2,6 @@ import { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { HelmetProvider } from 'react-helmet-async'
-import { useTranslation } from 'react-i18next'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import ScrollToTop from './components/ScrollToTop'
@@ -11,8 +10,10 @@ import FloatingContacts from './components/ui/FloatingContacts'
 import LoadingScreen from './components/ui/LoadingScreen'
 import { GeoProvider } from './contexts/GeoContext'
 import { AuthProvider } from './contexts/AuthContext'
+import { LocaleProvider } from './contexts/LocaleContext'
 import ProtectedRoute from './components/dashboard/ProtectedRoute'
 import GeoDevBadge from './components/dev/GeoDevBadge'
+import { detectLocale } from './config/locales'
 
 // Public site pages — route-level code splitting (T041)
 const Home = lazy(() => import('./pages/Home'))
@@ -68,15 +69,8 @@ function prefetchPublicRoutes() {
 }
 
 function PublicSite() {
-  const { i18n } = useTranslation()
-
-  // Sync <html> dir and lang attributes whenever language changes (US5)
-  useEffect(() => {
-    const lang = i18n.language
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = lang
-  }, [i18n.language])
-
+  // <html lang>/<html dir> are owned by LocaleProvider, which derives them from
+  // the URL rather than from i18n's in-memory state.
   useEffect(() => {
     if ('requestIdleCallback' in window) {
       const id = requestIdleCallback(prefetchPublicRoutes, { timeout: 1000 })
@@ -133,21 +127,37 @@ function DashboardRoot() {
   )
 }
 
+// Locale is resolved once, from the URL, before the router mounts.
+//
+// Mounting BrowserRouter under `/ar` or `/en` means every existing
+// `<Link to="/services">` and `navigate('/contact#contact-form')` in the pages,
+// Navbar and Footer automatically resolves within the active locale — so an
+// English visitor never gets bounced into the Arabic tree by an internal link,
+// and none of those call sites had to change.
+//
+// Unprefixed URLs (including the whole /dashboard tree) get an empty basename
+// and render the default locale, so every existing link and bookmark still works.
+const { locale, basename, prefixed } = detectLocale(
+  typeof window === 'undefined' ? '/' : window.location.pathname
+)
+
 export default function App() {
   return (
     <HelmetProvider>
-      <BrowserRouter>
-        <AuthProvider>
-          <GeoProvider>
-            <GeoDevBadge />
-            <Routes>
-              {/* Dashboard — own layout, no public Navbar/Footer */}
-              <Route path="/dashboard/*" element={<DashboardRoot />} />
-              {/* Public marketing site */}
-              <Route path="/*" element={<PublicSite />} />
-            </Routes>
-          </GeoProvider>
-        </AuthProvider>
+      <BrowserRouter basename={basename}>
+        <LocaleProvider locale={locale} prefixed={prefixed}>
+          <AuthProvider>
+            <GeoProvider>
+              <GeoDevBadge />
+              <Routes>
+                {/* Dashboard — own layout, no public Navbar/Footer */}
+                <Route path="/dashboard/*" element={<DashboardRoot />} />
+                {/* Public marketing site */}
+                <Route path="/*" element={<PublicSite />} />
+              </Routes>
+            </GeoProvider>
+          </AuthProvider>
+        </LocaleProvider>
       </BrowserRouter>
     </HelmetProvider>
   )

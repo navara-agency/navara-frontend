@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run prerender && npm run sitemap",
+    "build:spa": "vite build",
+    "prerender": "node scripts/prerender.mjs",
+    "sitemap": "node scripts/generate-sitemap.mjs",
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.{js,jsx,json,css}\"",
     "preview": "vite preview"

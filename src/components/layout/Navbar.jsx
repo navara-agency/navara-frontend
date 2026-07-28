@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import useLiteMotion from '../../hooks/useLiteMotion'
+import { useLocale } from '../../contexts/LocaleContext'
 
+// Paths stay locale-agnostic. The router is mounted under a `/ar` or `/en`
+// basename (see App.jsx), so react-router resolves these within the active
+// locale automatically.
 const NAV_LINKS = [
   { key: 'nav.links.services', href: '/services' },
   { key: 'nav.links.about', href: '/about' },
@@ -37,9 +41,8 @@ function isNavActive(to, location) {
 
 function NavLinkAnimated({ to, label }) {
   const shouldReduceMotion = useReducedMotion()
-  const { i18n } = useTranslation()
+  const { isRTL } = useLocale()
   const location = useLocation()
-  const isRTL = i18n.language === 'ar'
   const isActive = isNavActive(to, location)
 
   return (
@@ -99,7 +102,8 @@ function NavLinkAnimated({ to, label }) {
 }
 
 export default function Navbar() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const { locale, isRTL, switchTo } = useLocale()
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -109,7 +113,6 @@ export default function Navbar() {
   // compression effect only exists for the lg+ nav anyway.
   const lite = useLiteMotion()
   const { scrollY, scrollYProgress } = useScroll()
-  const isRTL = i18n.language === 'ar'
 
   // Scroll-driven nav compression: items spread at top, compress on scroll
   const rawGap = useTransform(scrollY, [0, 150], [32, 10])
@@ -136,12 +139,13 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const toggleLanguage = () => {
-    const nextLang = i18n.language === 'en' ? 'ar' : 'en'
-    i18n.changeLanguage(nextLang)
-    document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = nextLang
-  }
+  // Switching language is a navigation, not a state change: it moves the visitor
+  // to the same page under the other locale prefix so the URL always matches
+  // what is rendered.
+  const otherLocale = locale === 'en' ? 'ar' : 'en'
+  const switchLanguage = () => switchTo(otherLocale)
+  const switchLabel = locale === 'en' ? t('nav.lang.ar') : t('nav.lang.en')
+  const switchAria = `Switch to ${locale === 'en' ? 'Arabic' : 'English'}`
 
   const mobileVariants = {
     hidden: { x: isRTL ? '-100%' : '100%' },
@@ -186,11 +190,12 @@ export default function Navbar() {
         {/* Desktop right: language toggle + CTA */}
         <div className="hidden lg:flex items-center gap-4">
           <button
-            onClick={toggleLanguage}
+            onClick={switchLanguage}
             className="text-white font-somar font-medium text-sm hover:text-primary-cyan transition-colors cursor-pointer"
-            aria-label={`Switch to ${i18n.language === 'en' ? 'Arabic' : 'English'}`}
+            aria-label={switchAria}
+            lang={otherLocale}
           >
-            {i18n.language === 'en' ? t('nav.lang.ar') : t('nav.lang.en')}
+            {switchLabel}
           </button>
           <motion.div
             whileHover={{ scale: 1.04, y: -1 }}
@@ -209,11 +214,12 @@ export default function Navbar() {
         {/* Mobile: language + hamburger */}
         <div className="flex lg:hidden items-center gap-3">
           <button
-            onClick={toggleLanguage}
+            onClick={switchLanguage}
             className="text-white font-somar font-medium text-sm hover:text-primary-cyan transition-colors cursor-pointer"
-            aria-label={`Switch to ${i18n.language === 'en' ? 'Arabic' : 'English'}`}
+            aria-label={switchAria}
+            lang={otherLocale}
           >
-            {i18n.language === 'en' ? t('nav.lang.ar') : t('nav.lang.en')}
+            {switchLabel}
           </button>
           <button
             onClick={() => setMobileOpen(true)}
