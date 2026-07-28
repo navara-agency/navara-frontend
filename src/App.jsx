@@ -13,6 +13,7 @@ import { GeoProvider } from './contexts/GeoContext'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './components/dashboard/ProtectedRoute'
 import GeoDevBadge from './components/dev/GeoDevBadge'
+import { LOCALES, ROUTES, toPath, localeFromPath, isRtl } from './lib/locale'
 
 // Public site pages — route-level code splitting (T041)
 const Home = lazy(() => import('./pages/Home'))
@@ -37,6 +38,16 @@ const DashboardEmailServer = lazy(() => import('./pages/dashboard/DashboardEmail
 const DashboardAccount     = lazy(() => import('./pages/dashboard/DashboardAccount'))
 const DashboardLogin       = lazy(() => import('./pages/dashboard/DashboardLogin'))
 
+// Route slug -> page component. Each entry is mounted once per locale below.
+const PAGE_COMPONENTS = {
+  '': Home,
+  'about': About,
+  'services': Services,
+  'industries': Industries,
+  'how-we-work': HowWeWork,
+  'contact': Contact,
+}
+
 function AnimatedRoutes() {
   const location = useLocation()
 
@@ -44,16 +55,47 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <Suspense fallback={null}>
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/industries" element={<Industries />} />
-          <Route path="/how-we-work" element={<HowWeWork />} />
-          <Route path="/contact" element={<Contact />} />
+          {/* Every page is registered under both locales: Arabic at the root
+              (/services) and English under /en (/en/services). Generating them
+              from ROUTES keeps the two trees from drifting apart, which would
+              break the reciprocal hreflang pairs. */}
+          {LOCALES.flatMap((locale) =>
+            ROUTES.map((route) => {
+              const Component = PAGE_COMPONENTS[route]
+              return (
+                <Route
+                  key={`${locale}:${route}`}
+                  path={toPath(locale, route)}
+                  element={<Component />}
+                />
+              )
+            })
+          )}
         </Routes>
       </Suspense>
     </AnimatePresence>
   )
+}
+
+/**
+ * Keeps i18n and the document's language attributes in step with the URL.
+ *
+ * The URL is the single source of truth for language now, so a prerendered or
+ * directly-opened /en/services renders English on first paint rather than
+ * flashing Arabic while a stored preference is read.
+ */
+function LocaleSync() {
+  const { pathname } = useLocation()
+  const { i18n } = useTranslation()
+  const locale = localeFromPath(pathname)
+
+  useEffect(() => {
+    if (i18n.language !== locale) i18n.changeLanguage(locale)
+    document.documentElement.lang = locale
+    document.documentElement.dir = isRtl(locale) ? 'rtl' : 'ltr'
+  }, [locale, i18n])
+
+  return null
 }
 
 // Warm the public route chunks while the browser is idle so in-app navigation
@@ -68,15 +110,6 @@ function prefetchPublicRoutes() {
 }
 
 function PublicSite() {
-  const { i18n } = useTranslation()
-
-  // Sync <html> dir and lang attributes whenever language changes (US5)
-  useEffect(() => {
-    const lang = i18n.language
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = lang
-  }, [i18n.language])
-
   useEffect(() => {
     if ('requestIdleCallback' in window) {
       const id = requestIdleCallback(prefetchPublicRoutes, { timeout: 1000 })
@@ -88,6 +121,7 @@ function PublicSite() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <LocaleSync />
       <LoadingScreen />
       <ScrollToTop />
       <Navbar />
