@@ -2,7 +2,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import en from './locales/en.json'
 import ar from './locales/ar.json'
-import { DEFAULT_LOCALE, VALID_LANGS_HINT } from './config/locales'
+import { DEFAULT_LOCALE } from './config/locales'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'
 
