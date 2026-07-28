@@ -46,6 +46,7 @@
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="ar_SA" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Navara_Agency" />
 
     <title>Navara | Integrated Growth Marketing</title>
 
@@ -59,11 +60,15 @@
 
          Note the bare "نافارا" is intentionally absent from alternateName.
          Nissan + Arabic Wikipedia own that entity and it is not winnable; the
-         compound brand names below are. -->
+         compound brand names below are.
+
+         sameAs values verified with Omar on 2026-07-28. Keep in sync with
+         src/config/links.js — a mismatch between the two weakens the signal. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
+      "@id": "https://navaraagency.com/#organization",
       "name": "Navara",
       "alternateName": [
         "Navara Agency",
@@ -80,13 +85,20 @@
       "areaServed": [
         { "@type": "Country", "name": "SA" },
         { "@type": "Country", "name": "EG" }
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/company/navara-agency",
+        "https://www.instagram.com/navara_agency",
+        "https://www.facebook.com/navara.agency",
+        "https://www.tiktok.com/@navara_agency",
+        "https://x.com/Navara_Agency"
       ]
     }
     </script>
 
-    <!-- Arabic-language description of the same entity. Kept as a separate
-         node so the Arabic string is unambiguous to parsers rather than being
-         buried in a mixed-language field. -->
+    <!-- Arabic-language description of the same entity. Shares the same @id as
+         the node above so parsers treat them as one organisation rather than
+         two, while keeping the Arabic strings unambiguous. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
