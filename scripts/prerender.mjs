@@ -15,7 +15,23 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { join, extname, dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { chromium } from 'playwright'
+import { execFileSync } from 'node:child_process'
+
+// Install the browser into node_modules rather than a home-directory cache.
+// On CI builders (Vercel included) $HOME is not part of the cached layer, so
+// the default location means a ~110 MB Chromium download on every single build
+// — and a build failure if that download is ever unavailable. node_modules is
+// cached, so this makes the browser a normal cached dependency.
+// Must be set before playwright is imported: it resolves the path at load.
+process.env.PLAYWRIGHT_BROWSERS_PATH ??= '0'
+
+console.log('Ensuring Chromium is installed…')
+execFileSync('npx', ['--yes', 'playwright', 'install', 'chromium'], {
+  stdio: 'inherit',
+  shell: process.platform === 'win32',
+})
+
+const { chromium } = await import('playwright')
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const DIST = resolve(__dirname, '..', 'dist')

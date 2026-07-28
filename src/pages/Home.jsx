@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import useLocalePath from '../hooks/useLocalePath'
 import HeroSection from '../components/ui/HeroSection'
 import PlatformLogos from '../components/ui/PlatformLogos'
 import WhoWeAreSection from '../components/ui/WhoWeAreSection'
@@ -121,10 +122,11 @@ function buildFaqSchema(items, t) {
 export default function Home() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
-  const goToContact = () => navigate('/contact#contact-form')
+  const { path } = useLocalePath()
+  const goToContact = () => navigate(path('contact', '#contact-form'))
 
   // FAQ — fetch from backend; map current language to questionEn/Ar; fall back to translation-key list.
-  const { data: apiFaq, error: faqError } = useApi('/api/faq')
+  const { data: apiFaq } = useApi('/api/faq')
   const isAr = i18n.language === 'ar'
   const apiFaqItems = Array.isArray(apiFaq)
     ? apiFaq

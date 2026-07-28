@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Helmet } from 'react-helmet-async'
+import Seo from '../components/seo/Seo'
 import { Target, Layers, Palette, Check } from 'lucide-react'
 import Section from '../components/layout/Section'
 import FadeUp from '../components/animations/FadeUp'
@@ -57,13 +57,7 @@ export default function Services() {
 
   return (
     <PageWrapper>
-      <Helmet>
-        <title>{t('services.seo.title')}</title>
-        <meta name="description" content={t('services.seo.description')} />
-        <meta property="og:title" content={t('services.seo.title')} />
-        <meta property="og:description" content={t('services.seo.description')} />
-        <link rel="canonical" href="https://navaraagency.com/services" />
-      </Helmet>
+      <Seo />
 
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Helmet } from 'react-helmet-async'
+import Seo from '../components/seo/Seo'
 import { useForm } from 'react-hook-form'
 import { Mail, MapPin, Clock, Calendar } from 'lucide-react'
 import FadeUp from '../components/animations/FadeUp'
@@ -328,13 +328,7 @@ export default function Contact() {
 
   return (
     <PageWrapper>
-      <Helmet>
-        <title>{t('contact.seo.title')}</title>
-        <meta name="description" content={t('contact.seo.description')} />
-        <meta property="og:title" content={t('contact.seo.title')} />
-        <meta property="og:description" content={t('contact.seo.description')} />
-        <link rel="canonical" href="https://navaraagency.com/contact" />
-      </Helmet>
+      <Seo />
 
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section

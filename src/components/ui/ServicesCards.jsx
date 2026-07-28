@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react'
 import { motion, useReducedMotion, useInView, useSpring } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import useLocalePath from '../../hooks/useLocalePath'
 import { ArrowRight } from 'lucide-react'
 
 const META = [
@@ -139,9 +140,10 @@ export default function ServicesCards({ onCtaClick }) {
   const { t } = useTranslation()
   const reduced = useReducedMotion()
   const navigate = useNavigate()
+  const { path } = useLocalePath()
 
   const cards = t('homeV2.services.cards', { returnObjects: true })
-  const handleCta = onCtaClick ?? (() => navigate('/contact#contact-form'))
+  const handleCta = onCtaClick ?? (() => navigate(path('contact', '#contact-form')))
 
   return (
     <section

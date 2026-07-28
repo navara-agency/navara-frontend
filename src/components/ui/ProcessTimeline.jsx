@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import useLocalePath from '../../hooks/useLocalePath'
 import { CAL_LINK } from '../../config/links'
 
 export default function ProcessTimeline({ onCtaClick }) {
@@ -8,10 +9,11 @@ export default function ProcessTimeline({ onCtaClick }) {
   const reduced = useReducedMotion()
   const isRTL = i18n.language === 'ar'
   const navigate = useNavigate()
+  const { path } = useLocalePath()
 
   const steps = t('homeV2.process.steps', { returnObjects: true })
 
-  const handleCta = onCtaClick ?? (() => navigate('/contact#contact-form'))
+  const handleCta = onCtaClick ?? (() => navigate(path('contact', '#contact-form')))
 
   const connectorClass = isRTL
     ? 'bg-gradient-to-r from-[#03c9e0] via-[#3322cc] to-[#060078]'

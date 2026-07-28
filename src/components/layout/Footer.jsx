@@ -21,6 +21,7 @@ import { WHATSAPP_FULL_URL, WHATSAPP_MESSAGE, LINKEDIN_URL, INSTAGRAM_URL } from
 import PhotoBackdrop from '../ui/PhotoBackdrop'
 import { useGeo } from '../../contexts/GeoContext'
 import { useApi } from '../../hooks/useApi'
+import useLocalePath from '../../hooks/useLocalePath'
 
 function buildWhatsappUrl(number) {
   const digits = (number || '').replace(/[^\d]/g, '')
@@ -31,6 +32,7 @@ export default function Footer() {
   const { t } = useTranslation()
   const { config: geoConfig } = useGeo()
   const { data: siteConfig } = useApi('/api/site-config')
+  const { path } = useLocalePath()
 
   const whatsappUrl = buildWhatsappUrl(geoConfig?.whatsapp) || WHATSAPP_FULL_URL
   const linkedinUrl = siteConfig?.global?.linkedinUrl || LINKEDIN_URL
@@ -79,7 +81,7 @@ export default function Footer() {
               ].map((key) => (
                 <li key={key}>
                   <Link
-                    to="/services"
+                    to={path('services')}
                     className="hover:text-primary-cyan transition-colors"
                   >
                     {t(`footer.services.${key}`)}
@@ -96,13 +98,13 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm font-somar">
               {[
-                { key: 'about', href: '/about' },
-                { key: 'industries', href: '/industries' },
-                { key: 'howWeWork', href: '/how-we-work' },
-                { key: 'contact', href: '/contact' },
-              ].map(({ key, href }) => (
+                { key: 'about', route: 'about' },
+                { key: 'industries', route: 'industries' },
+                { key: 'howWeWork', route: 'how-we-work' },
+                { key: 'contact', route: 'contact' },
+              ].map(({ key, route }) => (
                 <li key={key}>
-                  <Link to={href} className="hover:text-primary-cyan transition-colors">
+                  <Link to={path(route)} className="hover:text-primary-cyan transition-colors">
                     {t(`footer.company.${key}`)}
                   </Link>
                 </li>

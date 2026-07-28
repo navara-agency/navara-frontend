@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Helmet } from 'react-helmet-async'
+import Seo from '../components/seo/Seo'
 import { Eye, CheckSquare, Shield } from 'lucide-react'
 import FadeUp from '../components/animations/FadeUp'
 import ProcessStep from '../components/ui/ProcessStep'
@@ -67,13 +67,7 @@ export default function HowWeWork() {
 
   return (
     <PageWrapper>
-      <Helmet>
-        <title>{t('howWeWork.seo.title')}</title>
-        <meta name="description" content={t('howWeWork.seo.description')} />
-        <meta property="og:title" content={t('howWeWork.seo.title')} />
-        <meta property="og:description" content={t('howWeWork.seo.description')} />
-        <link rel="canonical" href="https://navaraagency.com/how-we-work" />
-      </Helmet>
+      <Seo />
 
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <section

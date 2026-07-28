@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import useLocalePath from '../../hooks/useLocalePath'
 import LiquidButton from './LiquidButton'
 
 const fade = (delay, reduced) =>
@@ -34,7 +35,8 @@ export default function HeroSection({ onCtaClick }) {
   )
 
   const navigate = useNavigate()
-  const handleCta = onCtaClick ?? (() => navigate('/contact#contact-form'))
+  const { path } = useLocalePath()
+  const handleCta = onCtaClick ?? (() => navigate(path('contact', '#contact-form')))
 
   return (
     <section

@@ -28,34 +28,18 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/nv-apple-touch.png" />
     <meta name="theme-color" content="#001192" />
 
-    <!-- Defaults only. Every public page renders <Seo /> (src/components/seo/Seo.jsx),
-         which overwrites title/description/canonical/hreflang per route and locale,
-         and the build-time prerenderer bakes those resolved tags into the shipped HTML.
-         These values are the pre-hydration fallback, so they are Arabic to match the
-         root locale. -->
-    <title>وكالة تسويق رقمي متكاملة في مصر والسعودية | نافارا</title>
-    <meta
-      name="description"
-      content="نافارا وكالة تسويق إلكتروني متكاملة تخدم مصر والسعودية: استراتيجية، إبداع، شراء إعلانات، وتحليلات تحت سقف واحد."
-    />
-
-    <!-- Open Graph (social link previews) -->
-    <meta property="og:site_name" content="Navara" />
-    <meta property="og:title" content="وكالة تسويق رقمي متكاملة في مصر والسعودية | نافارا" />
-    <meta property="og:description" content="استراتيجية، إبداع، شراء إعلانات، وتحليلات تحت سقف واحد." />
-    <meta property="og:image" content="https://navaraagency.com/og-image.png" />
-    <meta property="og:url" content="https://navaraagency.com" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="ar_EG" />
-    <meta property="og:locale:alternate" content="en_US" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <!-- Deliberately no title, description, Open Graph or Twitter tags here.
+         Every public page renders the Seo component (src/components/seo/Seo.jsx),
+         which emits all of them per route and per locale. react-helmet-async
+         appends its tags rather than replacing static ones, so declaring them
+         in this shell produced two of each in every prerendered page — including
+         English pages that carried an Arabic title. -->
 
     <!-- ProfessionalService rather than bare Organization: it is the type that
          carries service + locality signals, which is what this site competes on.
-         NOTE: `sameAs` was removed because the previous values
-         (linkedin.com/company/navara, instagram.com/navara) are not verifiably
-         this company, and a wrong sameAs misattributes the brand entity.
-         Add the real profile URLs here. -->
+         `sameAs` points at the confirmed official profiles — this is what ties
+         the domain to the brand entity, and is worth keeping accurate. The same
+         URLs are in src/config/links.js, which the footer links use. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -68,6 +52,10 @@
       "image": "https://navaraagency.com/og-image.png",
       "description": "Integrated growth marketing agency serving Egypt and Saudi Arabia — strategy, creative, media buying and analytics under one roof.",
       "knowsLanguage": ["ar", "en"],
+      "sameAs": [
+        "https://www.linkedin.com/company/navara-agency/",
+        "https://www.instagram.com/navara_agency/"
+      ],
       "areaServed": [
         { "@type": "Country", "name": "Egypt", "identifier": "EG" },
         { "@type": "Country", "name": "Saudi Arabia", "identifier": "SA" }
