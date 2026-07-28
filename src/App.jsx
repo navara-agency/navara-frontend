@@ -1,5 +1,5 @@
-import { Suspense, lazy, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { Suspense, lazy, useEffect, useRef } from 'react'
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { HelmetProvider } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
@@ -9,10 +9,12 @@ import ScrollToTop from './components/ScrollToTop'
 import StickyBooking from './components/ui/StickyBooking'
 import FloatingContacts from './components/ui/FloatingContacts'
 import LoadingScreen from './components/ui/LoadingScreen'
+import SeoHead from './components/SeoHead'
 import { GeoProvider } from './contexts/GeoContext'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './components/dashboard/ProtectedRoute'
 import GeoDevBadge from './components/dev/GeoDevBadge'
+import { langFromPath, localizedPath, isPublicPath } from './lib/routes'
 
 // Public site pages — route-level code splitting (T041)
 const Home = lazy(() => import('./pages/Home'))
@@ -37,6 +39,17 @@ const DashboardEmailServer = lazy(() => import('./pages/dashboard/DashboardEmail
 const DashboardAccount     = lazy(() => import('./pages/dashboard/DashboardAccount'))
 const DashboardLogin       = lazy(() => import('./pages/dashboard/DashboardLogin'))
 
+// Declared once, mounted twice: bare path (Arabic) and /en-prefixed (English).
+// Adding a public page means adding it here and to PUBLIC_SLUGS in lib/routes.js.
+const PUBLIC_ROUTES = [
+  { slug: '',            element: <Home /> },
+  { slug: 'about',       element: <About /> },
+  { slug: 'services',    element: <Services /> },
+  { slug: 'industries',  element: <Industries /> },
+  { slug: 'how-we-work', element: <HowWeWork /> },
+  { slug: 'contact',     element: <Contact /> },
+]
+
 function AnimatedRoutes() {
   const location = useLocation()
 
@@ -44,16 +57,59 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <Suspense fallback={null}>
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/industries" element={<Industries />} />
-          <Route path="/how-we-work" element={<HowWeWork />} />
-          <Route path="/contact" element={<Contact />} />
+          {/* Arabic — canonical, lives at the root */}
+          {PUBLIC_ROUTES.map(({ slug, element }) => (
+            <Route key={`ar-${slug}`} path={`/${slug}`} element={element} />
+          ))}
+          {/* English — /en prefix */}
+          {PUBLIC_ROUTES.map(({ slug, element }) => (
+            <Route key={`en-${slug}`} path={`/en/${slug}`} element={element} />
+          ))}
         </Routes>
       </Suspense>
     </AnimatePresence>
   )
+}
+
+/**
+ * Keeps i18n and the <html> attributes slaved to the URL, which is now the only
+ * source of truth for language.
+ *
+ * Also contains a safety net. Any internal <Link to="/contact"> that hasn't been
+ * migrated to LocalizedLink will drop an English visitor onto the Arabic URL and
+ * silently flip their language mid-session. When we see an en -> ar transition
+ * that the visitor did not explicitly ask for (the navbar switcher marks its own
+ * navigations with router state), we rewrite the URL back into English instead.
+ * Costs one client-side replace; prevents a confusing language flip.
+ */
+function LanguageSync() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { i18n } = useTranslation()
+  const prevLangRef = useRef(null)
+
+  useEffect(() => {
+    const urlLang = langFromPath(location.pathname)
+    const prevLang = prevLangRef.current
+    const deliberateSwitch = Boolean(location.state && location.state.langSwitch)
+
+    if (
+      !deliberateSwitch &&
+      prevLang === 'en' &&
+      urlLang === 'ar' &&
+      isPublicPath(location.pathname)
+    ) {
+      navigate(localizedPath(location.pathname, 'en') + location.hash, { replace: true })
+      return
+    }
+
+    prevLangRef.current = urlLang
+    if (i18n.language !== urlLang) i18n.changeLanguage(urlLang)
+    document.documentElement.dir = urlLang === 'ar' ? 'rtl' : 'ltr'
+    document.documentElement.lang = urlLang
+  }, [location.pathname, location.hash, location.state, i18n, navigate])
+
+  return null
 }
 
 // Warm the public route chunks while the browser is idle so in-app navigation
@@ -68,15 +124,6 @@ function prefetchPublicRoutes() {
 }
 
 function PublicSite() {
-  const { i18n } = useTranslation()
-
-  // Sync <html> dir and lang attributes whenever language changes (US5)
-  useEffect(() => {
-    const lang = i18n.language
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = lang
-  }, [i18n.language])
-
   useEffect(() => {
     if ('requestIdleCallback' in window) {
       const id = requestIdleCallback(prefetchPublicRoutes, { timeout: 1000 })
@@ -88,6 +135,7 @@ function PublicSite() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <LanguageSync />
       <LoadingScreen />
       <ScrollToTop />
       <Navbar />
@@ -97,16 +145,29 @@ function PublicSite() {
       <Footer />
       <StickyBooking />
       <FloatingContacts />
+      {/*
+        Mounted after <AnimatedRoutes> deliberately. react-helmet-async resolves
+        duplicate tags in mount order (last wins) and the page components still
+        hardcode an identical <link rel="canonical">. Rendering later lets the
+        correct per-route canonical + hreflang win without editing six pages.
+        See the note in SeoHead.jsx.
+      */}
+      <SeoHead />
     </div>
   )
 }
 
 function DashboardRoot() {
-  // Dashboard always LTR regardless of public site language setting
+  const { i18n } = useTranslation()
+
+  // Dashboard is an internal English-only tool. It sits at /dashboard with no
+  // /en prefix, so without pinning it here it would inherit the public site's
+  // Arabic default once language became URL-derived.
   useEffect(() => {
     document.documentElement.dir = 'ltr'
     document.documentElement.lang = 'en'
-  }, [])
+    if (i18n.language !== 'en') i18n.changeLanguage('en')
+  }, [i18n])
 
   return (
     <Suspense fallback={null}>
