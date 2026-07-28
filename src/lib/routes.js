@@ -1,23 +1,31 @@
 /**
  * Single source of truth for the site's language-aware URL shape.
  *
- * Arabic is canonical and lives at the root; English is prefixed with /en.
- * That split is deliberate: the audience is Saudi Arabia and Egypt, so the
- * Arabic pages get the shorter, higher-authority URLs and x-default.
+ * English stays at the root; Arabic is prefixed with /ar.
  *
- *   /            /about        /services       ...  -> Arabic
- *   /en          /en/about     /en/services    ...  -> English
+ *   /            /about        /services       ...  -> English
+ *   /ar          /ar/about     /ar/services    ...  -> Arabic
+ *
+ * The root was NOT given to Arabic, even though SA/EG is the primary market and
+ * root URLs carry more weight. Every English page is already indexed and the
+ * site ranks #1 for "navara agency"; handing the root to Arabic would change
+ * what those indexed URLs serve and strand the English pages on new URLs with
+ * no accumulated authority. /ar is purely additive — nothing that currently
+ * ranks moves or changes language. Revisit once /ar has authority of its own.
  */
 
 export const ORIGIN = 'https://navaraagency.com'
 
-export const DEFAULT_LANG = 'ar'
+/** The language served from the root, i.e. with no prefix. */
+export const DEFAULT_LANG = 'en'
+/** The language served from a URL prefix. */
+export const PREFIXED_LANG = 'ar'
 export const VALID_LANGS = ['en', 'ar']
 
 /**
  * Public route slugs without a language prefix. '' is the home page.
- * App.jsx renders each of these twice (bare + /en), so adding a public page
- * means adding it here and in App.jsx's PUBLIC_ROUTES — nowhere else.
+ * App.jsx renders each of these twice (bare + /ar), so adding a public page
+ * means adding it here and to PUBLIC_ROUTES in App.jsx — nowhere else.
  */
 export const PUBLIC_SLUGS = ['', 'about', 'services', 'industries', 'how-we-work', 'contact']
 
@@ -33,28 +41,28 @@ export function isDashboardPath(pathname = '/') {
  * was never indexable.
  */
 export function langFromPath(pathname = '/') {
-  return pathname === '/en' || pathname.startsWith('/en/') ? 'en' : DEFAULT_LANG
+  return pathname === '/ar' || pathname.startsWith('/ar/') ? PREFIXED_LANG : DEFAULT_LANG
 }
 
-/** Remove the /en prefix, returning the canonical Arabic path. */
+/** Remove the /ar prefix, returning the English path. */
 export function stripLang(pathname = '/') {
-  if (pathname === '/en') return '/'
-  if (pathname.startsWith('/en/')) return pathname.slice(3) || '/'
+  if (pathname === '/ar') return '/'
+  if (pathname.startsWith('/ar/')) return pathname.slice(3) || '/'
   return pathname || '/'
 }
 
 /** Render `pathname` in `lang`. Accepts already-prefixed or bare input. */
 export function localizedPath(pathname = '/', lang = DEFAULT_LANG) {
   const base = stripLang(pathname)
-  if (lang !== 'en') return base
-  return base === '/' ? '/en' : `/en${base}`
+  if (lang !== PREFIXED_LANG) return base
+  return base === '/' ? '/ar' : `/ar${base}`
 }
 
 /** The same page in the other language — powers the navbar switcher + hreflang. */
 export function counterpartPath(pathname = '/') {
-  return langFromPath(pathname) === 'en'
+  return langFromPath(pathname) === PREFIXED_LANG
     ? stripLang(pathname)
-    : localizedPath(pathname, 'en')
+    : localizedPath(pathname, PREFIXED_LANG)
 }
 
 /** True if the path maps to a known public marketing page in either language. */

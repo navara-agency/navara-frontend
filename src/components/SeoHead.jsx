@@ -24,20 +24,20 @@ export default function SeoHead() {
   const { pathname } = useLocation()
   const lang = langFromPath(pathname)
 
-  const arPath = stripLang(pathname)
-  const enPath = localizedPath(pathname, 'en')
-  const canonical = ORIGIN + (lang === 'en' ? enPath : arPath)
+  const enPath = stripLang(pathname)
+  const arPath = localizedPath(pathname, 'ar')
+  const canonical = ORIGIN + (lang === 'ar' ? arPath : enPath)
 
   return (
     <Helmet>
       <html lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'} />
       <link rel="canonical" href={canonical} />
 
-      {/* Reciprocal and absolute, which Google requires. x-default points at
-          Arabic because SA/EG is the primary market. */}
-      <link rel="alternate" hrefLang="ar" href={ORIGIN + arPath} />
+      {/* Reciprocal and absolute, which Google requires. x-default points at the
+          root English page: it is the established, already-indexed URL. */}
       <link rel="alternate" hrefLang="en" href={ORIGIN + enPath} />
-      <link rel="alternate" hrefLang="x-default" href={ORIGIN + arPath} />
+      <link rel="alternate" hrefLang="ar" href={ORIGIN + arPath} />
+      <link rel="alternate" hrefLang="x-default" href={ORIGIN + enPath} />
 
       <meta property="og:url" content={canonical} />
       <meta property="og:locale" content={lang === 'ar' ? 'ar_SA' : 'en_US'} />
