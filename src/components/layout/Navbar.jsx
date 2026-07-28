@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import logoIcon from '../../assets/images/navara-logo-icon.png'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import useLiteMotion from '../../hooks/useLiteMotion'
+import { withLocale, stripLocale, localeFromPath } from '../../lib/locale'
 
+// Locale-neutral hrefs. The active locale prefix is applied at render time via
+// withLocale(), so `/services` becomes `/en/services` on the English site.
 const NAV_LINKS = [
   { key: 'nav.links.services', href: '/services' },
   { key: 'nav.links.about', href: '/about' },
@@ -25,14 +28,17 @@ function getNavTarget(to) {
   }
 }
 
+// Compare locale-neutral paths so /services and /en/services both light up
+// the same nav item.
 function isNavActive(to, location) {
   const target = getNavTarget(to)
+  const current = stripLocale(location.pathname)
 
   if (target.hash) {
-    return location.pathname === target.pathname && location.hash === target.hash
+    return current === target.pathname && location.hash === target.hash
   }
 
-  return location.pathname === target.pathname
+  return current === target.pathname
 }
 
 function NavLinkAnimated({ to, label }) {
@@ -41,9 +47,10 @@ function NavLinkAnimated({ to, label }) {
   const location = useLocation()
   const isRTL = i18n.language === 'ar'
   const isActive = isNavActive(to, location)
+  const href = withLocale(to, localeFromPath(location.pathname))
 
   return (
-    <Link to={to} aria-current={isActive ? 'page' : undefined}>
+    <Link to={href} aria-current={isActive ? 'page' : undefined}>
       {shouldReduceMotion ? (
         <span
           className={`relative inline-block font-somar font-medium transition-colors duration-200 ${
@@ -101,6 +108,7 @@ function NavLinkAnimated({ to, label }) {
 export default function Navbar() {
   const { t, i18n } = useTranslation()
   const location = useLocation()
+  const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const shouldReduceMotion = useReducedMotion()
@@ -110,6 +118,10 @@ export default function Navbar() {
   const lite = useLiteMotion()
   const { scrollY, scrollYProgress } = useScroll()
   const isRTL = i18n.language === 'ar'
+
+  const activeLocale = localeFromPath(location.pathname)
+  const homeHref = withLocale('/', activeLocale)
+  const contactHref = withLocale('/contact#contact-form', activeLocale)
 
   // Scroll-driven nav compression: items spread at top, compress on scroll
   const rawGap = useTransform(scrollY, [0, 150], [32, 10])
@@ -136,11 +148,13 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Switching language is a navigation, not a state flip — that is what makes
+  // the choice shareable via URL and visible to crawlers. App.jsx syncs i18n
+  // from the new path.
   const toggleLanguage = () => {
-    const nextLang = i18n.language === 'en' ? 'ar' : 'en'
-    i18n.changeLanguage(nextLang)
-    document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = nextLang
+    const nextLang = activeLocale === 'en' ? 'ar' : 'en'
+    const neutral = stripLocale(location.pathname)
+    navigate(`${withLocale(neutral, nextLang)}${location.hash || ''}`)
   }
 
   const mobileVariants = {
@@ -164,7 +178,7 @@ export default function Navbar() {
         aria-label={t('nav.aria')}
       >
         {/* Logo */}
-        <Link to="/" className="flex-shrink-0">
+        <Link to={homeHref} className="flex-shrink-0">
           <img
             src={logoIcon}
             alt="Navara"
@@ -188,9 +202,9 @@ export default function Navbar() {
           <button
             onClick={toggleLanguage}
             className="text-white font-somar font-medium text-sm hover:text-primary-cyan transition-colors cursor-pointer"
-            aria-label={`Switch to ${i18n.language === 'en' ? 'Arabic' : 'English'}`}
+            aria-label={`Switch to ${activeLocale === 'en' ? 'Arabic' : 'English'}`}
           >
-            {i18n.language === 'en' ? t('nav.lang.ar') : t('nav.lang.en')}
+            {activeLocale === 'en' ? t('nav.lang.ar') : t('nav.lang.en')}
           </button>
           <motion.div
             whileHover={{ scale: 1.04, y: -1 }}
@@ -198,7 +212,7 @@ export default function Navbar() {
             transition={{ duration: 0.18, ease: 'easeOut' }}
           >
             <Link
-              to="/contact#contact-form"
+              to={contactHref}
               className="inline-flex items-center justify-center font-somar font-semibold text-sm text-white border border-white/40 rounded-full px-5 py-2 bg-white/5 hover:bg-white hover:text-primary-dark-blue hover:border-white transition-all duration-200 whitespace-nowrap cursor-pointer"
             >
               {t('nav.cta')}
@@ -211,9 +225,9 @@ export default function Navbar() {
           <button
             onClick={toggleLanguage}
             className="text-white font-somar font-medium text-sm hover:text-primary-cyan transition-colors cursor-pointer"
-            aria-label={`Switch to ${i18n.language === 'en' ? 'Arabic' : 'English'}`}
+            aria-label={`Switch to ${activeLocale === 'en' ? 'Arabic' : 'English'}`}
           >
-            {i18n.language === 'en' ? t('nav.lang.ar') : t('nav.lang.en')}
+            {activeLocale === 'en' ? t('nav.lang.ar') : t('nav.lang.en')}
           </button>
           <button
             onClick={() => setMobileOpen(true)}
@@ -282,7 +296,7 @@ export default function Navbar() {
             {NAV_LINKS.map(({ key, href }) => (
               <div key={key}>
                 <Link
-                  to={href}
+                  to={withLocale(href, activeLocale)}
                   className={`text-2xl font-somar font-semibold ${
                     isNavActive(href, location) ? 'text-primary-cyan' : 'text-white'
                   }`}
@@ -296,7 +310,7 @@ export default function Navbar() {
 
             <div>
               <Link
-                to="/contact#contact-form"
+                to={contactHref}
                 onClick={() => setMobileOpen(false)}
                 className="inline-flex items-center justify-center font-somar font-semibold text-white border border-white/40 rounded-full px-8 py-3 bg-white/5 hover:bg-white hover:text-primary-dark-blue transition-all duration-200 cursor-pointer"
               >
