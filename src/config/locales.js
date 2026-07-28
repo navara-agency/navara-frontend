@@ -67,8 +67,13 @@ export function stripLocale(pathname = '/') {
   return pathname.slice(basename.length) || '/'
 }
 
-/** Absolute URL for a route in a given locale, e.g. ('en', '/about') -> https://…/en/about */
+/**
+ * Absolute URL for a route in a given locale, e.g. ('en', '/about') -> https://…/en/about
+ *
+ * Deliberately emits no trailing slash, including for the locale root: the host
+ * is configured with cleanUrls + trailingSlash:false, so `/ar/` 308-redirects to
+ * `/ar`. Canonicals and hreflang must name the destination, not the redirect.
+ */
 export function absoluteUrl(locale, route) {
-  const path = route === '/' ? '/' : route
-  return `${SITE_URL}/${locale}${path === '/' ? '/' : path}`
+  return route === '/' ? `${SITE_URL}/${locale}` : `${SITE_URL}/${locale}${route}`
 }
