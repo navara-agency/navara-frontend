@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import useLiteMotion from '../../hooks/useLiteMotion'
+import LocalizedLink from '../LocalizedLink'
+import { langFromPath, stripLang, counterpartPath } from '../../lib/routes'
 
+// Hrefs are written language-agnostically. LocalizedLink adds the /en prefix
+// when the visitor is in English.
 const NAV_LINKS = [
   { key: 'nav.links.services', href: '/services' },
   { key: 'nav.links.about', href: '/about' },
@@ -25,25 +29,58 @@ function getNavTarget(to) {
   }
 }
 
+// Compare against the language-stripped path: under /en/about the raw pathname
+// never equals the '/about' href, so nothing would ever highlight.
 function isNavActive(to, location) {
   const target = getNavTarget(to)
+  const current = stripLang(location.pathname)
 
   if (target.hash) {
-    return location.pathname === target.pathname && location.hash === target.hash
+    return current === target.pathname && location.hash === target.hash
   }
 
-  return location.pathname === target.pathname
+  return current === target.pathname
+}
+
+/**
+ * The language switcher.
+ *
+ * Previously an onClick <button> calling i18n.changeLanguage() — it mutated
+ * in-memory state and never changed the URL, so a crawler had no way to learn
+ * the other language existed. It is now a real anchor pointing at the
+ * counterpart URL, which is what makes the Arabic pages discoverable.
+ *
+ * state.langSwitch tells LanguageSync in App.jsx that this en -> ar navigation
+ * was intentional, so its stray-link safety net doesn't bounce it back.
+ */
+function LanguageSwitch({ className, onNavigate }) {
+  const { t } = useTranslation()
+  const location = useLocation()
+  const lang = langFromPath(location.pathname)
+  const target = counterpartPath(location.pathname) + location.hash
+
+  return (
+    <Link
+      to={target}
+      state={{ langSwitch: true }}
+      hrefLang={lang === 'en' ? 'ar' : 'en'}
+      onClick={onNavigate}
+      className={className}
+      aria-label={`Switch to ${lang === 'en' ? 'Arabic' : 'English'}`}
+    >
+      {lang === 'en' ? t('nav.lang.ar') : t('nav.lang.en')}
+    </Link>
+  )
 }
 
 function NavLinkAnimated({ to, label }) {
   const shouldReduceMotion = useReducedMotion()
-  const { i18n } = useTranslation()
   const location = useLocation()
-  const isRTL = i18n.language === 'ar'
+  const isRTL = langFromPath(location.pathname) === 'ar'
   const isActive = isNavActive(to, location)
 
   return (
-    <Link to={to} aria-current={isActive ? 'page' : undefined}>
+    <LocalizedLink to={to} aria-current={isActive ? 'page' : undefined}>
       {shouldReduceMotion ? (
         <span
           className={`relative inline-block font-somar font-medium transition-colors duration-200 ${
@@ -94,12 +131,12 @@ function NavLinkAnimated({ to, label }) {
           />
         </motion.span>
       )}
-    </Link>
+    </LocalizedLink>
   )
 }
 
 export default function Navbar() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -109,7 +146,8 @@ export default function Navbar() {
   // compression effect only exists for the lg+ nav anyway.
   const lite = useLiteMotion()
   const { scrollY, scrollYProgress } = useScroll()
-  const isRTL = i18n.language === 'ar'
+  // Direction follows the URL's language, same source of truth as everything else.
+  const isRTL = langFromPath(location.pathname) === 'ar'
 
   // Scroll-driven nav compression: items spread at top, compress on scroll
   const rawGap = useTransform(scrollY, [0, 150], [32, 10])
@@ -136,13 +174,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const toggleLanguage = () => {
-    const nextLang = i18n.language === 'en' ? 'ar' : 'en'
-    i18n.changeLanguage(nextLang)
-    document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = nextLang
-  }
-
   const mobileVariants = {
     hidden: { x: isRTL ? '-100%' : '100%' },
     visible: { x: 0 },
@@ -164,14 +195,14 @@ export default function Navbar() {
         aria-label={t('nav.aria')}
       >
         {/* Logo */}
-        <Link to="/" className="flex-shrink-0">
+        <LocalizedLink to="/" className="flex-shrink-0">
           <img
             src={logoIcon}
             alt="Navara"
             height={44}
             className="h-11 w-auto"
           />
-        </Link>
+        </LocalizedLink>
 
         {/* Desktop links */}
         <motion.div
@@ -183,38 +214,26 @@ export default function Navbar() {
           ))}
         </motion.div>
 
-        {/* Desktop right: language toggle + CTA */}
+        {/* Desktop right: language switch + CTA */}
         <div className="hidden lg:flex items-center gap-4">
-          <button
-            onClick={toggleLanguage}
-            className="text-white font-somar font-medium text-sm hover:text-primary-cyan transition-colors cursor-pointer"
-            aria-label={`Switch to ${i18n.language === 'en' ? 'Arabic' : 'English'}`}
-          >
-            {i18n.language === 'en' ? t('nav.lang.ar') : t('nav.lang.en')}
-          </button>
+          <LanguageSwitch className="text-white font-somar font-medium text-sm hover:text-primary-cyan transition-colors cursor-pointer" />
           <motion.div
             whileHover={{ scale: 1.04, y: -1 }}
             whileTap={{ scale: 0.97 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
           >
-            <Link
+            <LocalizedLink
               to="/contact#contact-form"
               className="inline-flex items-center justify-center font-somar font-semibold text-sm text-white border border-white/40 rounded-full px-5 py-2 bg-white/5 hover:bg-white hover:text-primary-dark-blue hover:border-white transition-all duration-200 whitespace-nowrap cursor-pointer"
             >
               {t('nav.cta')}
-            </Link>
+            </LocalizedLink>
           </motion.div>
         </div>
 
         {/* Mobile: language + hamburger */}
         <div className="flex lg:hidden items-center gap-3">
-          <button
-            onClick={toggleLanguage}
-            className="text-white font-somar font-medium text-sm hover:text-primary-cyan transition-colors cursor-pointer"
-            aria-label={`Switch to ${i18n.language === 'en' ? 'Arabic' : 'English'}`}
-          >
-            {i18n.language === 'en' ? t('nav.lang.ar') : t('nav.lang.en')}
-          </button>
+          <LanguageSwitch className="text-white font-somar font-medium text-sm hover:text-primary-cyan transition-colors cursor-pointer" />
           <button
             onClick={() => setMobileOpen(true)}
             className="text-white p-1 cursor-pointer"
@@ -281,7 +300,7 @@ export default function Navbar() {
           <nav className="flex flex-col items-center gap-8 mt-8">
             {NAV_LINKS.map(({ key, href }) => (
               <div key={key}>
-                <Link
+                <LocalizedLink
                   to={href}
                   className={`text-2xl font-somar font-semibold ${
                     isNavActive(href, location) ? 'text-primary-cyan' : 'text-white'
@@ -290,18 +309,18 @@ export default function Navbar() {
                   onClick={() => setMobileOpen(false)}
                 >
                   {t(key)}
-                </Link>
+                </LocalizedLink>
               </div>
             ))}
 
             <div>
-              <Link
+              <LocalizedLink
                 to="/contact#contact-form"
                 onClick={() => setMobileOpen(false)}
                 className="inline-flex items-center justify-center font-somar font-semibold text-white border border-white/40 rounded-full px-8 py-3 bg-white/5 hover:bg-white hover:text-primary-dark-blue transition-all duration-200 cursor-pointer"
               >
                 {t('nav.cta')}
-              </Link>
+              </LocalizedLink>
             </div>
           </nav>
         </motion.div>

@@ -2,22 +2,27 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import en from './locales/en.json'
 import ar from './locales/ar.json'
+import { langFromPath, isDashboardPath, DEFAULT_LANG } from './lib/routes'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'
 
-// Persist language choice across reloads. Without this, refreshing the page reverts
-// to the default (`en`) even after the user clicked AR, which is bad UX.
-const LANG_KEY = 'navara_lang'
-const VALID_LANGS = ['en', 'ar']
-
-function readSavedLang() {
-  if (typeof window === 'undefined') return 'en'
-  try {
-    const saved = window.localStorage.getItem(LANG_KEY)
-    return VALID_LANGS.includes(saved) ? saved : 'en'
-  } catch {
-    return 'en'
-  }
+// Language comes from the URL, not from storage.
+//
+// This used to read localStorage and default to 'en'. That meant a single URL
+// (navaraagency.com/) returned English to Googlebot and possibly Arabic to a
+// returning visitor — so the Arabic content in locales/ar.json had no address
+// a crawler could ever request, and was never indexed. Storage is no longer
+// consulted for language at all; /en/* is English, everything else is Arabic.
+//
+// Note this drops the "remember my language across reloads" behaviour, and that
+// is the point: the URL now carries that state, so it survives reloads, is
+// shareable, and is visible to crawlers.
+function initialLang() {
+  if (typeof window === 'undefined') return DEFAULT_LANG
+  const { pathname } = window.location
+  // The dashboard is an internal English-only tool with no language prefix.
+  if (isDashboardPath(pathname)) return 'en'
+  return langFromPath(pathname)
 }
 
 // Initialise with bundled JSON for instant render. Then asynchronously fetch the live
@@ -34,18 +39,14 @@ i18n
       en: { translation: en },
       ar: { translation: ar },
     },
-    lng: readSavedLang(),
+    lng: initialLang(),
+    // Kept as 'en' even though Arabic is now the site default: if an Arabic key
+    // is missing, rendering the English string is far better than rendering the
+    // raw key ("nav.links.services") to a visitor.
     fallbackLng: 'en',
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
   })
-
-// Save every language change so reloads preserve the user's choice.
-i18n.on('languageChanged', (lng) => {
-  if (typeof window === 'undefined') return
-  if (!VALID_LANGS.includes(lng)) return
-  try { window.localStorage.setItem(LANG_KEY, lng) } catch { /* quota / blocked storage */ }
-})
 
 // Repair leftover JSON-stringified arrays/objects from earlier saves where flatten()
 // turned arrays into strings. Strings shaped like "[...]" or "{...}" that parse cleanly
