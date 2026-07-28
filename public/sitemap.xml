@@ -1,39 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!--
+  English lives at the root (already indexed, ranks #1 for "navara agency").
+  Arabic lives under /ar and is new as of this change.
+
+  Every <url> carries the full reciprocal alternate set including a self
+  reference, which Google requires — an hreflang cluster where the pages don't
+  all point back at each other is ignored outright.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
   <url>
     <loc>https://navaraagency.com/</loc>
-    <lastmod>2026-05-06</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://navaraagency.com/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://navaraagency.com/ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://navaraagency.com/"/>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://navaraagency.com/about</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://navaraagency.com/ar</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://navaraagency.com/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://navaraagency.com/ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://navaraagency.com/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
   </url>
+
   <url>
     <loc>https://navaraagency.com/services</loc>
-    <lastmod>2026-05-06</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://navaraagency.com/services"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://navaraagency.com/ar/services"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://navaraagency.com/services"/>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://navaraagency.com/industries</loc>
-    <lastmod>2026-05-06</lastmod>
+    <loc>https://navaraagency.com/ar/services</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://navaraagency.com/services"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://navaraagency.com/ar/services"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://navaraagency.com/services"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://navaraagency.com/about</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://navaraagency.com/about"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://navaraagency.com/ar/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://navaraagency.com/about"/>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://navaraagency.com/ar/about</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://navaraagency.com/about"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://navaraagency.com/ar/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://navaraagency.com/about"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://navaraagency.com/industries</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://navaraagency.com/industries"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://navaraagency.com/ar/industries"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://navaraagency.com/industries"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://navaraagency.com/ar/industries</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://navaraagency.com/industries"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://navaraagency.com/ar/industries"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://navaraagency.com/industries"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://navaraagency.com/how-we-work</loc>
-    <lastmod>2026-05-06</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://navaraagency.com/how-we-work"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://navaraagency.com/ar/how-we-work"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://navaraagency.com/how-we-work"/>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://navaraagency.com/contact</loc>
-    <lastmod>2026-05-06</lastmod>
+    <loc>https://navaraagency.com/ar/how-we-work</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://navaraagency.com/how-we-work"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://navaraagency.com/ar/how-we-work"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://navaraagency.com/how-we-work"/>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.7</priority>
   </url>
+
+  <url>
+    <loc>https://navaraagency.com/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://navaraagency.com/contact"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://navaraagency.com/ar/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://navaraagency.com/contact"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://navaraagency.com/ar/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://navaraagency.com/contact"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://navaraagency.com/ar/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://navaraagency.com/contact"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>
