@@ -22,5 +22,10 @@ export const WHATSAPP_FULL_URL = `${WHATSAPP_URL}?text=${WHATSAPP_MESSAGE}`
 export const PHONE_NUMBER = import.meta.env.VITE_PHONE_NUMBER || '+201001234567'
 export const PHONE_DISPLAY = import.meta.env.VITE_PHONE_DISPLAY || '+20 100 123 4567'
 
-export const LINKEDIN_URL = import.meta.env.VITE_LINKEDIN_URL || 'https://linkedin.com/company/navara'
-export const INSTAGRAM_URL = import.meta.env.VITE_INSTAGRAM_URL || 'https://instagram.com/navara'
+// Confirmed official profiles. These are also the `sameAs` values in the
+// ProfessionalService schema in index.html — keep the two in sync, because
+// sameAs is what ties this domain to the brand entity in search.
+export const LINKEDIN_URL =
+  import.meta.env.VITE_LINKEDIN_URL || 'https://www.linkedin.com/company/navara-agency/'
+export const INSTAGRAM_URL =
+  import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com/navara_agency/'

@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useReducedMotion, useInView, animate } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Helmet } from 'react-helmet-async'
+import Seo from '../components/seo/Seo'
 import { Target, Eye, CheckCircle, Calendar, FileCheck, Heart } from 'lucide-react'
 import Section from '../components/layout/Section'
 import FadeUp from '../components/animations/FadeUp'
@@ -123,13 +123,7 @@ export default function About() {
 
   return (
     <PageWrapper>
-      <Helmet>
-        <title>{t('about.seo.title')}</title>
-        <meta name="description" content={t('about.seo.description')} />
-        <meta property="og:title" content={t('about.seo.title')} />
-        <meta property="og:description" content={t('about.seo.description')} />
-        <link rel="canonical" href="https://navaraagency.com/about" />
-      </Helmet>
+      <Seo />
 
       {/* ══════════════════════════════════════════════════════════
           HERO — dark with continuous floating animations

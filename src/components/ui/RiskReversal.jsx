@@ -1,6 +1,7 @@
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import useLocalePath from '../../hooks/useLocalePath'
 import { useRef } from 'react'
 import useLiteMotion from '../../hooks/useLiteMotion'
 
@@ -148,7 +149,8 @@ export default function RiskReversal({ onCtaClick }) {
   // mobile via `lite`; entrance animations stay tied to `reduced`.
   const lite = useLiteMotion()
   const navigate = useNavigate()
-  const handleCta = onCtaClick ?? (() => navigate('/contact#contact-form'))
+  const { path } = useLocalePath()
+  const handleCta = onCtaClick ?? (() => navigate(path('contact', '#contact-form')))
 
   const sectionRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })

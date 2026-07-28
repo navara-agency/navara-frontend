@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Helmet } from 'react-helmet-async'
+import Seo from '../components/seo/Seo'
 import { Heart, ShoppingCart, RefreshCw, Building2, Car, Store, GitBranch } from 'lucide-react'
 import Section from '../components/layout/Section'
 import FadeUp from '../components/animations/FadeUp'
@@ -86,13 +86,7 @@ export default function Industries() {
 
   return (
     <PageWrapper>
-      <Helmet>
-        <title>{t('industries.seo.title')}</title>
-        <meta name="description" content={t('industries.seo.description')} />
-        <meta property="og:title" content={t('industries.seo.title')} />
-        <meta property="og:description" content={t('industries.seo.description')} />
-        <link rel="canonical" href="https://navaraagency.com/industries" />
-      </Helmet>
+      <Seo />
 
       {/* ══════════════════════════════════════════════════════
           HERO — post-render life: ghost icons + orbs + rings

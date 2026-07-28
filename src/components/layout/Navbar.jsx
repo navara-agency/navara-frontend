@@ -1,18 +1,21 @@
 import { useState, useEffect } from 'react'
 import logoIcon from '../../assets/images/navara-logo-icon.png'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import useLiteMotion from '../../hooks/useLiteMotion'
+import { toPath, localeFromPath, swapLocalePath, isRtl } from '../../lib/locale'
 
+// Route slugs, not paths — resolved against the active locale at render time so
+// English pages link to English pages and Arabic to Arabic.
 const NAV_LINKS = [
-  { key: 'nav.links.services', href: '/services' },
-  { key: 'nav.links.about', href: '/about' },
-  { key: 'nav.links.industries', href: '/industries' },
-  { key: 'nav.links.howWeWork', href: '/how-we-work' },
-  { key: 'nav.links.faqs', href: '/#faq' },
-  { key: 'nav.links.contact', href: '/contact' },
+  { key: 'nav.links.services', route: 'services' },
+  { key: 'nav.links.about', route: 'about' },
+  { key: 'nav.links.industries', route: 'industries' },
+  { key: 'nav.links.howWeWork', route: 'how-we-work' },
+  { key: 'nav.links.faqs', route: '', hash: '#faq' },
+  { key: 'nav.links.contact', route: 'contact' },
 ]
 
 const NAV_LABEL_TRANSITION = { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
@@ -37,9 +40,8 @@ function isNavActive(to, location) {
 
 function NavLinkAnimated({ to, label }) {
   const shouldReduceMotion = useReducedMotion()
-  const { i18n } = useTranslation()
   const location = useLocation()
-  const isRTL = i18n.language === 'ar'
+  const rtl = isRtl(localeFromPath(location.pathname))
   const isActive = isNavActive(to, location)
 
   return (
@@ -90,7 +92,7 @@ function NavLinkAnimated({ to, label }) {
             className={`absolute bottom-[-6px] start-0 h-[2px] w-full bg-primary-cyan transition-transform duration-300 ease-out ${
               isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
             }`}
-            style={{ transformOrigin: isRTL ? 'right' : 'left' }}
+            style={{ transformOrigin: rtl ? 'right' : 'left' }}
           />
         </motion.span>
       )}
@@ -99,8 +101,9 @@ function NavLinkAnimated({ to, label }) {
 }
 
 export default function Navbar() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const location = useLocation()
+  const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const shouldReduceMotion = useReducedMotion()
@@ -109,7 +112,11 @@ export default function Navbar() {
   // compression effect only exists for the lg+ nav anyway.
   const lite = useLiteMotion()
   const { scrollY, scrollYProgress } = useScroll()
-  const isRTL = i18n.language === 'ar'
+
+  const locale = localeFromPath(location.pathname)
+  const isRTL = isRtl(locale)
+  const homePath = toPath(locale, '')
+  const contactPath = `${toPath(locale, 'contact')}#contact-form`
 
   // Scroll-driven nav compression: items spread at top, compress on scroll
   const rawGap = useTransform(scrollY, [0, 150], [32, 10])
@@ -136,11 +143,10 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Language is part of the URL, so switching it is a navigation. This keeps the
+  // choice shareable and lets crawlers reach the alternate-language page.
   const toggleLanguage = () => {
-    const nextLang = i18n.language === 'en' ? 'ar' : 'en'
-    i18n.changeLanguage(nextLang)
-    document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = nextLang
+    navigate(swapLocalePath(location.pathname, location.hash))
   }
 
   const mobileVariants = {
@@ -148,6 +154,14 @@ export default function Navbar() {
     visible: { x: 0 },
     exit: { x: isRTL ? '-100%' : '100%' },
   }
+
+  const navItems = NAV_LINKS.map(({ key, route, hash }) => ({
+    key,
+    href: `${toPath(locale, route)}${hash ?? ''}`,
+  }))
+
+  const otherLanguageLabel = locale === 'en' ? t('nav.lang.ar') : t('nav.lang.en')
+  const otherLanguageAria = `Switch to ${locale === 'en' ? 'Arabic' : 'English'}`
 
   return (
     <>
@@ -164,7 +178,7 @@ export default function Navbar() {
         aria-label={t('nav.aria')}
       >
         {/* Logo */}
-        <Link to="/" className="flex-shrink-0">
+        <Link to={homePath} className="flex-shrink-0">
           <img
             src={logoIcon}
             alt="Navara"
@@ -178,7 +192,7 @@ export default function Navbar() {
           className="hidden lg:flex items-center"
           style={!lite ? { gap: navGap } : { gap: 24 }}
         >
-          {NAV_LINKS.map(({ key, href }) => (
+          {navItems.map(({ key, href }) => (
             <NavLinkAnimated key={key} to={href} label={t(key)} />
           ))}
         </motion.div>
@@ -188,9 +202,9 @@ export default function Navbar() {
           <button
             onClick={toggleLanguage}
             className="text-white font-somar font-medium text-sm hover:text-primary-cyan transition-colors cursor-pointer"
-            aria-label={`Switch to ${i18n.language === 'en' ? 'Arabic' : 'English'}`}
+            aria-label={otherLanguageAria}
           >
-            {i18n.language === 'en' ? t('nav.lang.ar') : t('nav.lang.en')}
+            {otherLanguageLabel}
           </button>
           <motion.div
             whileHover={{ scale: 1.04, y: -1 }}
@@ -198,7 +212,7 @@ export default function Navbar() {
             transition={{ duration: 0.18, ease: 'easeOut' }}
           >
             <Link
-              to="/contact#contact-form"
+              to={contactPath}
               className="inline-flex items-center justify-center font-somar font-semibold text-sm text-white border border-white/40 rounded-full px-5 py-2 bg-white/5 hover:bg-white hover:text-primary-dark-blue hover:border-white transition-all duration-200 whitespace-nowrap cursor-pointer"
             >
               {t('nav.cta')}
@@ -211,9 +225,9 @@ export default function Navbar() {
           <button
             onClick={toggleLanguage}
             className="text-white font-somar font-medium text-sm hover:text-primary-cyan transition-colors cursor-pointer"
-            aria-label={`Switch to ${i18n.language === 'en' ? 'Arabic' : 'English'}`}
+            aria-label={otherLanguageAria}
           >
-            {i18n.language === 'en' ? t('nav.lang.ar') : t('nav.lang.en')}
+            {otherLanguageLabel}
           </button>
           <button
             onClick={() => setMobileOpen(true)}
@@ -279,7 +293,7 @@ export default function Navbar() {
 
           {/* Mobile links */}
           <nav className="flex flex-col items-center gap-8 mt-8">
-            {NAV_LINKS.map(({ key, href }) => (
+            {navItems.map(({ key, href }) => (
               <div key={key}>
                 <Link
                   to={href}
@@ -296,7 +310,7 @@ export default function Navbar() {
 
             <div>
               <Link
-                to="/contact#contact-form"
+                to={contactPath}
                 onClick={() => setMobileOpen(false)}
                 className="inline-flex items-center justify-center font-somar font-semibold text-white border border-white/40 rounded-full px-8 py-3 bg-white/5 hover:bg-white hover:text-primary-dark-blue transition-all duration-200 cursor-pointer"
               >

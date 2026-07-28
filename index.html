@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,31 +28,43 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/nv-apple-touch.png" />
     <meta name="theme-color" content="#001192" />
 
-    <!-- Open Graph (social link previews) -->
-    <meta property="og:title" content="Navara | Integrated Growth Marketing" />
-    <meta property="og:description" content="Navara is Egypt and Saudi Arabia's integrated growth marketing agency — strategy, creative, media buying, and analytics under one roof." />
-    <meta property="og:image" content="https://navaraagency.com/og-image.png" />
-    <meta property="og:url" content="https://navaraagency.com" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <!-- Deliberately no title, description, Open Graph or Twitter tags here.
+         Every public page renders the Seo component (src/components/seo/Seo.jsx),
+         which emits all of them per route and per locale. react-helmet-async
+         appends its tags rather than replacing static ones, so declaring them
+         in this shell produced two of each in every prerendered page — including
+         English pages that carried an Arabic title. -->
 
-    <title>Navara | Integrated Growth Marketing</title>
-
-    <!-- Schema.org organisation — helps Google show the logo in search results & knowledge panels -->
+    <!-- ProfessionalService rather than bare Organization: it is the type that
+         carries service + locality signals, which is what this site competes on.
+         `sameAs` points at the confirmed official profiles — this is what ties
+         the domain to the brand entity, and is worth keeping accurate. The same
+         URLs are in src/config/links.js, which the footer links use. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": "ProfessionalService",
+      "@id": "https://navaraagency.com/#organization",
       "name": "Navara",
-      "alternateName": "Navara Agency",
+      "alternateName": ["Navara Agency", "نافارا"],
       "url": "https://navaraagency.com",
       "logo": "https://navaraagency.com/nv-icon-512.png",
       "image": "https://navaraagency.com/og-image.png",
-      "description": "Egypt and Saudi Arabia's integrated growth marketing agency — strategy, creative, media buying, and analytics under one roof.",
-      "areaServed": ["Egypt", "Saudi Arabia"],
+      "description": "Integrated growth marketing agency serving Egypt and Saudi Arabia — strategy, creative, media buying and analytics under one roof.",
+      "knowsLanguage": ["ar", "en"],
       "sameAs": [
-        "https://linkedin.com/company/navara",
-        "https://instagram.com/navara"
+        "https://www.linkedin.com/company/navara-agency/",
+        "https://www.instagram.com/navara_agency/"
+      ],
+      "areaServed": [
+        { "@type": "Country", "name": "Egypt", "identifier": "EG" },
+        { "@type": "Country", "name": "Saudi Arabia", "identifier": "SA" }
+      ],
+      "serviceType": [
+        "Growth marketing strategy",
+        "Paid media buying",
+        "Creative and content production",
+        "Marketing analytics and conversion tracking"
       ]
     }
     </script>

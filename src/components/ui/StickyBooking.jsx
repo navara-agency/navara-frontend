@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import useLocalePath from '../../hooks/useLocalePath'
 import { Calendar } from 'lucide-react'
 
 /**
@@ -15,11 +16,12 @@ export default function StickyBooking() {
   const { t, i18n } = useTranslation()
   const shouldReduceMotion = useReducedMotion()
   const navigate = useNavigate()
+  const { path } = useLocalePath()
   const [visible, setVisible] = useState(false)
   const isRTL = i18n.language === 'ar'
 
   function handleClick() {
-    navigate('/contact#contact-form')
+    navigate(path('contact', '#contact-form'))
   }
 
   useEffect(() => {
