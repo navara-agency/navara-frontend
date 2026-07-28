@@ -39,9 +39,9 @@ const DashboardEmailServer = lazy(() => import('./pages/dashboard/DashboardEmail
 const DashboardAccount     = lazy(() => import('./pages/dashboard/DashboardAccount'))
 const DashboardLogin       = lazy(() => import('./pages/dashboard/DashboardLogin'))
 
-// Declared once, mounted twice: bare path (English, unchanged and already
-// indexed) and /ar-prefixed (Arabic, new). Adding a public page means adding it
-// here and to PUBLIC_SLUGS in lib/routes.js — nowhere else.
+// Declared once, mounted twice: bare path (Arabic, the site default) and
+// /en-prefixed (English). Adding a public page means adding it here and to
+// PUBLIC_SLUGS in lib/routes.js — nowhere else.
 const PUBLIC_ROUTES = [
   { slug: '',            element: <Home /> },
   { slug: 'about',       element: <About /> },
@@ -58,13 +58,13 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <Suspense fallback={null}>
         <Routes location={location} key={location.pathname}>
-          {/* English — root, unchanged */}
+          {/* Arabic — the site default, served from the root */}
           {PUBLIC_ROUTES.map(({ slug, element }) => (
-            <Route key={`en-${slug}`} path={`/${slug}`} element={element} />
+            <Route key={`ar-${slug}`} path={`/${slug}`} element={element} />
           ))}
-          {/* Arabic — /ar prefix */}
+          {/* English — /en prefix */}
           {PUBLIC_ROUTES.map(({ slug, element }) => (
-            <Route key={`ar-${slug}`} path={`/ar/${slug}`} element={element} />
+            <Route key={`en-${slug}`} path={`/en/${slug}`} element={element} />
           ))}
         </Routes>
       </Suspense>
@@ -77,10 +77,10 @@ function AnimatedRoutes() {
  * source of truth for language.
  *
  * Also contains a safety net. Any internal <Link to="/contact"> still using the
- * bare react-router Link will drop an Arabic visitor onto the English URL and
- * silently flip their language mid-session. When we see an ar -> en transition
+ * bare react-router Link will drop an English visitor onto the Arabic URL and
+ * silently flip their language mid-session. When we see an en -> ar transition
  * the visitor did not ask for (the navbar switcher marks its own navigations
- * with router state), we rewrite the URL back into Arabic. Costs one
+ * with router state), we rewrite the URL back into English. Costs one
  * client-side replace; prevents a confusing language flip.
  *
  * This is a net, not a fix — every internal link should use LocalizedLink.
@@ -98,11 +98,11 @@ function LanguageSync() {
 
     if (
       !deliberateSwitch &&
-      prevLang === 'ar' &&
-      urlLang === 'en' &&
+      prevLang === 'en' &&
+      urlLang === 'ar' &&
       isPublicPath(location.pathname)
     ) {
-      navigate(localizedPath(location.pathname, 'ar') + location.hash, { replace: true })
+      navigate(localizedPath(location.pathname, 'en') + location.hash, { replace: true })
       return
     }
 
@@ -164,8 +164,8 @@ function DashboardRoot() {
   const { i18n } = useTranslation()
 
   // Dashboard is an internal English-only tool. It sits at /dashboard with no
-  // language prefix, so pin it explicitly rather than letting it inherit
-  // whatever the public site's URL-derived language happened to be.
+  // language prefix, so without pinning it here it would inherit the public
+  // site's Arabic default once language became URL-derived.
   useEffect(() => {
     document.documentElement.dir = 'ltr'
     document.documentElement.lang = 'en'
