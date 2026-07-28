@@ -12,7 +12,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001
 // (navaraagency.com/) returned English to Googlebot and possibly Arabic to a
 // returning visitor — so the Arabic content in locales/ar.json had no address
 // a crawler could ever request, and was never indexed. Storage is no longer
-// consulted for language at all; /ar/* is Arabic, everything else is English.
+// consulted for language at all; /en/* is English, everything else is Arabic.
 //
 // Note this drops the "remember my language across reloads" behaviour, and that
 // is the point: the URL now carries that state, so it survives reloads, is
@@ -40,8 +40,9 @@ i18n
       ar: { translation: ar },
     },
     lng: initialLang(),
-    // If an Arabic key is missing, rendering the English string is far better
-    // than rendering the raw key ("nav.links.services") to a visitor.
+    // Kept as 'en' even though Arabic is now the site default: if an Arabic key
+    // is missing, rendering the English string is far better than rendering the
+    // raw key ("nav.links.services") to a visitor.
     fallbackLng: 'en',
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
