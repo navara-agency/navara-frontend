@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { Helmet } from 'react-helmet-async'
 import HeroSection from '../components/ui/HeroSection'
 import PlatformLogos from '../components/ui/PlatformLogos'
 import WhoWeAreSection from '../components/ui/WhoWeAreSection'
@@ -12,6 +11,7 @@ import FAQAccordion from '../components/ui/FAQAccordion'
 import { useApi } from '../hooks/useApi'
 import { TESTIMONIALS as FALLBACK_TESTIMONIALS } from '../data/mockDashboard'
 import PageWrapper from '../components/layout/PageWrapper'
+import Seo from '../components/seo/Seo'
 
 
 // Carousel shape: { id, clientName, clientTitle, clientPhoto, quote, resultsBadge, videoUrl }
@@ -82,6 +82,42 @@ const FALLBACK_FAQ_ITEMS = [
   { id: 'faq7', questionKey: 'home.faq.item7.q', answerKey: 'home.faq.item7.a' },
 ]
 
+/**
+ * FAQPage JSON-LD for the questions rendered on this page.
+ *
+ * Only items whose text is already resolved are described. The fallback list
+ * carries translation keys rather than copy, and emitting `home.faq.item1.q`
+ * into structured data would be markup that doesn't match visible content —
+ * which is a structured-data violation, not just noise.
+ */
+function buildFaqSchema(items, t) {
+  const resolved = items
+    .map((item) => ({
+      question: item.question ?? (item.questionKey ? t(item.questionKey) : null),
+      answer: item.answer ?? (item.answerKey ? t(item.answerKey) : null),
+    }))
+    .filter(
+      (item) =>
+        item.question &&
+        item.answer &&
+        // t() returns the key itself when a translation is missing
+        !item.question.startsWith('home.faq.') &&
+        !item.answer.startsWith('home.faq.')
+    )
+
+  if (resolved.length === 0) return null
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: resolved.map(({ question, answer }) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: { '@type': 'Answer', text: answer },
+    })),
+  }
+}
+
 export default function Home() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
@@ -102,6 +138,8 @@ export default function Home() {
     : null
   const FAQ_ITEMS = (apiFaqItems && apiFaqItems.length > 0) ? apiFaqItems : FALLBACK_FAQ_ITEMS
 
+  const faqSchema = buildFaqSchema(FAQ_ITEMS, t)
+
   // Fetch testimonials from the backend.
   // Once the API responds (even with an empty array) we use that result directly
   // so the dashboard is the single source of truth — no dummy fallback data.
@@ -121,13 +159,7 @@ export default function Home() {
 
   return (
     <PageWrapper>
-      <Helmet>
-        <title>{t('home.seo.title')}</title>
-        <meta name="description" content={t('home.seo.description')} />
-        <meta property="og:title" content={t('home.seo.title')} />
-        <meta property="og:description" content={t('home.seo.description')} />
-        <link rel="canonical" href="https://navaraagency.com/" />
-      </Helmet>
+      <Seo schema={faqSchema} />
 
       <HeroSection onCtaClick={goToContact} />
 
