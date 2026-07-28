@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,31 +28,55 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/nv-apple-touch.png" />
     <meta name="theme-color" content="#001192" />
 
+    <!-- Defaults only. Every public page renders <Seo /> (src/components/seo/Seo.jsx),
+         which overwrites title/description/canonical/hreflang per route and locale,
+         and the build-time prerenderer bakes those resolved tags into the shipped HTML.
+         These values are the pre-hydration fallback, so they are Arabic to match the
+         root locale. -->
+    <title>وكالة تسويق رقمي متكاملة في مصر والسعودية | نافارا</title>
+    <meta
+      name="description"
+      content="نافارا وكالة تسويق إلكتروني متكاملة تخدم مصر والسعودية: استراتيجية، إبداع، شراء إعلانات، وتحليلات تحت سقف واحد."
+    />
+
     <!-- Open Graph (social link previews) -->
-    <meta property="og:title" content="Navara | Integrated Growth Marketing" />
-    <meta property="og:description" content="Navara is Egypt and Saudi Arabia's integrated growth marketing agency — strategy, creative, media buying, and analytics under one roof." />
+    <meta property="og:site_name" content="Navara" />
+    <meta property="og:title" content="وكالة تسويق رقمي متكاملة في مصر والسعودية | نافارا" />
+    <meta property="og:description" content="استراتيجية، إبداع، شراء إعلانات، وتحليلات تحت سقف واحد." />
     <meta property="og:image" content="https://navaraagency.com/og-image.png" />
     <meta property="og:url" content="https://navaraagency.com" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ar_EG" />
+    <meta property="og:locale:alternate" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <title>Navara | Integrated Growth Marketing</title>
-
-    <!-- Schema.org organisation — helps Google show the logo in search results & knowledge panels -->
+    <!-- ProfessionalService rather than bare Organization: it is the type that
+         carries service + locality signals, which is what this site competes on.
+         NOTE: `sameAs` was removed because the previous values
+         (linkedin.com/company/navara, instagram.com/navara) are not verifiably
+         this company, and a wrong sameAs misattributes the brand entity.
+         Add the real profile URLs here. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": "ProfessionalService",
+      "@id": "https://navaraagency.com/#organization",
       "name": "Navara",
-      "alternateName": "Navara Agency",
+      "alternateName": ["Navara Agency", "نافارا"],
       "url": "https://navaraagency.com",
       "logo": "https://navaraagency.com/nv-icon-512.png",
       "image": "https://navaraagency.com/og-image.png",
-      "description": "Egypt and Saudi Arabia's integrated growth marketing agency — strategy, creative, media buying, and analytics under one roof.",
-      "areaServed": ["Egypt", "Saudi Arabia"],
-      "sameAs": [
-        "https://linkedin.com/company/navara",
-        "https://instagram.com/navara"
+      "description": "Integrated growth marketing agency serving Egypt and Saudi Arabia — strategy, creative, media buying and analytics under one roof.",
+      "knowsLanguage": ["ar", "en"],
+      "areaServed": [
+        { "@type": "Country", "name": "Egypt", "identifier": "EG" },
+        { "@type": "Country", "name": "Saudi Arabia", "identifier": "SA" }
+      ],
+      "serviceType": [
+        "Growth marketing strategy",
+        "Paid media buying",
+        "Creative and content production",
+        "Marketing analytics and conversion tracking"
       ]
     }
     </script>
