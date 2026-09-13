@@ -19,7 +19,7 @@ const NAV_GROUPS = [
   {
     label: 'Website Content',
     items: [
-      { to: '/dashboard/case-studies', label: 'Case Studies', icon: Folder, disabled: true },
+      { to: '/dashboard/case-studies', label: 'Case Studies', icon: Folder },
       { to: '/dashboard/testimonials', label: 'Testimonials', icon: MessageSquare },
       { to: '/dashboard/logos', label: 'Client Logos', icon: Image },
       { to: '/dashboard/faq', label: 'FAQ', icon: HelpCircle },
