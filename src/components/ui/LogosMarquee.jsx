@@ -95,16 +95,18 @@ function LogoItem({ logo, logoSize, 'aria-hidden': ariaHidden }) {
 
 function PartnerRow({ partners }) {
   return (
-    <div className="flex flex-wrap justify-center gap-4 mt-6">
+    <div className="flex flex-wrap justify-center gap-3 mt-8">
       {partners.map(p => (
+        // Partner logos are full-color badges with their own backgrounds, so
+        // they are shown as-is (a color filter turns them into solid blocks).
         <div
           key={p.id}
-          className="h-8 px-4 bg-gray-50 border border-gray-100 rounded flex items-center justify-center"
+          className="h-16 px-4 bg-white border border-primary-dark-blue/10 rounded-xl flex items-center justify-center shadow-[0_4px_14px_-8px_rgba(6,0,120,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-cyan/50"
         >
           {p.image ? (
-            <img src={p.image} alt={p.name} className="h-5 w-auto object-contain" style={{ filter: 'brightness(0)', opacity: 0.5 }} />
+            <img src={p.image} alt={p.name} className="h-10 w-auto max-w-[8rem] object-contain" />
           ) : (
-            <span className="font-somar text-xs text-gray-400">{p.name}</span>
+            <span className="font-somar text-xs text-primary-dark-blue/60">{p.name}</span>
           )}
         </div>
       ))}
