@@ -24,7 +24,7 @@ export default function LogosMarquee({ logos, logoSize = 'h-12 w-auto' }) {
 
   return (
     <div className="py-4">
-      <div className="marquee-wrapper overflow-hidden" dir="ltr">
+      <div className="marquee-wrapper overflow-hidden py-3" dir="ltr">
         <div className="marquee-track">
           {clientLogos.map(logo => (
             <LogoItem key={logo.id} logo={logo} logoSize={logoSize} />
@@ -41,55 +41,56 @@ export default function LogosMarquee({ logos, logoSize = 'h-12 w-auto' }) {
 
 function LogoItem({ logo, logoSize, 'aria-hidden': ariaHidden }) {
   const [imgFailed, setImgFailed] = useState(false)
-  const [hovered, setHovered] = useState(false)
 
+  // Client logos are uploaded as white transparent PNGs, so each one sits on a
+  // brand-navy card. The filter forces any colored fallback logo to white too.
   const content = logo.image && !imgFailed ? (
     <img
       src={logo.image}
       alt={logo.name}
-      className={`${logoSize} object-contain`}
-      style={{
-        filter: hovered ? 'grayscale(0)' : 'grayscale(1)',
-        opacity: hovered ? 1 : 0.45,
-        transition: 'filter 0.4s ease, opacity 0.4s ease',
-      }}
+      className={`${logoSize} max-w-full object-contain opacity-80 transition-opacity duration-300 group-hover:opacity-100`}
+      style={{ filter: 'brightness(0) invert(1)' }}
+      loading="lazy"
       onError={() => setImgFailed(true)}
     />
   ) : (
-    <span className="font-somar font-bold text-primary-dark-blue/40 hover:text-primary-dark-blue/70 transition-colors duration-300 whitespace-nowrap tracking-wide uppercase text-sm">
+    <span className="font-somar font-bold text-white/80 group-hover:text-white transition-colors duration-300 whitespace-nowrap tracking-wide uppercase text-sm">
       {logo.name}
     </span>
   )
 
-  const sharedProps = {
-    onMouseEnter: () => setHovered(true),
-    onMouseLeave: () => setHovered(false),
-  }
+  const cardClass =
+    'group relative flex-shrink-0 mx-3 w-48 h-28 px-5 flex items-center justify-center overflow-hidden rounded-2xl ' +
+    'bg-gradient-to-br from-primary-dark-blue to-[#0d0a9e] border border-white/10 ' +
+    'shadow-[0_8px_24px_-12px_rgba(6,0,120,0.55)] transition-all duration-300 ease-out ' +
+    'hover:-translate-y-1 hover:border-primary-cyan/50 hover:shadow-[0_14px_32px_-12px_rgba(3,201,224,0.45)]'
 
-  const wrapper = logo.url ? (
+  const inner = (
+    <>
+      <span
+        className="pointer-events-none absolute -top-10 -right-10 w-24 h-24 rounded-full bg-primary-cyan/20 blur-2xl opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+        aria-hidden="true"
+      />
+      <span className="relative flex items-center justify-center">{content}</span>
+    </>
+  )
+
+  return logo.url ? (
     <a
       href={logo.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex-shrink-0 px-10 flex items-center"
+      className={cardClass}
       aria-label={logo.name}
       aria-hidden={ariaHidden}
       tabIndex={ariaHidden ? -1 : undefined}
-      {...sharedProps}
     >
-      {content}
+      {inner}
     </a>
   ) : (
-    <div className="flex-shrink-0 px-10 flex items-center" aria-hidden={ariaHidden} {...sharedProps}>
-      {content}
+    <div className={cardClass} aria-hidden={ariaHidden}>
+      {inner}
     </div>
-  )
-
-  return (
-    <>
-      {wrapper}
-      <span className="flex-shrink-0 text-primary-cyan/30 text-xl self-center" aria-hidden="true">·</span>
-    </>
   )
 }
 
