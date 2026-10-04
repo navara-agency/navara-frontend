@@ -50,7 +50,6 @@ function LogoItem({ logo, logoSize, 'aria-hidden': ariaHidden }) {
       alt={logo.name}
       className={`${logoSize} max-w-full object-contain opacity-80 transition-opacity duration-300 group-hover:opacity-100`}
       style={{ filter: 'brightness(0) invert(1)' }}
-      loading="lazy"
       onError={() => setImgFailed(true)}
     />
   ) : (
