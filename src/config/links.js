@@ -12,13 +12,13 @@ export const BOOKING_URL = import.meta.env.VITE_BOOKING_URL || '#'
 export const CAL_LINK = import.meta.env.VITE_CAL_LINK || 'omarelsady/discovery-call'
 
 // Cal.com event opened as a popup after the /contact form submits successfully
-// ("استشارة مجانية مع نافارا", slug free-consultation). Format: "username/event-slug".
-// Override via VITE_CONSULTATION_CAL_LINK; falls back to CAL_LINK until it's set.
-export const CONSULTATION_CAL_LINK = import.meta.env.VITE_CONSULTATION_CAL_LINK || CAL_LINK
+// (free 30-min consultation). Format: "username/event-slug".
+// Override via VITE_CONSULTATION_CAL_LINK.
+export const CONSULTATION_CAL_LINK = import.meta.env.VITE_CONSULTATION_CAL_LINK || 'navara-agency/30min'
 
-// Identifier of the event's custom "WhatsApp" booking question, prefilled from the form.
+// Identifier of the event's phone booking question, prefilled with the form's WhatsApp number.
 // Must match the question's identifier in Cal.com (Event type → Advanced → Booking questions).
-export const CAL_WHATSAPP_FIELD = import.meta.env.VITE_CAL_WHATSAPP_FIELD || 'whatsapp'
+export const CAL_WHATSAPP_FIELD = import.meta.env.VITE_CAL_WHATSAPP_FIELD || 'attendeePhoneNumber'
 
 export const WHATSAPP_URL = import.meta.env.VITE_WHATSAPP_URL || 'https://wa.me/'
 
