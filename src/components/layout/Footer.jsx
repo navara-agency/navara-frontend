@@ -173,9 +173,8 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-gray-700 pt-6 flex flex-col sm:flex-row justify-between gap-3 text-xs font-somar">
+        <div className="border-t border-gray-700 pt-6 text-xs font-somar">
           <span>{t('footer.copyright')}</span>
-          <span className="text-gray-500 text-end">{t('footer.adSpendNote')}</span>
         </div>
       </div>
     </footer>

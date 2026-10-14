@@ -264,6 +264,29 @@ h1, h2, h3, h4, h5, h6 {
   animation-play-state: paused;
 }
 
+/* Platform/tool logos row — runs opposite to the client row */
+.marquee-wrapper--partners {
+  overflow: hidden;
+}
+
+.marquee-track--reverse {
+  animation-direction: reverse;
+}
+
+/* Reduced motion: stop the tools row and let it scroll by hand instead */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-wrapper--partners {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .marquee-wrapper--partners .marquee-track {
+    animation: none;
+  }
+  .marquee-wrapper--partners [data-marquee-dup] {
+    display: none;
+  }
+}
+
 /* ============================================================
    Shimmer skeleton (logo placeholders, loading states)
    ============================================================ */

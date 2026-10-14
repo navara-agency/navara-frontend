@@ -1,5 +1,16 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
+
+// Logo names uploaded through the dashboard are often just the file name
+// ("Asset 44@4x 8"). Those make useless alt text, so fall back to a generic label.
+const FILE_NAME_RE = /^asset\s*\d+|@\dx|\.(png|jpe?g|svg|webp)$/i
+function useLogoAlt(kind) {
+  const { t } = useTranslation()
+  return (logo) => (logo.name && !FILE_NAME_RE.test(logo.name.trim()))
+    ? logo.name
+    : t(kind === 'partner' ? 'homeV2.logos.partnerAlt' : 'homeV2.logos.clientAlt')
+}
 
 export default function LogosMarquee({ logos, logoSize = 'h-12 w-auto' }) {
   const clientLogos = logos.filter(l => l.type !== 'partner')
@@ -17,7 +28,7 @@ export default function LogosMarquee({ logos, logoSize = 'h-12 w-auto' }) {
             />
           ))}
         </div>
-        {partnerLogos.length > 0 && <PartnerRow partners={partnerLogos} />}
+        {partnerLogos.length > 0 && <PartnerRow partners={partnerLogos} clientCount={6} />}
       </div>
     )
   }
@@ -34,20 +45,21 @@ export default function LogosMarquee({ logos, logoSize = 'h-12 w-auto' }) {
           ))}
         </div>
       </div>
-      {partnerLogos.length > 0 && <PartnerRow partners={partnerLogos} />}
+      {partnerLogos.length > 0 && <PartnerRow partners={partnerLogos} clientCount={clientLogos.length} />}
     </div>
   )
 }
 
 function LogoItem({ logo, logoSize, 'aria-hidden': ariaHidden }) {
   const [imgFailed, setImgFailed] = useState(false)
+  const altFor = useLogoAlt('client')
 
   // Client logos are uploaded as white transparent PNGs, so each one sits on a
   // brand-navy card. The filter forces any colored fallback logo to white too.
   const content = logo.image && !imgFailed ? (
     <img
       src={logo.image}
-      alt={logo.name}
+      alt={altFor(logo)}
       className={`${logoSize} max-w-full object-contain opacity-80 transition-opacity duration-300 group-hover:opacity-100`}
       style={{ filter: 'brightness(0) invert(1)' }}
       onError={() => setImgFailed(true)}
@@ -80,7 +92,7 @@ function LogoItem({ logo, logoSize, 'aria-hidden': ariaHidden }) {
       target="_blank"
       rel="noopener noreferrer"
       className={cardClass}
-      aria-label={logo.name}
+      aria-label={altFor(logo)}
       aria-hidden={ariaHidden}
       tabIndex={ariaHidden ? -1 : undefined}
     >
@@ -93,23 +105,39 @@ function LogoItem({ logo, logoSize, 'aria-hidden': ariaHidden }) {
   )
 }
 
-function PartnerRow({ partners }) {
+// Second marquee row for platform/tool logos. Same card size, radius, gap and
+// speed (px/s) as the client row above, but white cards (many tool logos are
+// dark and would vanish on navy) and it runs in the opposite direction.
+function PartnerRow({ partners, clientCount }) {
+  // The client track loops 21 logos in 30s; scale the duration by item count so
+  // both rows move at the same speed whatever the number of logos.
+  const duration = `${((30 * partners.length) / Math.max(clientCount, 1)).toFixed(1)}s`
   return (
-    <div className="flex flex-wrap justify-center gap-3 mt-8">
-      {partners.map(p => (
-        // Partner logos are full-color badges with their own backgrounds, so
-        // they are shown as-is (a color filter turns them into solid blocks).
-        <div
-          key={p.id}
-          className="h-16 px-4 bg-white border border-primary-dark-blue/10 rounded-xl flex items-center justify-center shadow-[0_4px_14px_-8px_rgba(6,0,120,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-cyan/50"
-        >
-          {p.image ? (
-            <img src={p.image} alt={p.name} className="h-10 w-auto max-w-[8rem] object-contain" />
-          ) : (
-            <span className="font-somar text-xs text-primary-dark-blue/60">{p.name}</span>
-          )}
-        </div>
-      ))}
+    <div className="marquee-wrapper marquee-wrapper--partners py-3 mt-8" dir="ltr">
+      <div className="marquee-track marquee-track--reverse" style={{ animationDuration: duration }}>
+        {partners.map(p => <PartnerItem key={p.id} logo={p} />)}
+        {partners.map(p => <PartnerItem key={`dup-${p.id}`} logo={p} duplicate />)}
+      </div>
+    </div>
+  )
+}
+
+function PartnerItem({ logo, duplicate = false }) {
+  const altFor = useLogoAlt('partner')
+  // Partner logos are full-color badges with their own backgrounds, so
+  // they are shown as-is (a color filter turns them into solid blocks).
+  return (
+    <div
+      className={'flex-shrink-0 mx-3 w-48 h-28 px-5 flex items-center justify-center rounded-2xl bg-white border border-primary-dark-blue/10 ' +
+        'shadow-[0_4px_14px_-8px_rgba(6,0,120,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-cyan/50'}
+      aria-hidden={duplicate || undefined}
+      data-marquee-dup={duplicate || undefined}
+    >
+      {logo.image ? (
+        <img src={logo.image} alt={duplicate ? '' : altFor(logo)} className="max-h-14 max-w-full w-auto object-contain" />
+      ) : (
+        <span className="font-somar text-xs text-primary-dark-blue/60">{logo.name}</span>
+      )}
     </div>
   )
 }

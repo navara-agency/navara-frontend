@@ -66,8 +66,7 @@
       "instagram": "إنستغرام",
       "email": "hello@navara.com"
     },
-    "copyright": "© 2026 نافارا. جميع الحقوق محفوظة.",
-    "adSpendNote": "ميزانية الإعلانات منفصلة عن رسوم الإدارة ما لم يُتفق على خلاف ذلك كتابياً."
+    "copyright": "© 2026 نافارا. جميع الحقوق محفوظة."
   },
 
   "home": {
@@ -543,12 +542,14 @@
       "whatsappPlaceholder": "5X XXX XXXX",
       "email": "البريد الإلكتروني",
       "emailPlaceholder": "بريدك@الإلكتروني.com",
-      "preferredDate": "اختار يوم المكالمة",
-      "today": "النهارده",
       "briefNote": "ملاحظة مختصرة (اختياري)",
       "briefNotePlaceholder": "أخبرنا عن أعمالك وأهدافك...",
       "submit": "احجز استشارتك المجانية",
       "submitting": "جاري الحجز..."
+    },
+    "booking": {
+      "received": "تم استلام بياناتك ✓ اختار ميعاد المكالمة المناسب ليك",
+      "openPage": "افتح صفحة الحجز"
     },
     "success": "شكراً! سنراجع استفسارك ونتواصل معك قريباً.",
     "error": "حدث خطأ ما. يرجى المحاولة مرة أخرى أو التواصل معنا عبر واتساب.",
@@ -560,9 +561,7 @@
       "budgetRequired": "يرجى اختيار نطاق ميزانية",
       "whatsappRequired": "رقم واتساب مطلوب",
       "whatsappInvalid": "يرجى إدخال رقم هاتف صحيح",
-      "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
-      "dateRequired": "يرجى اختيار تاريخ للمكالمة",
-      "slotRequired": "يرجى اختيار وقت للمكالمة"
+      "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح"
     }
   },
 
@@ -592,7 +591,9 @@
       "ctaSubtext": "في اقل من ساعه ، هتكتشف بالظبط ناقصك ايه علشان تعلي ايراداتك"
     },
     "logos": {
-      "heading": "موثوق من قبل"
+      "heading": "موثوقون من قِبل",
+      "clientAlt": "شعار عميل",
+      "partnerAlt": "شعار منصة"
     },
     "whoWeAre": {
       "sectionHeading": "مين إحنا؟",
@@ -669,8 +670,7 @@
     },
     "testimonials": {
       "sectionHeading": "ده شكل النمو الحقيقي",
-      "sectionSubheading": "كلام بعض عملائنا",
-      "ratingLabel": "من عملائنا",
+      "sectionSubheading": "نتائج بعض عملائنا",
       "videoComing": "الفيديو قريباً",
       "items": [
         {

@@ -1,9 +1,11 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
+import { getCalApi } from '@calcom/embed-react'
 import { Mail, MapPin, Clock, Calendar } from 'lucide-react'
+import { CONSULTATION_CAL_LINK, CAL_WHATSAPP_FIELD } from '../config/links'
 import FadeUp from '../components/animations/FadeUp'
 import PhotoBackdrop from '../components/ui/PhotoBackdrop'
 import IntlPhoneInput from '../components/ui/IntlPhoneInput'
@@ -25,201 +27,10 @@ const GOAL_OPTIONS = ['presence', 'leads', 'both', 'notSure']
 const SERVICES_OPTIONS = ['brandPresence', 'demandGeneration', 'growthPartner360']
 const BUDGET_OPTIONS = ['under1k', '1kTo3k', '3kTo6k', '6kPlus', 'preferNot']
 
-
-// Number of bookable days the picker should always surface, and the maximum window we
-// search through to find them. Cal.com returns empty for non-working days (weekends,
-// holidays, etc.), so we scan ahead and show only the days that actually have slots.
-const TARGET_AVAILABLE_DAYS = 3
-const MAX_SCAN_AHEAD = 21
-
-function fmtLocalDate(d) {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-}
-
-function ThreeDayDateTimePicker({ dateValue, onDateChange, slotValue, onSlotChange, market }) {
-  const { t, i18n } = useTranslation()
-  const locale = i18n.language === 'ar' ? 'ar-EG' : 'en-US'
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
-
-  // Build candidate dates (today + up to MAX_SCAN_AHEAD days) and fetch availability for
-  // all of them in parallel. We then keep the first TARGET_AVAILABLE_DAYS that have slots.
-  const candidates = useMemo(() => {
-    const t0 = new Date()
-    return Array.from({ length: MAX_SCAN_AHEAD + 1 }, (_, offset) => {
-      const d = new Date(t0)
-      d.setDate(t0.getDate() + offset)
-      return d
-    })
-  }, [])
-
-  const [slotsByDate, setSlotsByDate] = useState({})
-  const [calConfigured, setCalConfigured] = useState(true)
-  const [scanLoading, setScanLoading] = useState(true)
-
-  useEffect(() => {
-    let cancelled = false
-    setScanLoading(true)
-
-    async function scan() {
-      const map = {}
-      let anyConfigured = false
-      // Scan 5 days at a time and stop as soon as TARGET_AVAILABLE_DAYS are found.
-      // Avoids firing all 22 requests at once — typical Mon–Fri schedule resolves
-      // in the first batch of 5 calendar days.
-      const batchSize = 5
-      for (let i = 0; i < candidates.length; i += batchSize) {
-        if (cancelled) return
-        const batch = candidates.slice(i, i + batchSize)
-        const results = await Promise.all(batch.map(async (d) => {
-          const ds = fmtLocalDate(d)
-          try {
-            const res = await api.get('/api/calcom/slots', { query: { date: ds, market: market || '', timezone } })
-            return { ds, slots: Array.isArray(res?.slots) ? res.slots : [], configured: res?.configured !== false }
-          } catch {
-            return { ds, slots: [], configured: true }
-          }
-        }))
-        if (cancelled) return
-        for (const r of results) {
-          map[r.ds] = r.slots
-          if (r.configured) anyConfigured = true
-        }
-        if (Object.values(map).filter(s => s.length > 0).length >= TARGET_AVAILABLE_DAYS) break
-      }
-      if (!cancelled) {
-        setSlotsByDate({ ...map })
-        setCalConfigured(anyConfigured)
-        setScanLoading(false)
-      }
-    }
-
-    scan()
-    return () => { cancelled = true }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [market, timezone])
-
-  // Pick the first N candidates that have at least one slot — skipping weekends/holidays/full days.
-  const visibleDays = useMemo(() => {
-    const result = []
-    for (const d of candidates) {
-      const ds = fmtLocalDate(d)
-      const slots = slotsByDate[ds]
-      if (Array.isArray(slots) && slots.length > 0) {
-        result.push(d)
-        if (result.length === TARGET_AVAILABLE_DAYS) break
-      }
-    }
-    return result
-  }, [candidates, slotsByDate])
-
-  // Auto-select the first available day on first load if user hasn't picked one.
-  useEffect(() => {
-    if (!dateValue && visibleDays.length > 0) {
-      onDateChange(fmtLocalDate(visibleDays[0]))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visibleDays.length])
-
-  const apiSlots = dateValue ? (slotsByDate[dateValue] || []) : []
-  const noConfigured = !calConfigured && !scanLoading
-  const noAvailability = !scanLoading && calConfigured && visibleDays.length === 0
-
-  const formatSlot = (iso) => {
-    try {
-      const d = new Date(iso)
-      return d.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: false })
-    } catch {
-      return iso
-    }
-  }
-
-  // Label: "Today" if the visible day is actually today, else weekday short name
-  const todayStr = fmtLocalDate(new Date())
-  const labelFor = (d) => (fmtLocalDate(d) === todayStr ? t('contact.form.today') : d.toLocaleDateString(locale, { weekday: 'short' }))
-
-  return (
-    <div className="space-y-3">
-      <div>
-        <span className="block font-somar text-sm font-medium text-text-dark mb-1.5">{t('contact.form.preferredDate')}</span>
-
-        {scanLoading ? (
-          <p className="font-somar text-xs text-gray-500 mt-2">Loading availability…</p>
-        ) : noConfigured ? (
-          <p className="font-somar text-xs text-gray-500 mt-2">
-            Auto-booking isn&rsquo;t configured yet — submit the form and we&rsquo;ll send you available times.
-          </p>
-        ) : noAvailability ? (
-          <p className="font-somar text-xs text-gray-500 mt-2">
-            No availability in the next {MAX_SCAN_AHEAD} days — submit the form and we&rsquo;ll suggest times.
-          </p>
-        ) : (
-          <div className="grid grid-cols-3 gap-3 mt-2">
-            {visibleDays.map((d) => {
-              const dateStr = fmtLocalDate(d)
-              const isSelected = dateValue === dateStr
-              return (
-                <motion.button
-                  key={dateStr}
-                  type="button"
-                  onClick={() => onDateChange(dateStr)}
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.96 }}
-                  transition={{ duration: 0.15 }}
-                  className={`rounded-xl border py-3 px-2 text-center transition-all duration-200 cursor-pointer ${
-                    isSelected
-                      ? 'border-primary-cyan bg-primary-cyan/10'
-                      : 'border-gray-200 bg-white hover:border-primary-cyan/50'
-                  }`}
-                >
-                  <div className={`font-somar text-xs mb-1 ${isSelected ? 'text-primary-cyan' : 'text-gray-400'}`}>
-                    {labelFor(d)}
-                  </div>
-                  <div className={`font-handicrafts font-bold text-2xl ${isSelected ? 'text-primary-dark-blue' : 'text-gray-800'}`}>
-                    {d.getDate()}
-                  </div>
-                  <div className={`font-somar text-xs mt-1 ${isSelected ? 'text-primary-cyan' : 'text-gray-400'}`}>
-                    {d.toLocaleDateString(locale, { month: 'short' })}
-                  </div>
-                </motion.button>
-              )
-            })}
-          </div>
-        )}
-      </div>
-
-      {dateValue && !scanLoading && !noConfigured && !noAvailability && (
-        <div>
-          <span className="block font-somar text-sm font-medium text-text-dark mb-1.5">
-            Time slot <span className="text-gray-400 font-normal">(your timezone)</span>
-          </span>
-          {apiSlots.length === 0 ? (
-            <p className="font-somar text-xs text-gray-500 mt-1">No availability on this date — pick another.</p>
-          ) : (
-            <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
-              {apiSlots.map((slot) => {
-                const isSelected = slotValue === slot.start
-                return (
-                  <button
-                    key={slot.start}
-                    type="button"
-                    onClick={() => onSlotChange(slot.start)}
-                    className={`rounded-lg border py-2 px-2 text-center font-somar text-sm transition-all cursor-pointer ${
-                      isSelected
-                        ? 'border-primary-cyan bg-primary-cyan/10 text-primary-dark-blue font-semibold'
-                        : 'border-gray-200 bg-white text-gray-700 hover:border-primary-cyan/50'
-                    }`}
-                  >
-                    {formatSlot(slot.start)}
-                  </button>
-                )
-              })}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
+// Cal.com embed namespace for the post-submit booking popup. getCalApi() injects
+// embed.js once (async) the first time it's called, and only this page calls it.
+const CAL_NAMESPACE = 'consultation'
+const CAL_BOOKING_URL = `https://cal.com/${CONSULTATION_CAL_LINK}`
 
 export default function Contact() {
   const { t } = useTranslation()
@@ -239,27 +50,53 @@ export default function Contact() {
   const liveEmail = siteConfig?.global?.emailContact
   const liveOffice = geoConfig?.officeAddress
   const liveHours = geoConfig?.workingHours
-  const calLink = geoConfig?.calLink || null
-  const calUrl = calLink ? `https://cal.com/${calLink}` : null
-
   const defaultPhoneIso = MARKET_TO_ISO[geoMarket] || 'EG'
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
     defaultValues: { whatsappNumber: '' },
   })
-  const preferredDate = watch('preferredDate')
-  const preferredSlot = watch('preferredSlot') // Exact ISO from Cal.com /v2/slots
   const whatsappNumber = watch('whatsappNumber')
-  const [bookingResult, setBookingResult] = useState(null)
+
+  // Warm up the Cal.com embed on this page only, so the popup opens fast after submit.
+  useEffect(() => {
+    getCalApi({ namespace: CAL_NAMESPACE })
+      .then((cal) => cal('ui', { hideEventTypeDetails: false, layout: 'month_view' }))
+      .catch(() => { /* embed blocked/offline — the fallback link still works */ })
+  }, [])
+
+  // Opens the booking calendar prefilled with the visitor's details. Only ever called
+  // after /api/leads succeeded, so the lead is saved before the popup appears.
+  const openBookingPopup = async (data) => {
+    const label = (group, value) => (value ? t(`contact.form.${group}.${value}`) : '')
+    const summary = [
+      data.businessName,
+      label('industryOptions', data.industry),
+      label('primaryGoalOptions', data.primaryGoal),
+      label('budgetOptions', data.budgetRange),
+      `WhatsApp: ${data.whatsappNumber}`,
+    ].filter(Boolean).join(' | ')
+    try {
+      const cal = await getCalApi({ namespace: CAL_NAMESPACE })
+      cal('modal', {
+        calLink: CONSULTATION_CAL_LINK,
+        config: {
+          layout: 'month_view',
+          name: data.fullName,
+          email: data.email,
+          notes: [summary, data.briefNote].filter(Boolean).join('\n'),
+          [CAL_WHATSAPP_FIELD]: data.whatsappNumber,
+        },
+      })
+      window.dataLayer?.push({ event: 'cal_booking_opened' })
+    } catch {
+      // Embed failed to load — the success panel shows the "Open booking page" link.
+    }
+  }
 
   const onSubmit = async (data) => {
     setSubmitStatus('submitting')
     setSubmitError(null)
-    setBookingResult(null)
 
-    // The slot picker stores the exact ISO start that Cal.com gave us, so the booking
-    // request is guaranteed to match an available slot.
-    const preferredDateTime = data.preferredSlot || null
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
     // Map react-hook-form fields → /api/leads payload (FR-008). Market is no longer collected
@@ -273,9 +110,8 @@ export default function Contact() {
       budget: data.budgetRange,
       phone: data.whatsappNumber || null,
       email: data.email,
-      note: [data.briefNote, preferredDateTime ? `Preferred slot: ${preferredDateTime}` : null].filter(Boolean).join('\n'),
-      // Date + time + timezone — backend uses these to create the Cal.com booking
-      preferredDateTime,
+      note: data.briefNote || '',
+      // Day/time is picked in the Cal.com popup after submit, so no slot is sent here.
       timezone,
       // Honeypot — must stay empty (R13). Renamed from "website" because browsers autofilled it.
       nv_check_x: data.nv_check_x || '',
@@ -291,8 +127,8 @@ export default function Contact() {
     try {
       const res = await api.post('/api/leads', payload, { auth: false })
       if (debug) { console.log('success:', res); console.groupEnd() }
-      setBookingResult(res.booking || null)
       setSubmitStatus('success')
+      openBookingPopup(data)
       // Scroll up so the user actually sees the success state instead of staring at a blank form area
       requestAnimationFrame(() => {
         const el = successRef.current
@@ -581,75 +417,21 @@ export default function Contact() {
                       <Calendar size={26} className="text-white" aria-hidden="true" />
                     </div>
 
-                    {/* Confirmed booking */}
-                    {bookingResult?.status === 'confirmed' && (
-                      <>
-                        <p className="font-somar text-primary-dark-blue font-bold text-lg">
-                          You&rsquo;re booked! ✓
-                        </p>
-                        <p className="font-somar text-text-gray text-sm max-w-md mx-auto">
-                          Your discovery call is confirmed. Check your inbox for the Cal.com invite — it includes the meeting link and a calendar add-to-cart.
-                        </p>
-                      </>
-                    )}
-
-                    {/* Cal.com booking failed but lead was saved — give them the manual fallback */}
-                    {bookingResult?.status === 'failed' && (
-                      <>
-                        <p className="font-somar text-primary-dark-blue font-medium text-lg">
-                          {t('contact.success')}
-                        </p>
-                        <p className="font-somar text-text-gray text-sm max-w-md mx-auto">
-                          We saved your details, but couldn&rsquo;t auto-book the slot. Pick a time below and we&rsquo;ll send the invite manually.
-                        </p>
-                        {calUrl && (
-                          <a
-                            href={calUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-somar font-bold text-white"
-                            style={{
-                              background: 'linear-gradient(to right, #0044ff 0%, #3322cc 42%, #bb33aa 100%)',
-                              boxShadow: '0 4px 20px rgba(0,50,255,0.25)',
-                            }}
-                          >
-                            <Calendar size={16} aria-hidden="true" /> Pick a time on Cal.com
-                          </a>
-                        )}
-                      </>
-                    )}
-
-                    {/* No booking attempted (no date+time picked) */}
-                    {!bookingResult && (
-                      <>
-                        <p className="font-somar text-primary-dark-blue font-medium text-lg">
-                          {t('contact.success')}
-                        </p>
-                        {calUrl ? (
-                          <>
-                            <p className="font-somar text-text-gray text-sm max-w-md mx-auto">
-                              Want to lock in a slot now? Pick a time on Cal.com.
-                            </p>
-                            <a
-                              href={calUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-somar font-bold text-white"
-                              style={{
-                                background: 'linear-gradient(to right, #0044ff 0%, #3322cc 42%, #bb33aa 100%)',
-                                boxShadow: '0 4px 20px rgba(0,50,255,0.25)',
-                              }}
-                            >
-                              <Calendar size={16} aria-hidden="true" /> Book your call now
-                            </a>
-                          </>
-                        ) : (
-                          <p className="font-somar text-text-gray text-sm">
-                            We&rsquo;ll be in touch on WhatsApp shortly.
-                          </p>
-                        )}
-                      </>
-                    )}
+                    <p className="font-somar text-primary-dark-blue font-bold text-lg">
+                      {t('contact.booking.received')}
+                    </p>
+                    <a
+                      href={CAL_BOOKING_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 min-h-[44px] px-6 py-3 rounded-xl font-somar font-bold text-white"
+                      style={{
+                        background: 'linear-gradient(to right, #0044ff 0%, #3322cc 42%, #bb33aa 100%)',
+                        boxShadow: '0 4px 20px rgba(0,50,255,0.25)',
+                      }}
+                    >
+                      <Calendar size={16} aria-hidden="true" /> {t('contact.booking.openPage')}
+                    </a>
                   </div>
                 ) : (
                   <form
@@ -786,21 +568,6 @@ export default function Contact() {
                         />
                         {errors.email && <p role="alert" className="font-somar text-xs text-red-500 mt-1">{errors.email.message}</p>}
                       </div>
-
-                      <ThreeDayDateTimePicker
-                        dateValue={preferredDate}
-                        onDateChange={(date) => { setValue('preferredDate', date, { shouldValidate: true }); setValue('preferredSlot', '', { shouldValidate: true }) }}
-                        slotValue={preferredSlot}
-                        onSlotChange={(iso) => setValue('preferredSlot', iso, { shouldValidate: true })}
-                        // Geo-resolved market keeps the per-market Cal.com event-type split working
-                        // without exposing a Market dropdown to the visitor. Falls back to Egypt
-                        // (the default geo) if geo hasn't resolved yet.
-                        market={geoMarket || 'Egypt'}
-                      />
-                      <input type="hidden" {...register('preferredDate', { required: t('contact.validation.dateRequired') })} />
-                      <input type="hidden" {...register('preferredSlot', { required: t('contact.validation.slotRequired') })} />
-                      {errors.preferredDate && <p role="alert" className="font-somar text-xs text-red-500 mt-1">{errors.preferredDate.message}</p>}
-                      {errors.preferredSlot && !errors.preferredDate && <p role="alert" className="font-somar text-xs text-red-500 mt-1">{errors.preferredSlot.message}</p>}
 
                       {/* Honeypot — bots fill this; humans never see it. R13.
                           Obscure name + autoComplete="off" + new-password trick to avoid browser autofill. */}

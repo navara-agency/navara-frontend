@@ -480,16 +480,6 @@ export default function TestimonialsCarousel({ testimonials }) {
           viewport={{ once: true, amount: 0.3 }}
           transition={reduced ? { duration: 0 } : { duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-50 border border-yellow-200 mb-6">
-            <div className="flex gap-0.5" aria-hidden="true">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={13} className="text-yellow-400 fill-yellow-400" />
-              ))}
-            </div>
-            <span className="font-somar font-semibold text-yellow-700 text-sm">4.9 / 5</span>
-            <span className="font-somar text-yellow-600/70 text-sm">{t('homeV2.testimonials.ratingLabel')}</span>
-          </div>
-
           <h2
             className="font-handicrafts font-bold text-primary-dark-blue mb-4"
             style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}

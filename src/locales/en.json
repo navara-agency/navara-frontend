@@ -66,8 +66,7 @@
       "instagram": "Instagram",
       "email": "hello@navara.com"
     },
-    "copyright": "© 2026 Navara. All rights reserved.",
-    "adSpendNote": "Ad spend is separate from management fees unless otherwise agreed in writing."
+    "copyright": "© 2026 Navara. All rights reserved."
   },
 
   "home": {
@@ -552,12 +551,14 @@
       "whatsappPlaceholder": "1XX XXX XXXX",
       "email": "Email Address",
       "emailPlaceholder": "your@email.com",
-      "preferredDate": "Pick your preferred call date",
-      "today": "Today",
       "briefNote": "Brief Note (optional)",
       "briefNotePlaceholder": "Tell us about your business and goals...",
       "submit": "Book Your Free Consultation Call",
       "submitting": "Booking..."
+    },
+    "booking": {
+      "received": "Got your details ✓ Pick a time for your call",
+      "openPage": "Open booking page"
     },
     "success": "Thank you! We'll review your inquiry and be in touch shortly.",
     "error": "Something went wrong. Please try again or reach us via WhatsApp.",
@@ -569,9 +570,7 @@
       "budgetRequired": "Please select a budget range",
       "whatsappRequired": "WhatsApp number is required",
       "whatsappInvalid": "Please enter a valid phone number",
-      "emailInvalid": "Please enter a valid email address",
-      "dateRequired": "Please pick a date for the call",
-      "slotRequired": "Please pick a time slot"
+      "emailInvalid": "Please enter a valid email address"
     }
   },
 
@@ -601,7 +600,9 @@
       "ctaSubtext": "We'll show you exactly what's holding your growth back"
     },
     "logos": {
-      "heading": "Trusted by"
+      "heading": "Trusted by",
+      "clientAlt": "Client logo",
+      "partnerAlt": "Platform logo"
     },
     "whoWeAre": {
       "sectionHeading": "Who are we?",
@@ -678,8 +679,7 @@
     },
     "testimonials": {
       "sectionHeading": "This Is What Growth Looks Like",
-      "sectionSubheading": "What Our Clients Actually Say",
-      "ratingLabel": "from our clients",
+      "sectionSubheading": "Results From Some of Our Clients",
       "videoComing": "Video coming soon",
       "items": [
         {
