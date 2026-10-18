@@ -5,6 +5,7 @@ import FadeUp from '../animations/FadeUp'
 
 export default function CaseStudyCard({
   clientName,
+  title,
   industry,
   outcome,
   imageUrl,
@@ -74,6 +75,9 @@ export default function CaseStudyCard({
           {clientName && (
             <p className="font-glancyr font-bold text-white text-lg leading-tight mb-1">{clientName}</p>
           )}
+          {title && (
+            <p className="font-sherika text-sm text-white/85 leading-snug mb-1">{title}</p>
+          )}
           {outcome && (
             <p className="font-sherika text-sm font-medium" style={{ color: accentColor }}>
               {outcome}
@@ -87,6 +91,7 @@ export default function CaseStudyCard({
 
 CaseStudyCard.propTypes = {
   clientName: PropTypes.string,
+  title: PropTypes.string,
   industry: PropTypes.string,
   challenge: PropTypes.string,
   outcome: PropTypes.string,
@@ -97,6 +102,7 @@ CaseStudyCard.propTypes = {
 
 CaseStudyCard.defaultProps = {
   clientName: '',
+  title: '',
   industry: '',
   outcome: '',
   imageUrl: null,

@@ -584,6 +584,11 @@
   },
 
   "homeV2": {
+    "caseStudies": {
+      "eyebrow": "Our work",
+      "heading": "Case studies",
+      "sub": "Real results for brands we grow in Egypt and Saudi Arabia."
+    },
     "hero": {
       "eyebrow": "For Ecommerce & Service Businesses in Egypt & Saudi Arabia",
       "h1": "Turn Your Marketing Spend Into\n+30% More Revenue in 90 Days with our\nCompletely Done-For-You Growth System",

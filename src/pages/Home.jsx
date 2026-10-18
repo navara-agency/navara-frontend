@@ -5,6 +5,7 @@ import HeroSection from '../components/ui/HeroSection'
 import PlatformLogos from '../components/ui/PlatformLogos'
 import WhoWeAreSection from '../components/ui/WhoWeAreSection'
 import ServicesCards from '../components/ui/ServicesCards'
+import CaseStudiesSection from '../components/ui/CaseStudiesSection'
 import TestimonialsCarousel from '../components/ui/TestimonialsCarousel'
 import RiskReversal from '../components/ui/RiskReversal'
 import ProcessTimeline from '../components/ui/ProcessTimeline'
@@ -136,6 +137,8 @@ export default function Home() {
       <WhoWeAreSection />
 
       <ServicesCards onCtaClick={goToContact} />
+
+      <CaseStudiesSection />
 
       <ProcessTimeline onCtaClick={goToContact} />
 

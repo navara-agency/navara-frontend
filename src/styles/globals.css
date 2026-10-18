@@ -260,9 +260,8 @@ h1, h2, h3, h4, h5, h6 {
   will-change: transform;
 }
 
-.marquee-wrapper:hover .marquee-track {
-  animation-play-state: paused;
-}
+/* No pause on hover: on phones a tap leaves a sticky :hover that froze the
+   logos until the user scrolled away. The strips always keep moving. */
 
 /* Platform/tool logos row — runs opposite to the client row */
 .marquee-wrapper--partners {
