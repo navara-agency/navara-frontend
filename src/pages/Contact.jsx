@@ -175,7 +175,7 @@ export default function Contact() {
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative min-h-[65vh] flex items-center overflow-hidden bg-primary-dark-blue pt-32 pb-24"
+        className="relative md:min-h-[65vh] flex items-center overflow-hidden bg-primary-dark-blue pt-28 pb-12 md:pt-32 md:pb-24"
         aria-label="Contact hero"
       >
         <PhotoBackdrop src="/brand/AbstractBG/ab2.jpg" opacity={0.15} parallax={!lite} sectionRef={heroRef} />
@@ -192,7 +192,7 @@ export default function Contact() {
 
         <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8 text-center">
           <motion.p
-            className="font-somar font-semibold text-primary-cyan uppercase tracking-[0.18em] mb-5"
+            className="hidden md:block font-somar font-semibold text-primary-cyan uppercase tracking-[0.18em] mb-5"
             style={{ fontSize: '0.8rem' }}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -282,7 +282,7 @@ export default function Contact() {
       </section>
 
       {/* ── Contact split layout ─────────────────────────────── */}
-      <section id="contact-form" className="relative overflow-hidden py-24">
+      <section id="contact-form" className="relative overflow-hidden pt-10 pb-24 md:py-24">
         {/* Background gradient + dot grid */}
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
           style={{ background: 'linear-gradient(160deg, #F9F6FF 0%, #f0ebff 40%, #F8F5FF 70%, #ece6ff 100%)' }} />
