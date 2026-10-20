@@ -76,10 +76,13 @@ function LogoItem({ logo, logoSize, 'aria-hidden': ariaHidden }) {
     'shadow-[0_8px_24px_-12px_rgba(43, 14, 116,0.55)] transition-all duration-300 ease-out ' +
     'hover:-translate-y-1 hover:border-primary-cyan/50 hover:shadow-[0_14px_32px_-12px_rgba(33, 211, 251,0.45)]'
 
+  // Glow is a gradient, not filter: blur — 40 blurred layers in the moving strip
+  // are the likely reason iOS Safari left the whole client row blank.
   const inner = (
     <>
       <span
-        className="pointer-events-none absolute -top-10 -right-10 w-24 h-24 rounded-full bg-primary-cyan/20 blur-2xl opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+        className="pointer-events-none absolute -top-12 -right-12 w-32 h-32 rounded-full opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: 'radial-gradient(circle, rgba(33, 211, 251, 0.22) 0%, transparent 65%)' }}
         aria-hidden="true"
       />
       <span className="relative flex items-center justify-center">{content}</span>
