@@ -19,10 +19,10 @@ export default function PlatformLogos() {
       ]
 
   return (
-    <section id="logos" className="bg-bg-light py-20" aria-label="Platform logos">
+    <section id="logos" className="bg-bg-light py-8 md:py-14" aria-label="Platform logos">
       <div className="max-w-[1200px] mx-auto px-6 md:px-8">
         <motion.h2
-          className="font-somar font-semibold text-center text-primary-dark-blue mb-10"
+          className="font-somar font-semibold text-center text-primary-dark-blue mb-2 md:mb-6"
           style={{ fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)' }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

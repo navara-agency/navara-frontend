@@ -18,7 +18,7 @@ export default function LogosMarquee({ logos, logoSize = 'h-12 w-auto' }) {
 
   if (clientLogos.length === 0) {
     return (
-      <div className="py-4">
+      <div className="md:py-4">
         <div className="flex justify-center gap-4 flex-wrap">
           {[...Array(6)].map((_, i) => (
             <div
@@ -34,7 +34,7 @@ export default function LogosMarquee({ logos, logoSize = 'h-12 w-auto' }) {
   }
 
   return (
-    <div className="py-4">
+    <div className="md:py-4">
       <div className="marquee-wrapper overflow-hidden py-3" dir="ltr">
         <div className="marquee-track">
           {clientLogos.map(logo => (
@@ -113,7 +113,7 @@ function PartnerRow({ partners, clientCount }) {
   // both rows move at the same speed whatever the number of logos.
   const duration = `${((30 * partners.length) / Math.max(clientCount, 1)).toFixed(1)}s`
   return (
-    <div className="marquee-wrapper marquee-wrapper--partners py-3 mt-8" dir="ltr">
+    <div className="marquee-wrapper marquee-wrapper--partners py-3 mt-1 md:mt-4" dir="ltr">
       <div className="marquee-track marquee-track--reverse" style={{ animationDuration: duration }}>
         {partners.map(p => <PartnerItem key={p.id} logo={p} />)}
         {partners.map(p => <PartnerItem key={`dup-${p.id}`} logo={p} duplicate />)}

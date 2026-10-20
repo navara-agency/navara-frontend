@@ -16,9 +16,6 @@ import useLiteMotion from '../hooks/useLiteMotion'
 import PageWrapper from '../components/layout/PageWrapper'
 
 
-const fade = (delay, reduced) =>
-  reduced ? { duration: 0 } : { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }
-
 // Geo market → ISO2 used by the phone input's flag/code default
 const MARKET_TO_ISO = { Egypt: 'EG', KSA: 'SA' }
 
@@ -175,7 +172,7 @@ export default function Contact() {
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative md:min-h-[65vh] flex items-center overflow-hidden bg-primary-dark-blue pt-28 pb-12 md:pt-32 md:pb-24"
+        className="relative flex items-center overflow-hidden bg-primary-dark-blue pt-28 pb-12 md:pt-40 md:pb-20"
         aria-label="Contact hero"
       >
         <PhotoBackdrop src="/brand/AbstractBG/ab2.jpg" opacity={0.15} parallax={!lite} sectionRef={heroRef} />
@@ -191,16 +188,6 @@ export default function Contact() {
         />
 
         <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8 text-center">
-          <motion.p
-            className="hidden md:block font-somar font-semibold text-primary-cyan uppercase tracking-[0.18em] mb-5"
-            style={{ fontSize: '0.8rem' }}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={fade(0.2, reduced)}
-          >
-            {t('nav.links.contact')}
-          </motion.p>
-
           <div className="relative inline-block mb-0">
             <h1
               className="font-handicrafts font-black"
@@ -282,7 +269,7 @@ export default function Contact() {
       </section>
 
       {/* ── Contact split layout ─────────────────────────────── */}
-      <section id="contact-form" className="relative overflow-hidden pt-10 pb-24 md:py-24">
+      <section id="contact-form" className="relative overflow-hidden pt-10 pb-24 md:pt-14">
         {/* Background gradient + dot grid */}
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
           style={{ background: 'linear-gradient(160deg, #F9F6FF 0%, #f0ebff 40%, #F8F5FF 70%, #ece6ff 100%)' }} />

@@ -39,7 +39,7 @@ export default function HeroSection({ onCtaClick }) {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center overflow-hidden bg-primary-dark-blue"
+      className="relative flex items-center overflow-hidden bg-primary-dark-blue"
       aria-label="Hero"
     >
       {/* Poster image — visible until video has buffered enough to play smoothly.
@@ -86,42 +86,20 @@ export default function HeroSection({ onCtaClick }) {
         }}
       />
 
-      <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8 pt-[110px] pb-[100px] text-center">
+      <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8 pt-28 pb-12 md:pt-40 md:pb-24 text-center">
 
-        {/* Eyebrow */}
-        <motion.p
-          className="font-somar font-medium text-white/70 uppercase tracking-[0.18em] mb-8"
-          style={{ fontSize: 'clamp(0.75rem, 1.3vw, 0.88rem)' }}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={fade(0.3, reduced)}
-        >
-          {t('homeV2.hero.eyebrow')}
-        </motion.p>
-
-        {/* H1 — 3 lines */}
+        {/* H1 — 3 lines. No opacity animation so Chrome can record LCP immediately */}
         <motion.h1
-          className="font-handicrafts font-black text-white mb-8"
+          className="font-handicrafts font-black text-white mb-8 md:mb-10"
           style={{ fontSize: 'clamp(2.2rem, 4.2vw, 2.8rem)', lineHeight: 1.3, letterSpacing: '-0.01em' }}
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ y: 28 }}
+          animate={{ y: 0 }}
           transition={fade(0.5, reduced)}
         >
           {t('homeV2.hero.h1').split('\n').map((line, i) => (
             <span key={i} className="block">{renderH1Line(line)}</span>
           ))}
         </motion.h1>
-
-        {/* Subheadline — no opacity animation so Chrome can record LCP immediately */}
-        <motion.p
-          className="font-somar font-semibold text-white/75 uppercase tracking-[0.08em] mb-10"
-          style={{ fontSize: 'clamp(0.8rem, 1.4vw, 0.97rem)' }}
-          initial={{ y: 16 }}
-          animate={{ y: 0 }}
-          transition={fade(0.75, reduced)}
-        >
-          {t('homeV2.hero.subheadline')}
-        </motion.p>
 
         {/* CTA */}
         <motion.div
@@ -133,13 +111,6 @@ export default function HeroSection({ onCtaClick }) {
           <LiquidButton onClick={handleCta}>
             {t('homeV2.hero.cta')}
           </LiquidButton>
-
-          <p
-            className="font-somar text-white/55 uppercase tracking-[0.1em]"
-            style={{ fontSize: 'clamp(0.72rem, 1.1vw, 0.82rem)' }}
-          >
-            {t('homeV2.hero.ctaSubtext')}
-          </p>
         </motion.div>
       </div>
     </section>
