@@ -295,10 +295,12 @@ export default function Contact() {
         )}
 
         <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          {/* Phones stack intro, form, then the contact cards; on desktop the
+              intro and cards share the first column beside the form. */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-8 lg:gap-x-12 lg:gap-y-0 items-start">
 
-            {/* Left — contact info */}
-            <FadeUp>
+            {/* Left — intro */}
+            <FadeUp className="lg:col-start-1 lg:row-start-1">
               {/* Section accent */}
               <div className="flex items-center gap-3 mb-5" aria-hidden="true">
                 <span className="h-px w-8 bg-gradient-to-r from-transparent to-primary-cyan/50" />
@@ -312,11 +314,14 @@ export default function Contact() {
               >
                 {t('contact.info.h2')}
               </h2>
-              <p className="font-somar text-text-gray mb-8 leading-relaxed"
+              <p className="font-somar text-text-gray lg:mb-8 leading-relaxed"
                 style={{ fontSize: 'clamp(0.95rem, 1.5vw, 1.05rem)' }}>
                 {t('contact.info.body')}
               </p>
+            </FadeUp>
 
+            {/* Left — contact cards (below the form on phones) */}
+            <FadeUp className="order-last lg:order-none lg:col-start-1 lg:row-start-2">
               <div className="space-y-3 mb-8">
                 {/* Email card */}
                 <motion.div
@@ -385,7 +390,7 @@ export default function Contact() {
             </FadeUp>
 
             {/* Right — contact form */}
-            <FadeUp delay={0.1}>
+            <FadeUp delay={0.1} className="lg:col-start-2 lg:row-start-1 lg:row-span-2">
               <div className="relative rounded-2xl p-8 overflow-hidden"
                 style={{ background: 'rgba(255,255,255,0.88)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 32px rgba(138, 11, 230,0.08)' }}>
                 {/* Top accent */}
