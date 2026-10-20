@@ -14,8 +14,8 @@ export default function ProcessTimeline({ onCtaClick }) {
   const handleCta = onCtaClick ?? (() => navigate('/contact#contact-form'))
 
   const connectorClass = isRTL
-    ? 'bg-gradient-to-r from-[#03c9e0] via-[#3322cc] to-[#060078]'
-    : 'bg-gradient-to-r from-[#060078] via-[#3322cc] to-[#03c9e0]'
+    ? 'bg-gradient-to-r from-[#21D3FB] via-[#8A0BE6] to-[#2B0E74]'
+    : 'bg-gradient-to-r from-[#2B0E74] via-[#8A0BE6] to-[#21D3FB]'
 
   return (
     <section id="process" className="bg-white py-24" aria-label="Our process">
@@ -72,7 +72,7 @@ export default function ProcessTimeline({ onCtaClick }) {
                 >
                   <motion.div
                     className="w-20 h-20 rounded-full border-4 border-white shadow-lg flex items-center justify-center mb-6"
-                    style={{ background: 'linear-gradient(135deg, #060078, #3322cc, #03c9e0)' }}
+                    style={{ background: 'linear-gradient(135deg, #2B0E74, #8A0BE6, #21D3FB)' }}
                     initial={{ opacity: 0, scale: 0.5 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, amount: 0.2 }}
@@ -115,14 +115,14 @@ export default function ProcessTimeline({ onCtaClick }) {
                 <div className="flex flex-col items-center flex-shrink-0">
                   <div
                     className="w-16 h-16 rounded-full border-4 border-white shadow-lg flex items-center justify-center"
-                    style={{ background: 'linear-gradient(135deg, #060078, #3322cc, #03c9e0)' }}
+                    style={{ background: 'linear-gradient(135deg, #2B0E74, #8A0BE6, #21D3FB)' }}
                   >
                     <span className="font-handicrafts font-bold text-white text-2xl leading-none">
                       {String(i + 1).padStart(2, '0')}
                     </span>
                   </div>
                   {i < steps.length - 1 && (
-                    <div className="w-1 h-10 bg-gradient-to-b from-[#060078] via-[#3322cc] to-[#03c9e0]" />
+                    <div className="w-1 h-10 bg-gradient-to-b from-[#2B0E74] via-[#8A0BE6] to-[#21D3FB]" />
                   )}
                 </div>
 
@@ -150,7 +150,7 @@ export default function ProcessTimeline({ onCtaClick }) {
             type="button"
             onClick={handleCta}
             className="inline-flex items-center justify-center px-8 py-4 rounded-full font-somar font-semibold text-white min-h-[44px] hover:opacity-90 transition-opacity"
-            style={{ background: 'linear-gradient(to right, #060078, #3322cc, #03c9e0)' }}
+            style={{ background: 'linear-gradient(to right, #2B0E74, #8A0BE6, #21D3FB)' }}
           >
             {t('homeV2.process.ctaButton')}
           </button>

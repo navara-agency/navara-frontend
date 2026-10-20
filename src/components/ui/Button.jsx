@@ -46,7 +46,7 @@ const ANIMATED_VARIANT = {
 const REDUCED_VARIANT_CLASSES = {
   primary:
     'bg-navara-orange text-white font-somar font-semibold rounded-md ' +
-    'hover:bg-[#E55506] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-orange-500/30 ' +
+    'hover:bg-[#B52CD0] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-orange-500/30 ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navara-orange ' +
     'transition-all duration-300 ease-in-out ' +
     'motion-reduce:transition-none motion-reduce:transform-none',

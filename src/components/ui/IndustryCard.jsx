@@ -17,15 +17,15 @@ export default function IndustryCard({ titleKey, bodyKey, icon: Icon, glowDelay 
         // every scrolled frame — skip it on mobile
         backdropFilter: lite ? 'none' : 'blur(8px)',
         border: '1px solid rgba(255,255,255,0.9)',
-        boxShadow: '0 2px 16px rgba(82,55,159,0.06)',
+        boxShadow: '0 2px 16px rgba(138, 11, 230,0.06)',
       }}
-      whileHover={reduced ? {} : { y: -8, boxShadow: '0 16px 48px rgba(3,201,224,0.13)' }}
+      whileHover={reduced ? {} : { y: -8, boxShadow: '0 16px 48px rgba(33, 211, 251,0.13)' }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
     >
       {/* Shimmer running along top accent bar */}
       <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] overflow-hidden pointer-events-none">
         <div className="h-full w-full"
-          style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
+          style={{ background: 'linear-gradient(90deg, #21D3FB 0%, #8A0BE6 60%, transparent 100%)' }} />
         {!lite && (
           <motion.div className="absolute top-0 h-full w-14 pointer-events-none"
             style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%)' }}
@@ -37,12 +37,12 @@ export default function IndustryCard({ titleKey, bodyKey, icon: Icon, glowDelay 
       {/* Hover glow overlay */}
       <div aria-hidden="true"
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
-        style={{ background: 'radial-gradient(ellipse at 20% 0%, rgba(3,201,224,0.07) 0%, transparent 65%)' }} />
+        style={{ background: 'radial-gradient(ellipse at 20% 0%, rgba(33, 211, 251,0.07) 0%, transparent 65%)' }} />
 
       {/* Drifting ghost icon watermark */}
       <motion.div aria-hidden="true"
         className="absolute -bottom-1 -end-1 opacity-[0.04] pointer-events-none group-hover:opacity-[0.08] transition-opacity duration-500"
-        style={{ color: 'rgba(82,55,159,1)' }}
+        style={{ color: 'rgba(138, 11, 230,1)' }}
         animate={lite ? {} : { y: [0, -8, 0], x: [0, -4, 0] }}
         transition={{ duration: 5 + glowDelay * 2, repeat: Infinity, ease: 'easeInOut' }}
       >
@@ -53,12 +53,12 @@ export default function IndustryCard({ titleKey, bodyKey, icon: Icon, glowDelay 
         {/* Breathing icon box */}
         <motion.div
           className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
-          style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.15) 0%, rgba(82,55,159,0.12) 100%)', border: '1px solid rgba(3,201,224,0.28)' }}
+          style={{ background: 'linear-gradient(135deg, rgba(33, 211, 251,0.15) 0%, rgba(138, 11, 230,0.12) 100%)', border: '1px solid rgba(33, 211, 251,0.28)' }}
           animate={lite ? {} : {
             boxShadow: [
-              '0 0 0px rgba(3,201,224,0)',
-              '0 0 14px rgba(3,201,224,0.25)',
-              '0 0 0px rgba(3,201,224,0)',
+              '0 0 0px rgba(33, 211, 251,0)',
+              '0 0 14px rgba(33, 211, 251,0.25)',
+              '0 0 0px rgba(33, 211, 251,0)',
             ],
           }}
           whileHover={reduced ? {} : { scale: 1.15, rotate: 10 }}

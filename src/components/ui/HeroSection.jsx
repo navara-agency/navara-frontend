@@ -8,7 +8,7 @@ const fade = (delay, reduced) =>
   reduced ? { duration: 0 } : { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }
 
 const highlightStyle = {
-  backgroundImage: 'linear-gradient(135deg, #03c9e0 0%, #a8f0ff 100%)',
+  backgroundImage: 'linear-gradient(135deg, #21D3FB 0%, #B5F1FE 100%)',
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text',
@@ -74,7 +74,7 @@ export default function HeroSection({ onCtaClick }) {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'linear-gradient(155deg, rgba(6,0,120,0.92) 0%, rgba(14,0,80,0.88) 55%, rgba(26,10,110,0.92) 100%)',
+            'linear-gradient(155deg, rgba(43, 14, 116,0.92) 0%, rgba(26, 6, 72,0.88) 55%, rgba(43, 14, 116,0.92) 100%)',
         }}
       />
       {/* Secondary blue tint */}
@@ -82,7 +82,7 @@ export default function HeroSection({ onCtaClick }) {
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at 60% 40%, rgba(0,80,255,0.18) 0%, transparent 65%)',
+          background: 'radial-gradient(ellipse at 60% 40%, rgba(138, 11, 230,0.18) 0%, transparent 65%)',
         }}
       />
 

@@ -11,7 +11,7 @@ export default function ServiceCard({ titleKey, bodyKey, icon: Icon, number, ani
     <FadeUp delay={animationDelay} className="h-full">
       <motion.div
         className="relative rounded-2xl p-8 h-full group overflow-hidden cursor-default flex flex-col"
-        style={{ background: 'linear-gradient(135deg, #001192 0%, #000B60 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #2B0E74 0%, #000B60 100%)' }}
         whileHover={shouldReduceMotion ? {} : { y: -8 }}
         transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       >
@@ -19,14 +19,14 @@ export default function ServiceCard({ titleKey, bodyKey, icon: Icon, number, ani
         <div
           className="absolute top-0 inset-x-0 h-[2px] transition-all duration-500"
           style={{
-            background: 'linear-gradient(90deg, #06AED5 0%, #06AED5 60%, transparent 100%)',
+            background: 'linear-gradient(90deg, #21D3FB 0%, #21D3FB 60%, transparent 100%)',
           }}
           aria-hidden="true"
         />
         <div
           className="absolute top-0 inset-x-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           style={{
-            background: 'linear-gradient(90deg, #FB6107 0%, #FB6107 60%, transparent 100%)',
+            background: 'linear-gradient(90deg, #D43FEB 0%, #D43FEB 60%, transparent 100%)',
           }}
           aria-hidden="true"
         />
@@ -35,7 +35,7 @@ export default function ServiceCard({ titleKey, bodyKey, icon: Icon, number, ani
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at 20% 20%, rgba(6,174,213,0.14) 0%, transparent 65%)',
+            background: 'radial-gradient(ellipse at 20% 20%, rgba(33, 211, 251,0.14) 0%, transparent 65%)',
           }}
           aria-hidden="true"
         />

@@ -7,18 +7,18 @@ import { ArrowRight } from 'lucide-react'
 const META = [
   {
     abstract: '/brand/AbstractBG/ab3.webp',
-    accent: '#03c9e0',
-    gradient: 'linear-gradient(135deg, #060078 0%, #3322cc 100%)',
+    accent: '#21D3FB',
+    gradient: 'linear-gradient(135deg, #2B0E74 0%, #8A0BE6 100%)',
   },
   {
     abstract: '/brand/AbstractBG/ab4.webp',
-    accent: '#ffa5cd',
-    gradient: 'linear-gradient(135deg, #3322cc 0%, #03c9e0 100%)',
+    accent: '#D43FEB',
+    gradient: 'linear-gradient(135deg, #8A0BE6 0%, #21D3FB 100%)',
   },
   {
     abstract: '/brand/AbstractBG/ab1.webp',
-    accent: '#a8f0ff',
-    gradient: 'linear-gradient(135deg, #060078 0%, #03c9e0 100%)',
+    accent: '#B5F1FE',
+    gradient: 'linear-gradient(135deg, #2B0E74 0%, #21D3FB 100%)',
   },
 ]
 
@@ -148,7 +148,7 @@ export default function ServicesCards({ onCtaClick }) {
       id="services"
       className="relative py-28 overflow-hidden"
       aria-label="Services"
-      style={{ background: 'linear-gradient(155deg, #060078 0%, #0e0050 55%, #1a0a6e 100%)' }}
+      style={{ background: 'linear-gradient(155deg, #2B0E74 0%, #14063F 55%, #1E0A5C 100%)' }}
     >
       {/* Abstract bg texture */}
       <div
@@ -166,22 +166,12 @@ export default function ServicesCards({ onCtaClick }) {
       <div
         aria-hidden="true"
         className="absolute -top-20 -end-20 w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(3,201,224,0.12) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(33, 211, 251,0.12) 0%, transparent 70%)' }}
       />
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8">
 
         {/* Header */}
-        <motion.p
-          className="font-somar font-semibold text-primary-cyan uppercase tracking-[0.2em] text-sm text-center mb-4"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={reduced ? { duration: 0 } : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {t('homeV2.services.eyebrow')}
-        </motion.p>
-
         <motion.h2
           className="font-handicrafts font-bold text-white text-center mb-16"
           style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}
@@ -270,7 +260,7 @@ export default function ServicesCards({ onCtaClick }) {
             type="button"
             onClick={handleCta}
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-somar font-semibold text-white min-h-[44px] hover:opacity-90 transition-opacity"
-            style={{ background: 'linear-gradient(to right, #060078, #3322cc, #03c9e0)' }}
+            style={{ background: 'linear-gradient(to right, #2B0E74, #8A0BE6, #21D3FB)' }}
           >
             {t('homeV2.services.ctaButton')}
             <ArrowRight size={16} />

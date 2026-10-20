@@ -108,7 +108,7 @@ export default function WhoWeAreSection() {
                   width: 'clamp(210px, 58vw, 300px)',
                   height: 'clamp(295px, 81vw, 420px)',
                   borderRadius: 28,
-                  background: 'linear-gradient(155deg, #0e0050 0%, #060078 50%, #1a0a6e 100%)',
+                  background: 'linear-gradient(155deg, #14063F 0%, #2B0E74 50%, #1E0A5C 100%)',
                 }}
               >
                 {/* Abstract fill */}
@@ -127,7 +127,7 @@ export default function WhoWeAreSection() {
                 <div
                   aria-hidden="true"
                   className="absolute inset-0"
-                  style={{ background: 'linear-gradient(180deg, rgba(6,0,120,0.2) 0%, rgba(6,0,120,0.88) 100%)' }}
+                  style={{ background: 'linear-gradient(180deg, rgba(43, 14, 116,0.2) 0%, rgba(43, 14, 116,0.88) 100%)' }}
                 />
 
                 {/* Content */}
@@ -144,7 +144,7 @@ export default function WhoWeAreSection() {
                       className="font-handicrafts font-black text-white leading-none mb-2"
                       style={{
                         fontSize: 'clamp(4rem, 15vw, 5rem)',
-                        backgroundImage: 'linear-gradient(135deg, #a8f0ff, #ffffff, #ffa5cd)',
+                        backgroundImage: 'linear-gradient(135deg, #B5F1FE, #ffffff, #D43FEB)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                         backgroundClip: 'text',
@@ -178,16 +178,6 @@ export default function WhoWeAreSection() {
 
           {/* ── Right: content ── */}
           <div className="flex-1 min-w-0">
-            <motion.p
-              className="font-somar font-semibold text-primary-cyan uppercase tracking-[0.2em] text-sm mb-4"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={reduced ? { duration: 0 } : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {t('homeV2.whoWeAre.sectionHeading')}
-            </motion.p>
-
             <motion.h2
               className="font-handicrafts font-bold text-primary-dark-blue mb-10"
               style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', lineHeight: 1.15 }}
@@ -210,7 +200,7 @@ export default function WhoWeAreSection() {
                 <motion.div key={i} variants={fadeUp} className="flex items-start gap-4">
                   <div
                     className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-white font-handicrafts font-bold text-sm"
-                    style={{ background: 'linear-gradient(135deg, #060078, #52379f, #03c9e0)' }}
+                    style={{ background: 'linear-gradient(135deg, #2B0E74, #8A0BE6, #21D3FB)' }}
                   >
                     {String(i + 1).padStart(2, '0')}
                   </div>

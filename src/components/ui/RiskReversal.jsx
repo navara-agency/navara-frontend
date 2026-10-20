@@ -14,9 +14,9 @@ function renderEmphasis(text, reduced) {
           className="font-handicrafts font-bold text-primary-cyan"
           animate={reduced ? {} : {
             textShadow: [
-              '0 0 0px rgba(3,201,224,0)',
-              '0 0 14px rgba(3,201,224,0.9)',
-              '0 0 0px rgba(3,201,224,0)',
+              '0 0 0px rgba(33, 211, 251,0)',
+              '0 0 14px rgba(33, 211, 251,0.9)',
+              '0 0 0px rgba(33, 211, 251,0)',
             ],
           }}
           transition={reduced ? {} : { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
@@ -31,9 +31,9 @@ function renderEmphasis(text, reduced) {
           className="font-somar font-bold text-primary-cyan"
           animate={reduced ? {} : {
             textShadow: [
-              '0 0 0px rgba(3,201,224,0)',
-              '0 0 14px rgba(3,201,224,0.9)',
-              '0 0 0px rgba(3,201,224,0)',
+              '0 0 0px rgba(33, 211, 251,0)',
+              '0 0 14px rgba(33, 211, 251,0.9)',
+              '0 0 0px rgba(33, 211, 251,0)',
             ],
           }}
           transition={reduced ? {} : { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 1.8 }}
@@ -85,7 +85,7 @@ function GlowDivider({ reduced }) {
       <div className="relative flex-1 h-px overflow-hidden">
         <motion.div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(to left, rgba(3,201,224,0.45), transparent)' }}
+          style={{ background: 'linear-gradient(to left, rgba(33, 211, 251,0.45), transparent)' }}
           animate={reduced ? {} : { opacity: [0.35, 0.7, 0.35] }}
           transition={reduced ? {} : lineTransition}
         />
@@ -94,7 +94,7 @@ function GlowDivider({ reduced }) {
             className="absolute inset-y-0 w-16"
             style={{
               right: 0,
-              background: 'linear-gradient(90deg, transparent, rgba(3,201,224,0.85), transparent)',
+              background: 'linear-gradient(90deg, transparent, rgba(33, 211, 251,0.85), transparent)',
             }}
             animate={{ x: [0, '-550%'], opacity: [1, 0] }}
             transition={pingTransition}
@@ -105,12 +105,12 @@ function GlowDivider({ reduced }) {
       {/* Center dot — continuous pulse */}
       <motion.div
         className="mx-3 w-2 h-2 rounded-full flex-shrink-0"
-        style={{ background: '#03c9e0' }}
+        style={{ background: '#21D3FB' }}
         animate={reduced ? {} : {
           boxShadow: [
-            '0 0 5px 2px rgba(3,201,224,0.45)',
-            '0 0 20px 8px rgba(3,201,224,0.95)',
-            '0 0 5px 2px rgba(3,201,224,0.45)',
+            '0 0 5px 2px rgba(33, 211, 251,0.45)',
+            '0 0 20px 8px rgba(33, 211, 251,0.95)',
+            '0 0 5px 2px rgba(33, 211, 251,0.45)',
           ],
           scale: [1, 1.5, 1],
         }}
@@ -121,7 +121,7 @@ function GlowDivider({ reduced }) {
       <div className="relative flex-1 h-px overflow-hidden">
         <motion.div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(to right, rgba(3,201,224,0.45), transparent)' }}
+          style={{ background: 'linear-gradient(to right, rgba(33, 211, 251,0.45), transparent)' }}
           animate={reduced ? {} : { opacity: [0.35, 0.7, 0.35] }}
           transition={reduced ? {} : lineTransition}
         />
@@ -130,7 +130,7 @@ function GlowDivider({ reduced }) {
             className="absolute inset-y-0 w-16"
             style={{
               left: 0,
-              background: 'linear-gradient(90deg, transparent, rgba(3,201,224,0.85), transparent)',
+              background: 'linear-gradient(90deg, transparent, rgba(33, 211, 251,0.85), transparent)',
             }}
             animate={{ x: [0, '550%'], opacity: [1, 0] }}
             transition={pingTransition}
@@ -174,9 +174,9 @@ export default function RiskReversal({ onCtaClick }) {
       />
 
       {/* Scroll-parallax orbs */}
-      <BackgroundOrb cx="10%" cy="20%" size={420} color="rgba(3,201,224,0.18)" duration={11} parallaxY={orb1Y} reduced={lite} />
-      <BackgroundOrb cx="88%" cy="65%" size={380} color="rgba(82,55,159,0.22)" duration={14} parallaxY={orb2Y} reduced={lite} />
-      <BackgroundOrb cx="55%" cy="90%" size={300} color="rgba(3,201,224,0.12)" duration={9}  parallaxY={orb3Y} reduced={lite} />
+      <BackgroundOrb cx="10%" cy="20%" size={420} color="rgba(33, 211, 251,0.18)" duration={11} parallaxY={orb1Y} reduced={lite} />
+      <BackgroundOrb cx="88%" cy="65%" size={380} color="rgba(138, 11, 230,0.22)" duration={14} parallaxY={orb2Y} reduced={lite} />
+      <BackgroundOrb cx="55%" cy="90%" size={300} color="rgba(33, 211, 251,0.12)" duration={9}  parallaxY={orb3Y} reduced={lite} />
 
       <div className="relative z-10">
 
@@ -187,7 +187,7 @@ export default function RiskReversal({ onCtaClick }) {
             style={{
               fontSize: 'clamp(1.1rem, 4.2vw, 3.4rem)',
               lineHeight: 1.2,
-              background: 'linear-gradient(105deg, #ffffff 15%, #03c9e0 35%, rgba(255,255,255,0.96) 48%, #03c9e0 62%, #ffffff 82%)',
+              background: 'linear-gradient(105deg, #ffffff 15%, #21D3FB 35%, rgba(255,255,255,0.96) 48%, #21D3FB 62%, #ffffff 82%)',
               backgroundSize: '250% 100%',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
@@ -246,9 +246,9 @@ export default function RiskReversal({ onCtaClick }) {
             transition={reduced ? { duration: 0 } : { duration: 0.65, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             animate={lite ? {} : {
               boxShadow: [
-                '0 0 30px rgba(3,201,224,0.06), inset 0 1px 0 rgba(255,255,255,0.04)',
-                '0 0 55px rgba(3,201,224,0.18), inset 0 1px 0 rgba(255,255,255,0.07)',
-                '0 0 30px rgba(3,201,224,0.06), inset 0 1px 0 rgba(255,255,255,0.04)',
+                '0 0 30px rgba(33, 211, 251,0.06), inset 0 1px 0 rgba(255,255,255,0.04)',
+                '0 0 55px rgba(33, 211, 251,0.18), inset 0 1px 0 rgba(255,255,255,0.07)',
+                '0 0 30px rgba(33, 211, 251,0.06), inset 0 1px 0 rgba(255,255,255,0.04)',
               ],
             }}
             transition={reduced ? { duration: 0 } : {
@@ -258,8 +258,8 @@ export default function RiskReversal({ onCtaClick }) {
             }}
             className="rounded-2xl p-7 mb-14"
             style={{
-              background: 'linear-gradient(135deg, rgba(3,201,224,0.06) 0%, rgba(6,0,120,0.4) 100%)',
-              border: '1px solid rgba(3,201,224,0.22)',
+              background: 'linear-gradient(135deg, rgba(33, 211, 251,0.06) 0%, rgba(43, 14, 116,0.4) 100%)',
+              border: '1px solid rgba(33, 211, 251,0.22)',
             }}
           >
             <div className="flex flex-col gap-5">
@@ -299,13 +299,13 @@ export default function RiskReversal({ onCtaClick }) {
                   type="button"
                   onClick={handleCta}
                   className="inline-flex items-center justify-center rounded-full bg-white text-primary-dark-blue font-somar font-semibold px-9 py-3 min-h-[44px] hover:bg-primary-dark-blue hover:text-white hover:ring-2 hover:ring-white transition-colors duration-300"
-                  style={{ fontSize: 'clamp(0.95rem, 1.6vw, 1.05rem)', boxShadow: '0 0 24px rgba(3,201,224,0.3)' }}
+                  style={{ fontSize: 'clamp(0.95rem, 1.6vw, 1.05rem)', boxShadow: '0 0 24px rgba(33, 211, 251,0.3)' }}
                 >
                   {t('homeV2.riskReversal.primary.cta')}
                 </button>
                 <div
                   className="px-8 py-2 font-somar font-semibold text-white text-sm rounded-b-2xl"
-                  style={{ background: 'linear-gradient(135deg, #060078, #03c9e0)', letterSpacing: '0.04em' }}
+                  style={{ background: 'linear-gradient(135deg, #2B0E74, #21D3FB)', letterSpacing: '0.04em' }}
                 >
                   {t('homeV2.riskReversal.guarantee.badge')}
                 </div>
@@ -325,7 +325,7 @@ export default function RiskReversal({ onCtaClick }) {
                   className="relative z-10 inline-flex items-center justify-center rounded-full bg-white text-primary-dark-blue font-somar font-semibold px-9 py-3 min-h-[44px] hover:bg-primary-dark-blue hover:text-white hover:ring-2 hover:ring-white transition-colors duration-300"
                   style={{
                     fontSize: 'clamp(0.95rem, 1.6vw, 1.05rem)',
-                    boxShadow: '0 0 24px rgba(3,201,224,0.3)',
+                    boxShadow: '0 0 24px rgba(33, 211, 251,0.3)',
                   }}
                   variants={{ rest: { scale: 1 }, hover: { scale: 1.04 } }}
                   transition={{ duration: 0.25, ease: 'easeOut' }}
@@ -348,15 +348,15 @@ export default function RiskReversal({ onCtaClick }) {
                   <div
                     className="flex items-center gap-2.5 px-9 py-2.5 font-somar font-semibold text-white text-sm whitespace-nowrap"
                     style={{
-                      background: 'linear-gradient(105deg, #060078 0%, #1a0a6e 40%, #03c9e0 100%)',
+                      background: 'linear-gradient(105deg, #2B0E74 0%, #1E0A5C 40%, #21D3FB 100%)',
                       borderRadius: '0 0 18px 18px',
-                      boxShadow: '0 14px 30px rgba(3,201,224,0.35), 0 4px 10px rgba(6,0,120,0.5)',
+                      boxShadow: '0 14px 30px rgba(33, 211, 251,0.35), 0 4px 10px rgba(43, 14, 116,0.5)',
                       letterSpacing: '0.05em',
                     }}
                   >
-                    <span style={{ color: '#03c9e0', fontSize: '0.6rem' }}>◆</span>
+                    <span style={{ color: '#21D3FB', fontSize: '0.6rem' }}>◆</span>
                     {t('homeV2.riskReversal.guarantee.badge')}
-                    <span style={{ color: '#03c9e0', fontSize: '0.6rem' }}>◆</span>
+                    <span style={{ color: '#21D3FB', fontSize: '0.6rem' }}>◆</span>
                   </div>
                 </motion.div>
               </motion.div>

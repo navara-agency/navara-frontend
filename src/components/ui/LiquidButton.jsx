@@ -19,13 +19,13 @@ export default function LiquidButton({ children, calLink, onClick, className = '
       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
       className={`relative inline-flex items-center justify-center overflow-hidden rounded-full ${className}`}
       style={{
-        background: 'linear-gradient(to right, #0044ff 0%, #3322cc 42%, #bb33aa 100%)',
+        background: 'linear-gradient(to right, #8A0BE6 0%, #8A0BE6 42%, #D43FEB 100%)',
         padding: '1.1rem 2.8rem',
         minHeight: 52,
         fontSize: 'clamp(1rem, 2vw, 1.1rem)',
         cursor: 'pointer',
         border: '1px solid rgba(255,255,255,0.22)',
-        boxShadow: '0 8px 32px rgba(0,50,255,0.35), inset 0 1px 0 rgba(255,255,255,0.18)',
+        boxShadow: '0 8px 32px rgba(138, 11, 230,0.35), inset 0 1px 0 rgba(255,255,255,0.18)',
       }}
       onClick={onClick}
       {...extraProps}

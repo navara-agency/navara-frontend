@@ -24,14 +24,14 @@ export default function LoadingScreen() {
         <motion.div
           key="loader"
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
-          style={{ background: 'linear-gradient(155deg, #060078 0%, #04004e 55%, #140564 100%)' }}
+          style={{ background: 'linear-gradient(155deg, #2B0E74 0%, #04004e 55%, #220B62 100%)' }}
           exit={{ opacity: 0, scale: 1.03 }}
           transition={{ duration: lite ? 0.3 : 0.55, ease: [0.4, 0, 0.2, 1] }}
         >
           {/* Static ambient glow */}
           <div
             className="absolute inset-0 pointer-events-none"
-            style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(3,201,224,0.13) 0%, transparent 62%)' }}
+            style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(33, 211, 251,0.13) 0%, transparent 62%)' }}
             aria-hidden="true"
           />
 
@@ -39,7 +39,7 @@ export default function LoadingScreen() {
           {!lite && (
             <motion.div
               className="absolute rounded-full pointer-events-none"
-              style={{ width: 180, height: 180, border: '1px solid rgba(3,201,224,0.18)' }}
+              style={{ width: 180, height: 180, border: '1px solid rgba(33, 211, 251,0.18)' }}
               animate={{ scale: [1, 1.35, 1], opacity: [0.6, 0, 0.6] }}
               transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
               aria-hidden="true"
@@ -48,7 +48,7 @@ export default function LoadingScreen() {
           {!lite && (
             <motion.div
               className="absolute rounded-full pointer-events-none"
-              style={{ width: 260, height: 260, border: '1px solid rgba(82,55,159,0.12)' }}
+              style={{ width: 260, height: 260, border: '1px solid rgba(138, 11, 230,0.12)' }}
               animate={{ scale: [1, 1.25, 1], opacity: [0.4, 0, 0.4] }}
               transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
               aria-hidden="true"
@@ -94,7 +94,7 @@ export default function LoadingScreen() {
           >
             <motion.div
               className="h-full origin-left"
-              style={{ background: 'linear-gradient(to right, #060078, #03c9e0, #52379f)' }}
+              style={{ background: 'linear-gradient(to right, #2B0E74, #21D3FB, #8A0BE6)' }}
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: (lite ? HOLD_MS_MOBILE : HOLD_MS) / 1000, ease: 'linear' }}

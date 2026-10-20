@@ -38,7 +38,7 @@ export default function PlatformLogos() {
           viewport={{ once: true, amount: 0.2 }}
           transition={reduced ? { duration: 0 } : { duration: 0.7, delay: 0.15 }}
         >
-          <LogosMarquee logos={allLogos} logoSize="h-14 w-auto" />
+          <LogosMarquee logos={allLogos} logoSize="h-9 md:h-14 w-auto" />
         </motion.div>
       </div>
     </section>

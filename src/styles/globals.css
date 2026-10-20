@@ -6,9 +6,9 @@
 
 @theme {
   /* Color tokens — original design system (other pages) */
-  --color-navara-blue: #001192;
-  --color-navara-orange: #FB6107;
-  --color-navara-turquoise: #06AED5;
+  --color-navara-blue: #2B0E74;
+  --color-navara-orange: #D43FEB;
+  --color-navara-turquoise: #21D3FB;
   --color-navara-white: #FFFFFF;
   --color-navara-dark: #0C0F0A;
   --color-navara-light: #F9FAFB;
@@ -18,14 +18,22 @@
   --font-sherika: 'Sherika', sans-serif;
 
   /* v2 Brand Colors */
-  --color-primary-dark-blue: #060078;
-  --color-primary-cyan: #03c9e0;
-  --color-secondary-purple: #52379f;
-  --color-gradient-pink: #ffa5cd;
-  --color-gradient-light-blue: #c6cbe1;
+  --color-primary-dark-blue: #2B0E74;
+  --color-primary-cyan: #21D3FB;
+  --color-secondary-purple: #8A0BE6;
+  --color-gradient-pink: #D43FEB;
+  --color-gradient-light-blue: #DCCFF2;
   --color-bg-light: #f8f9fa;
   --color-text-dark: #1a1a1a;
   --color-text-gray: #6b7280;
+
+  /* Tailwind's stock blue/indigo shades, pulled into the brand palette */
+  --color-blue-50: #F6F0FF;
+  --color-blue-100: #ECE0FF;
+  --color-blue-700: #6A0BB8;
+  --color-blue-800: #2B0E74;
+  --color-indigo-100: #ECE0FF;
+  --color-indigo-700: #6A0BB8;
 
   /* v2 Font families */
   --font-handicrafts: 'Sherika', sans-serif;
@@ -177,8 +185,9 @@
    CSS custom properties — Navara gradients
    ============================================================ */
 :root {
-  --navara-gradient: linear-gradient(135deg, #001192, #06AED5);
-  --navara-gradient-warm: linear-gradient(135deg, #FB6107, #001192);
+  /* Brand gradient: Sky Aqua -> Neon Violet -> Blue Violet -> Indigo night */
+  --navara-gradient: linear-gradient(90deg, #12E4FC 0%, #7F8BE8 25%, #E31CF8 50%, #A90DF6 68%, #2B0E74 88%, #05001F 100%);
+  --navara-gradient-warm: linear-gradient(135deg, #D43FEB, #8A0BE6 55%, #2B0E74);
 }
 
 /* ============================================================
@@ -362,13 +371,13 @@ h1, h2, h3, h4, h5, h6 {
 .spark-border {
   background: conic-gradient(
     from var(--spark-angle),
-    rgba(255, 210, 80, 0) 0%,
-    rgba(255, 210, 80, 0) 50%,
-    rgba(255, 210, 80, 0.8) 60%,
+    rgba(212, 63, 235, 0) 0%,
+    rgba(212, 63, 235, 0) 50%,
+    rgba(212, 63, 235, 0.8) 60%,
     rgba(255, 255, 255, 1)  66%,
-    rgba(255, 210, 80, 0.8) 72%,
-    rgba(255, 210, 80, 0)   82%,
-    rgba(255, 210, 80, 0) 100%
+    rgba(212, 63, 235, 0.8) 72%,
+    rgba(212, 63, 235, 0)   82%,
+    rgba(212, 63, 235, 0) 100%
   );
   animation: spark-spin 2.5s linear infinite;
   pointer-events: none;
@@ -395,11 +404,11 @@ h1, h2, h3, h4, h5, h6 {
 .frame-glow {
   background: conic-gradient(
     from var(--frame-angle),
-    rgba(3, 201, 224, 0.9) 0%,
-    rgba(255, 165, 205, 0.7) 25%,
-    rgba(82, 55, 159, 0.8) 50%,
-    rgba(6, 0, 120, 0.6) 75%,
-    rgba(3, 201, 224, 0.9) 100%
+    rgba(33, 211, 251, 0.9) 0%,
+    rgba(212, 63, 235, 0.7) 25%,
+    rgba(138, 11, 230, 0.8) 50%,
+    rgba(43, 14, 116, 0.6) 75%,
+    rgba(33, 211, 251, 0.9) 100%
   );
   animation: frame-spin 5s linear infinite;
   will-change: background;
@@ -411,10 +420,10 @@ h1, h2, h3, h4, h5, h6 {
     animation: none;
     background: conic-gradient(
       from 120deg,
-      rgba(3, 201, 224, 0.85),
-      rgba(82, 55, 159, 0.75),
-      rgba(255, 165, 205, 0.6),
-      rgba(3, 201, 224, 0.85)
+      rgba(33, 211, 251, 0.85),
+      rgba(138, 11, 230, 0.75),
+      rgba(212, 63, 235, 0.6),
+      rgba(33, 211, 251, 0.85)
     );
     will-change: auto;
   }
@@ -425,9 +434,9 @@ h1, h2, h3, h4, h5, h6 {
     animation: none;
     background: conic-gradient(
       from 45deg,
-      rgba(3, 201, 224, 0.9),
-      rgba(255, 165, 205, 0.7),
-      rgba(82, 55, 159, 0.8)
+      rgba(33, 211, 251, 0.9),
+      rgba(212, 63, 235, 0.7),
+      rgba(138, 11, 230, 0.8)
     );
     will-change: auto;
   }

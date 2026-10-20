@@ -106,6 +106,6 @@ CaseStudyCard.defaultProps = {
   industry: '',
   outcome: '',
   imageUrl: null,
-  accentColor: '#FB6107',
+  accentColor: '#D43FEB',
   animationDelay: 0,
 }

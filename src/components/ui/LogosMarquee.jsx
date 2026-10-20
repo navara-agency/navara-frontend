@@ -71,10 +71,10 @@ function LogoItem({ logo, logoSize, 'aria-hidden': ariaHidden }) {
   )
 
   const cardClass =
-    'group relative flex-shrink-0 mx-3 w-48 h-28 px-5 flex items-center justify-center overflow-hidden rounded-2xl ' +
-    'bg-gradient-to-br from-primary-dark-blue to-[#0d0a9e] border border-white/10 ' +
-    'shadow-[0_8px_24px_-12px_rgba(6,0,120,0.55)] transition-all duration-300 ease-out ' +
-    'hover:-translate-y-1 hover:border-primary-cyan/50 hover:shadow-[0_14px_32px_-12px_rgba(3,201,224,0.45)]'
+    'group relative flex-shrink-0 mx-2 md:mx-3 w-32 h-20 md:w-48 md:h-28 px-4 md:px-5 flex items-center justify-center overflow-hidden rounded-xl md:rounded-2xl ' +
+    'bg-gradient-to-br from-primary-dark-blue to-[#4A12A8] border border-white/10 ' +
+    'shadow-[0_8px_24px_-12px_rgba(43, 14, 116,0.55)] transition-all duration-300 ease-out ' +
+    'hover:-translate-y-1 hover:border-primary-cyan/50 hover:shadow-[0_14px_32px_-12px_rgba(33, 211, 251,0.45)]'
 
   const inner = (
     <>
@@ -128,13 +128,13 @@ function PartnerItem({ logo, duplicate = false }) {
   // they are shown as-is (a color filter turns them into solid blocks).
   return (
     <div
-      className={'flex-shrink-0 mx-3 w-48 h-28 px-5 flex items-center justify-center rounded-2xl bg-white border border-primary-dark-blue/10 ' +
-        'shadow-[0_4px_14px_-8px_rgba(6,0,120,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-cyan/50'}
+      className={'flex-shrink-0 mx-2 md:mx-3 w-32 h-20 md:w-48 md:h-28 px-4 md:px-5 flex items-center justify-center rounded-xl md:rounded-2xl bg-white border border-primary-dark-blue/10 ' +
+        'shadow-[0_4px_14px_-8px_rgba(43, 14, 116,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-cyan/50'}
       aria-hidden={duplicate || undefined}
       data-marquee-dup={duplicate || undefined}
     >
       {logo.image ? (
-        <img src={logo.image} alt={duplicate ? '' : altFor(logo)} className="max-h-14 max-w-full w-auto object-contain" />
+        <img src={logo.image} alt={duplicate ? '' : altFor(logo)} className="max-h-9 md:max-h-14 max-w-full w-auto object-contain" />
       ) : (
         <span className="font-somar text-xs text-primary-dark-blue/60">{logo.name}</span>
       )}

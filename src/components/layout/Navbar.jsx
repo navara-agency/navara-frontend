@@ -275,7 +275,7 @@ export default function Navbar() {
           />
           <motion.div
             className="fixed inset-y-0 end-0 w-full max-w-xs z-[1100] flex flex-col shadow-2xl"
-            style={{ backgroundColor: '#060078', willChange: 'transform' }}
+            style={{ backgroundColor: '#2B0E74', willChange: 'transform' }}
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation"

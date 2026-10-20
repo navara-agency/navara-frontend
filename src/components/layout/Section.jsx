@@ -27,7 +27,7 @@ const Section = forwardRef(function Section(
         <span
           aria-hidden="true"
           className="absolute top-0 inset-x-0 h-px pointer-events-none"
-          style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 30%, rgba(3,201,224,0.15) 50%, rgba(255,255,255,0.08) 70%, transparent 100%)' }}
+          style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 30%, rgba(33, 211, 251,0.15) 50%, rgba(255,255,255,0.08) 70%, transparent 100%)' }}
         />
       )}
       {backdrop}

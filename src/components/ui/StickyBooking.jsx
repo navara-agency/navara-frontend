@@ -51,7 +51,7 @@ export default function StickyBooking() {
             hover:opacity-90 transition-opacity duration-200 cursor-pointer
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-dark-blue
             ${isRTL ? 'left-6' : 'right-6'}`}
-          style={{ background: 'linear-gradient(to right, #060078, #3322cc, #03c9e0)' }}
+          style={{ background: 'linear-gradient(to right, #2B0E74, #8A0BE6, #21D3FB)' }}
           aria-label={t('nav.cta')}
           initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 16, scale: 0.92 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}

@@ -142,9 +142,9 @@ export default function Home() {
 
       <ProcessTimeline onCtaClick={goToContact} />
 
-      <TestimonialsCarousel testimonials={CAROUSEL_TESTIMONIALS} />
-
       <RiskReversal onCtaClick={goToContact} />
+
+      <TestimonialsCarousel testimonials={CAROUSEL_TESTIMONIALS} />
 
       {/* FAQ */}
       <section id="faq" className="py-24 bg-bg-light" aria-label="Frequently asked questions">

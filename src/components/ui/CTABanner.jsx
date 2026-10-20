@@ -11,7 +11,7 @@ export default function CTABanner({ headingKey, bodyKey, backdrop }) {
   return (
     <section
       className="relative overflow-hidden py-24"
-      style={{ backgroundColor: '#060078' }}
+      style={{ backgroundColor: '#2B0E74' }}
       aria-label="Call to action"
     >
       {backdrop && <PhotoBackdrop src={backdrop} opacity={0.12} />}
@@ -19,13 +19,13 @@ export default function CTABanner({ headingKey, bodyKey, backdrop }) {
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'linear-gradient(155deg, rgba(6,0,120,0.95) 0%, rgba(4,0,78,0.98) 55%, rgba(20,5,100,0.95) 100%)',
+          background: 'linear-gradient(155deg, rgba(43, 14, 116,0.95) 0%, rgba(26, 6, 72,0.98) 55%, rgba(34, 9, 92,0.95) 100%)',
         }}
       />
       <div
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(3,201,224,0.18) 0%, transparent 60%)' }}
+        style={{ background: 'radial-gradient(ellipse at 50% 100%, rgba(33, 211, 251,0.18) 0%, transparent 60%)' }}
       />
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8 text-center">

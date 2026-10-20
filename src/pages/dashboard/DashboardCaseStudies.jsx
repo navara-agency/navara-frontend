@@ -9,7 +9,7 @@ function emptyCaseStudy(count = 0) {
   return {
     client: '', title: '', industry: '', market: 'Egypt',
     servicesText: '', challenge: '', outcome: '', slug: '',
-    status: 'draft', sortOrder: count, coverImage: null, coverPublicId: null, accentColor: '#FB6107',
+    status: 'draft', sortOrder: count, coverImage: null, coverPublicId: null, accentColor: '#D43FEB',
   }
 }
 const EMPTY_FORM = emptyCaseStudy(0)
@@ -126,8 +126,8 @@ function CaseStudyForm({ initial, onSave, onCancel, busy }) {
         </Field>
         <Field label="Accent Colour">
           <div className="flex items-center gap-3">
-            <input type="color" value={form.accentColor || '#FB6107'} onChange={set('accentColor')} className="w-10 h-10 rounded cursor-pointer border border-slate-200" />
-            <input className={INPUT} value={form.accentColor || '#FB6107'} onChange={set('accentColor')} placeholder="#FB6107" />
+            <input type="color" value={form.accentColor || '#D43FEB'} onChange={set('accentColor')} className="w-10 h-10 rounded cursor-pointer border border-slate-200" />
+            <input className={INPUT} value={form.accentColor || '#D43FEB'} onChange={set('accentColor')} placeholder="#D43FEB" />
           </div>
         </Field>
       </div>
@@ -166,7 +166,7 @@ function buildPayload(form) {
     sortOrder: Number(form.sortOrder) || 0,
     coverImage: form.coverImage || null,
     coverPublicId: form.coverPublicId || null,
-    accentColor: form.accentColor || '#FB6107',
+    accentColor: form.accentColor || '#D43FEB',
   }
 }
 

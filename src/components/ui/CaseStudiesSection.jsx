@@ -15,9 +15,6 @@ export default function CaseStudiesSection() {
     <section id="case-studies" className="py-24 bg-white" aria-label={t('homeV2.caseStudies.heading')}>
       <div className="max-w-[1200px] mx-auto px-6 md:px-8">
         <div className="text-center mb-12">
-          <p className="font-somar text-sm font-semibold tracking-wide uppercase text-primary-cyan mb-3">
-            {t('homeV2.caseStudies.eyebrow')}
-          </p>
           <h2
             className="font-handicrafts font-semibold text-primary-dark-blue"
             style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)' }}
@@ -38,7 +35,7 @@ export default function CaseStudiesSection() {
               industry={cs.industry}
               outcome={cs.outcome}
               imageUrl={cs.coverImage}
-              accentColor={cs.accentColor || '#FB6107'}
+              accentColor={cs.accentColor || '#D43FEB'}
               animationDelay={Math.min(i, 5) * 0.08}
             />
           ))}

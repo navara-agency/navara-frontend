@@ -182,12 +182,12 @@ export default function Contact() {
         <div
           aria-hidden="true"
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(155deg, rgba(6,0,120,0.92) 0%, rgba(4,0,78,0.88) 55%, rgba(26,10,110,0.92) 100%)' }}
+          style={{ background: 'linear-gradient(155deg, rgba(43, 14, 116,0.92) 0%, rgba(26, 6, 72,0.88) 55%, rgba(43, 14, 116,0.92) 100%)' }}
         />
         <div
           aria-hidden="true"
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse at 40% 60%, rgba(3,201,224,0.1) 0%, transparent 55%)' }}
+          style={{ background: 'radial-gradient(ellipse at 40% 60%, rgba(33, 211, 251,0.1) 0%, transparent 55%)' }}
         />
 
         <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-8 text-center">
@@ -285,22 +285,22 @@ export default function Contact() {
       <section id="contact-form" className="relative overflow-hidden py-24">
         {/* Background gradient + dot grid */}
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(160deg, #f8f9ff 0%, #f0ebff 40%, #f5f8ff 70%, #ece6ff 100%)' }} />
+          style={{ background: 'linear-gradient(160deg, #F9F6FF 0%, #f0ebff 40%, #F8F5FF 70%, #ece6ff 100%)' }} />
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
-          style={{ backgroundImage: 'radial-gradient(rgba(82,55,159,0.04) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+          style={{ backgroundImage: 'radial-gradient(rgba(138, 11, 230,0.04) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
 
         {/* Ambient orbs */}
         {!lite && (
           <>
             <motion.div aria-hidden="true"
               className="absolute -top-32 -start-24 w-[500px] h-[500px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(3,201,224,0.07) 0%, transparent 70%)', filter: 'blur(80px)' }}
+              style={{ background: 'radial-gradient(circle, rgba(33, 211, 251,0.07) 0%, transparent 70%)', filter: 'blur(80px)' }}
               animate={{ scale: [1, 1.14, 1], opacity: [0.7, 1, 0.7] }}
               transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
             />
             <motion.div aria-hidden="true"
               className="absolute -bottom-24 -end-20 w-[440px] h-[440px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(82,55,159,0.08) 0%, transparent 70%)', filter: 'blur(75px)' }}
+              style={{ background: 'radial-gradient(circle, rgba(138, 11, 230,0.08) 0%, transparent 70%)', filter: 'blur(75px)' }}
               animate={{ scale: [1, 1.2, 1], opacity: [0.6, 1, 0.6] }}
               transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
             />
@@ -334,14 +334,14 @@ export default function Contact() {
                 {/* Email card */}
                 <motion.div
                   className="relative rounded-xl p-4 overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: lite ? 'none' : 'blur(10px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(82,55,159,0.06)' }}
-                  whileHover={reduced ? {} : { y: -3, boxShadow: '0 8px 28px rgba(3,201,224,0.12)' }}
+                  style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: lite ? 'none' : 'blur(10px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(138, 11, 230,0.06)' }}
+                  whileHover={reduced ? {} : { y: -3, boxShadow: '0 8px 28px rgba(33, 211, 251,0.12)' }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-                    style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
+                    style={{ background: 'linear-gradient(90deg, #21D3FB 0%, #8A0BE6 60%, transparent 100%)' }} />
                   <div className="absolute start-0 top-0 bottom-0 w-[3px] pointer-events-none"
-                    style={{ background: 'linear-gradient(to bottom, #03c9e0, #52379f)' }} aria-hidden="true" />
+                    style={{ background: 'linear-gradient(to bottom, #21D3FB, #8A0BE6)' }} aria-hidden="true" />
                   <div className="flex items-start gap-3 ps-2">
                     <Mail size={18} className="text-primary-cyan mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <div>
@@ -360,14 +360,14 @@ export default function Contact() {
                 {/* Office card */}
                 <motion.div
                   className="relative rounded-xl p-4 overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: lite ? 'none' : 'blur(10px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(82,55,159,0.06)' }}
-                  whileHover={reduced ? {} : { y: -3, boxShadow: '0 8px 28px rgba(3,201,224,0.12)' }}
+                  style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: lite ? 'none' : 'blur(10px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(138, 11, 230,0.06)' }}
+                  whileHover={reduced ? {} : { y: -3, boxShadow: '0 8px 28px rgba(33, 211, 251,0.12)' }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-                    style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
+                    style={{ background: 'linear-gradient(90deg, #21D3FB 0%, #8A0BE6 60%, transparent 100%)' }} />
                   <div className="absolute start-0 top-0 bottom-0 w-[3px] pointer-events-none"
-                    style={{ background: 'linear-gradient(to bottom, #03c9e0, #52379f)' }} aria-hidden="true" />
+                    style={{ background: 'linear-gradient(to bottom, #21D3FB, #8A0BE6)' }} aria-hidden="true" />
                   <div className="flex items-center gap-3 ps-2">
                     <MapPin size={18} className="text-primary-cyan flex-shrink-0" aria-hidden="true" />
                     <span className="font-somar text-sm text-text-gray">{liveOffice || t('contact.info.office')}</span>
@@ -377,14 +377,14 @@ export default function Contact() {
                 {/* Hours card */}
                 <motion.div
                   className="relative rounded-xl p-4 overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: lite ? 'none' : 'blur(10px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(82,55,159,0.06)' }}
-                  whileHover={reduced ? {} : { y: -3, boxShadow: '0 8px 28px rgba(3,201,224,0.12)' }}
+                  style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: lite ? 'none' : 'blur(10px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(138, 11, 230,0.06)' }}
+                  whileHover={reduced ? {} : { y: -3, boxShadow: '0 8px 28px rgba(33, 211, 251,0.12)' }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-                    style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
+                    style={{ background: 'linear-gradient(90deg, #21D3FB 0%, #8A0BE6 60%, transparent 100%)' }} />
                   <div className="absolute start-0 top-0 bottom-0 w-[3px] pointer-events-none"
-                    style={{ background: 'linear-gradient(to bottom, #03c9e0, #52379f)' }} aria-hidden="true" />
+                    style={{ background: 'linear-gradient(to bottom, #21D3FB, #8A0BE6)' }} aria-hidden="true" />
                   <div className="flex items-center gap-3 ps-2">
                     <Clock size={18} className="text-primary-cyan flex-shrink-0" aria-hidden="true" />
                     <span className="font-somar text-sm text-text-gray">{liveHours || t('contact.info.hours')}</span>
@@ -400,10 +400,10 @@ export default function Contact() {
             {/* Right — contact form */}
             <FadeUp delay={0.1}>
               <div className="relative rounded-2xl p-8 overflow-hidden"
-                style={{ background: 'rgba(255,255,255,0.88)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 32px rgba(82,55,159,0.08)' }}>
+                style={{ background: 'rgba(255,255,255,0.88)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 32px rgba(138, 11, 230,0.08)' }}>
                 {/* Top accent */}
                 <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-                  style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
+                  style={{ background: 'linear-gradient(90deg, #21D3FB 0%, #8A0BE6 60%, transparent 100%)' }} />
                 <h3 className="font-handicrafts font-bold text-primary-dark-blue mb-6 text-xl">
                   {t('contact.form.title')}
                 </h3>
@@ -412,7 +412,7 @@ export default function Contact() {
                   <div ref={successRef} role="status" aria-live="polite" className="text-center py-10 space-y-5">
                     <div
                       className="mx-auto w-14 h-14 rounded-full flex items-center justify-center"
-                      style={{ background: 'linear-gradient(135deg, #03c9e0, #52379f)' }}
+                      style={{ background: 'linear-gradient(135deg, #21D3FB, #8A0BE6)' }}
                     >
                       <Calendar size={26} className="text-white" aria-hidden="true" />
                     </div>
@@ -426,8 +426,8 @@ export default function Contact() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center gap-2 min-h-[44px] px-6 py-3 rounded-xl font-somar font-bold text-white"
                       style={{
-                        background: 'linear-gradient(to right, #0044ff 0%, #3322cc 42%, #bb33aa 100%)',
-                        boxShadow: '0 4px 20px rgba(0,50,255,0.25)',
+                        background: 'linear-gradient(to right, #8A0BE6 0%, #8A0BE6 42%, #D43FEB 100%)',
+                        boxShadow: '0 4px 20px rgba(138, 11, 230,0.25)',
                       }}
                     >
                       <Calendar size={16} aria-hidden="true" /> {t('contact.booking.openPage')}
@@ -591,9 +591,9 @@ export default function Contact() {
                         disabled={submitStatus === 'submitting'}
                         className="w-full relative overflow-hidden rounded-xl font-somar font-bold text-white py-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         style={{
-                          background: 'linear-gradient(to right, #0044ff 0%, #3322cc 42%, #bb33aa 100%)',
+                          background: 'linear-gradient(to right, #8A0BE6 0%, #8A0BE6 42%, #D43FEB 100%)',
                           border: '1px solid rgba(255,255,255,0.15)',
-                          boxShadow: '0 4px 20px rgba(0,50,255,0.25)',
+                          boxShadow: '0 4px 20px rgba(138, 11, 230,0.25)',
                         }}
                         whileHover={reduced ? {} : { filter: 'brightness(1.1)' }}
                         whileTap={reduced ? {} : { scale: 0.99 }}

@@ -43,7 +43,7 @@ export default function GeoDevBadge() {
       <div>
         <strong>geo:</strong>{' '}
         {loading ? 'loading…' : (
-          <span style={{ color: market === 'KSA' ? '#34d399' : '#fbbf24' }}>{market}</span>
+          <span style={{ color: market === 'KSA' ? '#34d399' : '#D43FEB' }}>{market}</span>
         )}
         {!open && <span style={{ marginLeft: 8, opacity: 0.6 }}>▾</span>}
       </div>
@@ -68,14 +68,14 @@ export default function GeoDevBadge() {
           <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>{JSON.stringify(ksa, null, 2)}</pre>
           <hr style={{ borderColor: 'rgba(255,255,255,0.2)', margin: '8px 0' }} />
           <div style={{ opacity: 0.7, fontSize: 10 }}>
-            Force market: <a href="?geo=KSA" style={{ color: '#7dd3fc' }}>?geo=KSA</a>{' · '}
-            <a href="?geo=Egypt" style={{ color: '#7dd3fc' }}>?geo=Egypt</a>{' · '}
-            <a href={window.location.pathname} style={{ color: '#7dd3fc' }}>clear</a>
+            Force market: <a href="?geo=KSA" style={{ color: '#7FE3FD' }}>?geo=KSA</a>{' · '}
+            <a href="?geo=Egypt" style={{ color: '#7FE3FD' }}>?geo=Egypt</a>{' · '}
+            <a href={window.location.pathname} style={{ color: '#7FE3FD' }}>clear</a>
           </div>
           <div style={{ marginTop: 4, fontSize: 10 }}>
             <a
               href="#"
-              style={{ color: '#fbbf24' }}
+              style={{ color: '#D43FEB' }}
               onClick={(e) => { e.preventDefault(); clearGeoCache(); window.location.reload() }}
             >
               Clear session cache &amp; re-detect

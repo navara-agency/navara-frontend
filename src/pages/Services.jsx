@@ -76,7 +76,7 @@ export default function Services() {
 
         {/* Base gradient overlay */}
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(155deg, rgba(6,0,120,0.92) 0%, rgba(4,0,78,0.88) 55%, rgba(26,10,110,0.92) 100%)' }} />
+          style={{ background: 'linear-gradient(155deg, rgba(43, 14, 116,0.92) 0%, rgba(26, 6, 72,0.88) 55%, rgba(43, 14, 116,0.92) 100%)' }} />
 
         {/* ── Continuous hero animations ── */}
 
@@ -89,7 +89,7 @@ export default function Services() {
               height: 280 + i * 160,
               top: '50%', left: '50%',
               x: '-50%', y: '-50%',
-              border: '1px solid rgba(3,201,224,0.12)',
+              border: '1px solid rgba(33, 211, 251,0.12)',
             }}
             animate={{ scale: [1, 1.25, 1], opacity: [0.35, 0, 0.35] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeOut', delay: i * 1.6 }}
@@ -101,7 +101,7 @@ export default function Services() {
         <Orb
           style={{
             top: '8%', right: '12%', width: 360, height: 360,
-            background: 'radial-gradient(circle, rgba(3,201,224,0.13) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(33, 211, 251,0.13) 0%, transparent 70%)',
             filter: 'blur(65px)',
           }}
           animate={lite ? {} : { y: [0, -28, 0], x: [0, 18, 0], scale: [1, 1.08, 1] }}
@@ -110,7 +110,7 @@ export default function Services() {
         <Orb
           style={{
             bottom: '5%', left: '6%', width: 300, height: 300,
-            background: 'radial-gradient(circle, rgba(82,55,159,0.18) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(138, 11, 230,0.18) 0%, transparent 70%)',
             filter: 'blur(55px)',
           }}
           animate={lite ? {} : { y: [0, 22, 0], x: [0, -14, 0], scale: [1, 1.1, 1] }}
@@ -119,7 +119,7 @@ export default function Services() {
         <Orb
           style={{
             top: '40%', left: '3%', width: 200, height: 200,
-            background: 'radial-gradient(circle, rgba(255,165,205,0.1) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(212, 63, 235,0.1) 0%, transparent 70%)',
             filter: 'blur(45px)',
           }}
           animate={lite ? {} : { y: [0, -18, 0], opacity: [0.6, 1, 0.6] }}
@@ -133,7 +133,7 @@ export default function Services() {
             className="absolute pointer-events-none"
             style={{
               width: 3, height: '220%', top: '-60%',
-              background: 'linear-gradient(to bottom, transparent 0%, rgba(3,201,224,0.18) 50%, transparent 100%)',
+              background: 'linear-gradient(to bottom, transparent 0%, rgba(33, 211, 251,0.18) 50%, transparent 100%)',
               rotate: 30, transformOrigin: 'center',
             }}
             animate={{ left: ['-10%', '115%'] }}
@@ -143,11 +143,11 @@ export default function Services() {
 
         {/* Floating micro-particles */}
         {!lite && !isMobile && [
-          { cx: '18%', cy: '30%', color: 'rgba(3,201,224,0.7)', size: 3, dur: 4.5, delay: 0 },
-          { cx: '35%', cy: '65%', color: 'rgba(82,55,159,0.6)', size: 2, dur: 6, delay: 1 },
-          { cx: '55%', cy: '25%', color: 'rgba(255,165,205,0.6)', size: 2.5, dur: 5, delay: 0.8 },
-          { cx: '72%', cy: '70%', color: 'rgba(3,201,224,0.5)', size: 2, dur: 7, delay: 2 },
-          { cx: '85%', cy: '40%', color: 'rgba(82,55,159,0.7)', size: 3, dur: 5.5, delay: 1.5 },
+          { cx: '18%', cy: '30%', color: 'rgba(33, 211, 251,0.7)', size: 3, dur: 4.5, delay: 0 },
+          { cx: '35%', cy: '65%', color: 'rgba(138, 11, 230,0.6)', size: 2, dur: 6, delay: 1 },
+          { cx: '55%', cy: '25%', color: 'rgba(212, 63, 235,0.6)', size: 2.5, dur: 5, delay: 0.8 },
+          { cx: '72%', cy: '70%', color: 'rgba(33, 211, 251,0.5)', size: 2, dur: 7, delay: 2 },
+          { cx: '85%', cy: '40%', color: 'rgba(138, 11, 230,0.7)', size: 3, dur: 5.5, delay: 1.5 },
         ].map((p, i) => (
           <motion.span key={i} aria-hidden="true"
             className="absolute rounded-full pointer-events-none"
@@ -184,14 +184,14 @@ export default function Services() {
         no image parallax gaps.
       */}
       <section className="relative py-24 overflow-hidden" aria-label="Service packages"
-        style={{ background: 'linear-gradient(160deg, #f8f9ff 0%, #f0ebff 40%, #f5f8ff 70%, #ece6ff 100%)' }}>
+        style={{ background: 'linear-gradient(160deg, #F9F6FF 0%, #f0ebff 40%, #F8F5FF 70%, #ece6ff 100%)' }}>
 
         {/* Animated blobs — desktop only */}
         {!isMobile && <>
         <Orb
           style={{
             top: '-10%', right: '-5%', width: 600, height: 600,
-            background: 'radial-gradient(circle, rgba(82,55,159,0.09) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(138, 11, 230,0.09) 0%, transparent 70%)',
             filter: 'blur(90px)',
           }}
           animate={lite ? {} : { scale: [1, 1.12, 1], opacity: [0.7, 1, 0.7] }}
@@ -200,7 +200,7 @@ export default function Services() {
         <Orb
           style={{
             bottom: '-8%', left: '-4%', width: 500, height: 500,
-            background: 'radial-gradient(circle, rgba(3,201,224,0.07) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(33, 211, 251,0.07) 0%, transparent 70%)',
             filter: 'blur(80px)',
           }}
           animate={lite ? {} : { scale: [1, 1.1, 1], opacity: [0.6, 1, 0.6] }}
@@ -209,7 +209,7 @@ export default function Services() {
         <Orb
           style={{
             top: '40%', left: '45%', width: 350, height: 350,
-            background: 'radial-gradient(circle, rgba(82,55,159,0.06) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(138, 11, 230,0.06) 0%, transparent 70%)',
             filter: 'blur(70px)',
             transform: 'translate(-50%, -50%)',
           }}
@@ -236,32 +236,32 @@ export default function Services() {
               <FadeUp key={key} delay={i * 0.1}>
                 <motion.div
                   className="relative rounded-2xl p-8 h-full flex flex-col overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 24px rgba(82,55,159,0.07)' }}
-                  whileHover={reduced ? {} : { y: -6, boxShadow: '0 16px 48px rgba(82,55,159,0.13)' }}
+                  style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 24px rgba(138, 11, 230,0.07)' }}
+                  whileHover={reduced ? {} : { y: -6, boxShadow: '0 16px 48px rgba(138, 11, 230,0.13)' }}
                   transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 >
                   {/* Gradient top accent */}
                   <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-                    style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
+                    style={{ background: 'linear-gradient(90deg, #21D3FB 0%, #8A0BE6 60%, transparent 100%)' }} />
 
                   {/* Hover glow */}
                   <div aria-hidden="true"
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
-                    style={{ background: 'radial-gradient(ellipse at 20% 0%, rgba(82,55,159,0.07) 0%, transparent 65%)' }} />
+                    style={{ background: 'radial-gradient(ellipse at 20% 0%, rgba(138, 11, 230,0.07) 0%, transparent 65%)' }} />
 
                   {/* Ghost number watermark */}
                   <span aria-hidden="true"
                     className="absolute bottom-3 end-5 font-handicrafts font-black select-none pointer-events-none"
-                    style={{ fontSize: '6rem', lineHeight: 1, color: 'rgba(82,55,159,0.06)' }}>
+                    style={{ fontSize: '6rem', lineHeight: 1, color: 'rgba(138, 11, 230,0.06)' }}>
                     0{i + 1}
                   </span>
 
                   <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 relative z-10 group-hover:scale-110 transition-transform duration-300"
-                    style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.16) 0%, rgba(82,55,159,0.14) 100%)', border: '1px solid rgba(82,55,159,0.25)' }}>
+                    style={{ background: 'linear-gradient(135deg, rgba(33, 211, 251,0.16) 0%, rgba(138, 11, 230,0.14) 100%)', border: '1px solid rgba(138, 11, 230,0.25)' }}>
                     <Icon size={20} className="text-primary-cyan" aria-hidden="true" />
                   </div>
 
-                  <p className="font-somar text-xs italic mb-1.5 relative z-10" style={{ color: 'rgba(82,55,159,0.5)' }}>
+                  <p className="font-somar text-xs italic mb-1.5 relative z-10" style={{ color: 'rgba(138, 11, 230,0.5)' }}>
                     {t(`services.packages.${key}.bestFor`)}
                   </p>
                   <h3 className="font-handicrafts font-bold text-primary-dark-blue mb-3 relative z-10 group-hover:text-secondary-purple transition-colors duration-300"
@@ -273,7 +273,7 @@ export default function Services() {
                   </p>
 
                   <span aria-hidden="true" className="block h-px mb-5 relative z-10"
-                    style={{ background: 'linear-gradient(90deg, rgba(82,55,159,0.2), rgba(3,201,224,0.15), transparent)' }} />
+                    style={{ background: 'linear-gradient(90deg, rgba(138, 11, 230,0.2), rgba(33, 211, 251,0.15), transparent)' }} />
 
                   <ul className="space-y-2.5 mt-auto relative z-10">
                     {['f1', 'f2', 'f3', 'f4'].map((f) => (
@@ -291,37 +291,37 @@ export default function Services() {
           {/* Featured package — gradient border wrapper, glassmorphism surface */}
           <FadeUp delay={0.22}>
             <div className="relative rounded-[1.2rem] p-[2px]"
-              style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.65) 0%, rgba(82,55,159,0.55) 50%, rgba(3,201,224,0.45) 100%)' }}>
+              style={{ background: 'linear-gradient(135deg, rgba(33, 211, 251,0.65) 0%, rgba(138, 11, 230,0.55) 50%, rgba(33, 211, 251,0.45) 100%)' }}>
               <motion.div
                 className="relative rounded-2xl overflow-hidden group"
                 style={{ background: 'rgba(255,255,255,0.82)', backdropFilter: lite ? 'none' : 'blur(14px)' }}
-                whileHover={reduced ? {} : { y: -4, boxShadow: '0 20px 60px rgba(82,55,159,0.15)' }}
+                whileHover={reduced ? {} : { y: -4, boxShadow: '0 20px 60px rgba(138, 11, 230,0.15)' }}
                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               >
                 {/* Ambient inner glow */}
                 <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
-                  style={{ background: 'radial-gradient(ellipse at 20% 50%, rgba(82,55,159,0.06) 0%, transparent 60%)' }} />
+                  style={{ background: 'radial-gradient(ellipse at 20% 50%, rgba(138, 11, 230,0.06) 0%, transparent 60%)' }} />
 
                 {/* Hover glow */}
                 <div aria-hidden="true"
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: 'radial-gradient(ellipse at 30% 40%, rgba(3,201,224,0.08) 0%, transparent 60%)' }} />
+                  style={{ background: 'radial-gradient(ellipse at 30% 40%, rgba(33, 211, 251,0.08) 0%, transparent 60%)' }} />
 
                 <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 md:p-10">
                   {/* Left — identity */}
                   <div className="flex flex-col justify-center">
                     <div className="flex items-center gap-3 mb-5">
                       <div className="w-11 h-11 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-                        style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.2) 0%, rgba(82,55,159,0.18) 100%)', border: '1px solid rgba(82,55,159,0.3)' }}>
+                        style={{ background: 'linear-gradient(135deg, rgba(33, 211, 251,0.2) 0%, rgba(138, 11, 230,0.18) 100%)', border: '1px solid rgba(138, 11, 230,0.3)' }}>
                         <FEATURED.icon size={20} className="text-primary-cyan" aria-hidden="true" />
                       </div>
                       <span className="font-somar text-xs font-semibold text-primary-cyan rounded-full px-3 py-1"
-                        style={{ background: 'rgba(82,55,159,0.08)', border: '1px solid rgba(82,55,159,0.2)' }}>
+                        style={{ background: 'rgba(138, 11, 230,0.08)', border: '1px solid rgba(138, 11, 230,0.2)' }}>
                         {t('services.packages.featuredBadge')}
                       </span>
                     </div>
 
-                    <p className="font-somar text-xs italic mb-2" style={{ color: 'rgba(82,55,159,0.5)' }}>
+                    <p className="font-somar text-xs italic mb-2" style={{ color: 'rgba(138, 11, 230,0.5)' }}>
                       {t(`services.packages.${FEATURED.key}.bestFor`)}
                     </p>
                     <h3 className="font-handicrafts font-bold text-primary-dark-blue mb-3 group-hover:text-secondary-purple transition-colors duration-300"
@@ -336,7 +336,7 @@ export default function Services() {
                   {/* Right — feature checklist */}
                   <div className="flex flex-col justify-center">
                     <span aria-hidden="true" className="block lg:hidden h-px mb-6"
-                      style={{ background: 'linear-gradient(90deg, rgba(82,55,159,0.2), rgba(3,201,224,0.15), transparent)' }} />
+                      style={{ background: 'linear-gradient(90deg, rgba(138, 11, 230,0.2), rgba(33, 211, 251,0.15), transparent)' }} />
                     <ul className="space-y-3">
                       {['f1', 'f2', 'f3', 'f4'].map((f) => (
                         <li key={f} className="flex items-start gap-3">
@@ -351,7 +351,7 @@ export default function Services() {
                 {/* Ghost watermark */}
                 <span aria-hidden="true"
                   className="absolute bottom-2 end-6 font-handicrafts font-black select-none pointer-events-none"
-                  style={{ fontSize: '8rem', lineHeight: 1, color: 'rgba(82,55,159,0.05)' }}>
+                  style={{ fontSize: '8rem', lineHeight: 1, color: 'rgba(138, 11, 230,0.05)' }}>
                   03
                 </span>
               </motion.div>
@@ -364,9 +364,9 @@ export default function Services() {
       <Section variant="light" backdrop={
         <>
           <div aria-hidden="true" className="absolute -top-20 -end-20 w-[480px] h-[480px] rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(82,55,159,0.055) 0%, transparent 70%)', filter: 'blur(90px)' }} />
+            style={{ background: 'radial-gradient(circle, rgba(138, 11, 230,0.055) 0%, transparent 70%)', filter: 'blur(90px)' }} />
           <div aria-hidden="true" className="absolute -bottom-20 -start-20 w-[380px] h-[380px] rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(3,201,224,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+            style={{ background: 'radial-gradient(circle, rgba(33, 211, 251,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
         </>
       }>
         <FadeUp>

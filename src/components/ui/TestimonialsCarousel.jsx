@@ -47,7 +47,7 @@ function ClientFooter({ item }) {
       ) : (
         <div
           className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-white font-somar font-bold text-xs"
-          style={{ background: 'linear-gradient(135deg, #03c9e0, #52379f)' }}
+          style={{ background: 'linear-gradient(135deg, #21D3FB, #8A0BE6)' }}
           aria-hidden="true"
         >
           {getInitials(item.clientName)
@@ -113,9 +113,9 @@ function VideoCard({ item, isActive, onActivate }) {
       role={handleCardClick ? 'button' : undefined}
       aria-label={handleCardClick ? `View${item.clientName ? ` ${item.clientName}'s` : ''} testimonial` : undefined}
       style={{
-        border: isActive ? '1.5px solid rgba(3,201,224,0.45)' : '1px solid rgba(0,0,0,0.07)',
+        border: isActive ? '1.5px solid rgba(33, 211, 251,0.45)' : '1px solid rgba(0,0,0,0.07)',
         boxShadow: isActive
-          ? '0 8px 32px rgba(3,201,224,0.14), 0 2px 12px rgba(0,0,0,0.07)'
+          ? '0 8px 32px rgba(33, 211, 251,0.14), 0 2px 12px rgba(0,0,0,0.07)'
           : '0 2px 12px rgba(0,0,0,0.05)',
         minHeight: 280,
       }}
@@ -124,8 +124,8 @@ function VideoCard({ item, isActive, onActivate }) {
         className="h-1 w-full flex-shrink-0 transition-all duration-500"
         style={{
           background: isActive
-            ? 'linear-gradient(to right, #060078, #03c9e0, #ffa5cd)'
-            : 'linear-gradient(to right, #060078, #03c9e0)',
+            ? 'linear-gradient(to right, #2B0E74, #21D3FB, #D43FEB)'
+            : 'linear-gradient(to right, #2B0E74, #21D3FB)',
         }}
       />
 
@@ -165,7 +165,7 @@ function VideoCard({ item, isActive, onActivate }) {
         ) : (
           <div
             className="absolute inset-0 flex flex-col items-center justify-center gap-3"
-            style={{ background: 'linear-gradient(135deg, #060078 0%, #52379f 60%, #03c9e0 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #2B0E74 0%, #8A0BE6 60%, #21D3FB 100%)' }}
           >
             {item.resultsBadge && (
               <span
@@ -224,17 +224,17 @@ function ArrowButton({ onClick, label, children }) {
       aria-label={label}
       className="absolute top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer"
       style={{
-        background: 'rgba(6,0,120,0.07)',
-        border: '1px solid rgba(6,0,120,0.15)',
+        background: 'rgba(43, 14, 116,0.07)',
+        border: '1px solid rgba(43, 14, 116,0.15)',
         boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
       }}
       onMouseEnter={e => {
-        e.currentTarget.style.background = 'rgba(3,201,224,0.12)'
-        e.currentTarget.style.borderColor = 'rgba(3,201,224,0.5)'
+        e.currentTarget.style.background = 'rgba(33, 211, 251,0.12)'
+        e.currentTarget.style.borderColor = 'rgba(33, 211, 251,0.5)'
       }}
       onMouseLeave={e => {
-        e.currentTarget.style.background = 'rgba(6,0,120,0.07)'
-        e.currentTarget.style.borderColor = 'rgba(6,0,120,0.15)'
+        e.currentTarget.style.background = 'rgba(43, 14, 116,0.07)'
+        e.currentTarget.style.borderColor = 'rgba(43, 14, 116,0.15)'
       }}
     >
       {children}
@@ -297,7 +297,7 @@ function ProgressBar({ slideKey, paused, reduced }) {
       <motion.div
         key={slideKey}
         className="h-full rounded-full"
-        style={{ background: 'linear-gradient(to right, #060078, #03c9e0)' }}
+        style={{ background: 'linear-gradient(to right, #2B0E74, #21D3FB)' }}
         initial={{ width: '0%' }}
         animate={paused ? {} : { width: '100%' }}
         transition={{ duration: AUTO_MS / 1000, ease: 'linear' }}
@@ -468,7 +468,7 @@ export default function TestimonialsCarousel({ testimonials }) {
       id="testimonials"
       className="py-24 overflow-hidden"
       aria-label="Testimonials"
-      style={{ background: 'linear-gradient(160deg, #f5f7ff 0%, #ffffff 50%, #fdf5fb 100%)' }}
+      style={{ background: 'linear-gradient(160deg, #F8F5FF 0%, #ffffff 50%, #fdf5fb 100%)' }}
     >
       <div className="max-w-[1200px] mx-auto px-6 md:px-8">
 
@@ -481,14 +481,11 @@ export default function TestimonialsCarousel({ testimonials }) {
           transition={reduced ? { duration: 0 } : { duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
           <h2
-            className="font-handicrafts font-bold text-primary-dark-blue mb-4"
+            className="font-handicrafts font-bold text-primary-dark-blue"
             style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}
           >
-            {t('homeV2.testimonials.sectionHeading')}
-          </h2>
-          <p className="font-somar text-text-gray max-w-xl mx-auto">
             {t('homeV2.testimonials.sectionSubheading')}
-          </p>
+          </h2>
         </motion.div>
 
         {/* Static layout when fewer cards than visible slots */}
@@ -621,7 +618,7 @@ export default function TestimonialsCarousel({ testimonials }) {
                   style={{
                     width: i === current ? 28 : 8,
                     background: i === current
-                      ? 'linear-gradient(to right, #060078, #03c9e0)'
+                      ? 'linear-gradient(to right, #2B0E74, #21D3FB)'
                       : '#d1d5db',
                   }}
                 />

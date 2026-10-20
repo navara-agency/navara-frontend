@@ -61,7 +61,7 @@ DriftLine.propTypes = {
 
 export default function LineShadeWrapper({
   variant = 'horizontal',
-  color = '#06AED5',
+  color = '#21D3FB',
   direction = null,
   density = 'sparse',
 }) {

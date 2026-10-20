@@ -22,26 +22,26 @@ export default function ProcessStep({ number, titleKey, bodyKey, isLast = false,
       <div
         aria-hidden="true"
         className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent 0%, #03c9e0 40%, #52379f 80%, transparent 100%)' }}
+        style={{ background: 'linear-gradient(90deg, transparent 0%, #21D3FB 40%, #8A0BE6 80%, transparent 100%)' }}
       />
 
       {/* Background glow on hover */}
       <div
         aria-hidden="true"
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(3,201,224,0.05) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(33, 211, 251,0.05) 0%, transparent 70%)' }}
       />
 
       {/* Step number circle */}
       <div className="relative mb-5 z-10">
         <motion.div
           className="w-14 h-14 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300"
-          style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.18) 0%, rgba(82,55,159,0.14) 100%)', border: '2px solid rgba(3,201,224,0.4)' }}
+          style={{ background: 'linear-gradient(135deg, rgba(33, 211, 251,0.18) 0%, rgba(138, 11, 230,0.14) 100%)', border: '2px solid rgba(33, 211, 251,0.4)' }}
           animate={lite ? {} : {
             boxShadow: [
-              '0 0 0px rgba(3,201,224,0)',
-              '0 0 16px rgba(3,201,224,0.38)',
-              '0 0 0px rgba(3,201,224,0)',
+              '0 0 0px rgba(33, 211, 251,0)',
+              '0 0 16px rgba(33, 211, 251,0.38)',
+              '0 0 0px rgba(33, 211, 251,0)',
             ]
           }}
           transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: animationDelay * 0.5 }}
@@ -60,7 +60,7 @@ export default function ProcessStep({ number, titleKey, bodyKey, isLast = false,
             className="h-full"
             style={{
               transformOrigin: 'left center',
-              background: 'linear-gradient(90deg, rgba(3,201,224,0.5), rgba(82,55,159,0.3))',
+              background: 'linear-gradient(90deg, rgba(33, 211, 251,0.5), rgba(138, 11, 230,0.3))',
             }}
             initial={instant ? { scaleX: 1 } : { scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
@@ -81,7 +81,7 @@ export default function ProcessStep({ number, titleKey, bodyKey, isLast = false,
       {/* Mobile vertical connector */}
       {!isLast && (
         <div className="lg:hidden w-px h-6 my-1 z-10 relative"
-          style={{ background: 'linear-gradient(to bottom, rgba(3,201,224,0.5), rgba(82,55,159,0.3))' }}
+          style={{ background: 'linear-gradient(to bottom, rgba(33, 211, 251,0.5), rgba(138, 11, 230,0.3))' }}
           aria-hidden="true"
         />
       )}

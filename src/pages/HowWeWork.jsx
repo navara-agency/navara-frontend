@@ -30,9 +30,9 @@ const FLOW_LINES = [
 
 const SectionAccent = () => (
   <div className="flex items-center gap-3 mb-5 justify-center" aria-hidden="true">
-    <span className="h-px w-8" style={{ background: 'linear-gradient(90deg, transparent, rgba(3,201,224,0.5))' }} />
+    <span className="h-px w-8" style={{ background: 'linear-gradient(90deg, transparent, rgba(33, 211, 251,0.5))' }} />
     <span className="w-1.5 h-1.5 rounded-full bg-primary-cyan" />
-    <span className="h-px w-8" style={{ background: 'linear-gradient(270deg, transparent, rgba(3,201,224,0.5))' }} />
+    <span className="h-px w-8" style={{ background: 'linear-gradient(270deg, transparent, rgba(33, 211, 251,0.5))' }} />
   </div>
 )
 
@@ -97,11 +97,11 @@ export default function HowWeWork() {
 
         {/* Gradient overlay */}
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(155deg, rgba(6,0,120,0.88) 0%, rgba(4,0,78,0.84) 55%, rgba(20,5,100,0.88) 100%)' }} />
+          style={{ background: 'linear-gradient(155deg, rgba(43, 14, 116,0.88) 0%, rgba(26, 6, 72,0.84) 55%, rgba(34, 9, 92,0.88) 100%)' }} />
 
         {/* Radial glow */}
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse at 50% 60%, rgba(3,201,224,0.12) 0%, transparent 55%)' }} />
+          style={{ background: 'radial-gradient(ellipse at 50% 60%, rgba(33, 211, 251,0.12) 0%, transparent 55%)' }} />
 
         {/* Radar rings */}
         {!lite && [0, 1, 2].map(i => (
@@ -110,7 +110,7 @@ export default function HowWeWork() {
             style={{
               width: 240 + i * 200,
               height: 240 + i * 200,
-              border: '1px solid rgba(3,201,224,0.07)',
+              border: '1px solid rgba(33, 211, 251,0.07)',
             }}
             animate={{ scale: [1, 1.12, 1], opacity: [0.6, 0.15, 0.6] }}
             transition={{ duration: 4 + i * 1.3, repeat: Infinity, ease: 'easeInOut', delay: i * 1.4 }}
@@ -124,7 +124,7 @@ export default function HowWeWork() {
             style={{ top, height: '1px' }}>
             <motion.div
               className="absolute inset-y-0 w-1/4"
-              style={{ background: 'linear-gradient(90deg, transparent, rgba(3,201,224,0.32), rgba(82,55,159,0.22), transparent)' }}
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(33, 211, 251,0.32), rgba(138, 11, 230,0.22), transparent)' }}
               animate={{ left: ['-25%', '115%'] }}
               transition={{ duration: dur, repeat: Infinity, ease: 'linear', delay }}
             />
@@ -140,7 +140,7 @@ export default function HowWeWork() {
               height: 2 + (i % 3),
               left: `${8 + i * 10}%`,
               top: `${18 + (i % 5) * 14}%`,
-              background: i % 2 === 0 ? 'rgba(3,201,224,0.55)' : 'rgba(82,55,159,0.45)',
+              background: i % 2 === 0 ? 'rgba(33, 211, 251,0.55)' : 'rgba(138, 11, 230,0.45)',
             }}
             animate={{ y: [0, -18, 0], opacity: [0.25, 0.85, 0.25] }}
             transition={{ duration: 3.5 + i * 0.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.45 }}
@@ -178,18 +178,18 @@ export default function HowWeWork() {
                 <div key={i} className="flex items-center gap-2 sm:gap-3">
                   <motion.div
                     className="w-8 h-8 rounded-full flex items-center justify-center"
-                    style={{ background: 'rgba(3,201,224,0.10)', border: '1px solid rgba(3,201,224,0.28)' }}
-                    animate={{ boxShadow: ['0 0 0px rgba(3,201,224,0)', '0 0 10px rgba(3,201,224,0.4)', '0 0 0px rgba(3,201,224,0)'] }}
+                    style={{ background: 'rgba(33, 211, 251,0.10)', border: '1px solid rgba(33, 211, 251,0.28)' }}
+                    animate={{ boxShadow: ['0 0 0px rgba(33, 211, 251,0)', '0 0 10px rgba(33, 211, 251,0.4)', '0 0 0px rgba(33, 211, 251,0)'] }}
                     transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.5 }}
                   >
                     <span className="font-handicrafts font-bold text-primary-cyan" style={{ fontSize: '0.72rem' }}>{i + 1}</span>
                   </motion.div>
                   {i < 4 && (
                     <div className="relative h-px w-5 sm:w-8 overflow-hidden"
-                      style={{ background: 'rgba(3,201,224,0.15)' }}>
+                      style={{ background: 'rgba(33, 211, 251,0.15)' }}>
                       <motion.div
                         className="absolute inset-y-0 w-full"
-                        style={{ background: 'rgba(3,201,224,0.7)' }}
+                        style={{ background: 'rgba(33, 211, 251,0.7)' }}
                         animate={{ x: ['-100%', '100%'] }}
                         transition={{ duration: 1.4, repeat: Infinity, ease: 'linear', delay: i * 0.28 }}
                       />
@@ -206,30 +206,30 @@ export default function HowWeWork() {
       <section ref={processRef} className="relative overflow-hidden py-28">
         {/* Violet gradient bg */}
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(160deg, #f8f9ff 0%, #f0ebff 40%, #f5f8ff 70%, #ece6ff 100%)' }} />
+          style={{ background: 'linear-gradient(160deg, #F9F6FF 0%, #f0ebff 40%, #F8F5FF 70%, #ece6ff 100%)' }} />
 
         {/* Dot-grid texture */}
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
-          style={{ backgroundImage: 'radial-gradient(rgba(82,55,159,0.055) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+          style={{ backgroundImage: 'radial-gradient(rgba(138, 11, 230,0.055) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
 
         {/* Animated atmosphere blobs */}
         {!lite && (
           <>
             <motion.div aria-hidden="true"
               className="absolute -top-32 -start-24 w-[500px] h-[500px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(3,201,224,0.09) 0%, transparent 70%)', filter: 'blur(80px)' }}
+              style={{ background: 'radial-gradient(circle, rgba(33, 211, 251,0.09) 0%, transparent 70%)', filter: 'blur(80px)' }}
               animate={{ scale: [1, 1.18, 1], opacity: [0.7, 1, 0.7] }}
               transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
             />
             <motion.div aria-hidden="true"
               className="absolute -bottom-24 -end-20 w-[420px] h-[420px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(82,55,159,0.1) 0%, transparent 70%)', filter: 'blur(75px)' }}
+              style={{ background: 'radial-gradient(circle, rgba(138, 11, 230,0.1) 0%, transparent 70%)', filter: 'blur(75px)' }}
               animate={{ scale: [1, 1.22, 1], opacity: [0.6, 1, 0.6] }}
               transition={{ duration: 8.5, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
             />
             <motion.div aria-hidden="true"
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[360px] h-[360px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(3,201,224,0.05) 0%, transparent 70%)', filter: 'blur(65px)' }}
+              style={{ background: 'radial-gradient(circle, rgba(33, 211, 251,0.05) 0%, transparent 70%)', filter: 'blur(65px)' }}
               animate={{ scale: [1, 1.3, 1] }}
               transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
             />
@@ -267,7 +267,7 @@ export default function HowWeWork() {
                 style={{ top: '3rem', left: '5%', right: '5%', height: '2px' }}>
                 <motion.div
                   className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full"
-                  style={{ background: '#03c9e0', boxShadow: '0 0 8px rgba(3,201,224,0.9), 0 0 20px rgba(3,201,224,0.5), 0 0 40px rgba(3,201,224,0.25)' }}
+                  style={{ background: '#21D3FB', boxShadow: '0 0 8px rgba(33, 211, 251,0.9), 0 0 20px rgba(33, 211, 251,0.5), 0 0 40px rgba(33, 211, 251,0.25)' }}
                   animate={{ left: ['-1%', '101%'] }}
                   transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1.2 }}
                 />
@@ -284,13 +284,13 @@ export default function HowWeWork() {
           <>
             <motion.div aria-hidden="true"
               className="absolute -top-20 -end-20 w-[480px] h-[480px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(82,55,159,0.06) 0%, transparent 70%)', filter: 'blur(90px)' }}
+              style={{ background: 'radial-gradient(circle, rgba(138, 11, 230,0.06) 0%, transparent 70%)', filter: 'blur(90px)' }}
               animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
               transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
             />
             <motion.div aria-hidden="true"
               className="absolute -bottom-20 -start-20 w-[380px] h-[380px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(3,201,224,0.055) 0%, transparent 70%)', filter: 'blur(80px)' }}
+              style={{ background: 'radial-gradient(circle, rgba(33, 211, 251,0.055) 0%, transparent 70%)', filter: 'blur(80px)' }}
               animate={{ scale: [1, 1.25, 1], opacity: [0.6, 1, 0.6] }}
               transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
             />
@@ -316,13 +316,13 @@ export default function HowWeWork() {
               >
                 <motion.div
                   className="relative bg-white border border-gray-100 rounded-2xl p-8 text-center overflow-hidden group shadow-sm h-full"
-                  whileHover={reduced ? {} : { y: -8, boxShadow: '0 16px 48px rgba(82,55,159,0.1)' }}
+                  whileHover={reduced ? {} : { y: -8, boxShadow: '0 16px 48px rgba(138, 11, 230,0.1)' }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 >
                   {/* Top accent bar + shimmer */}
                   <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] overflow-hidden pointer-events-none">
                     <div className="h-full w-full"
-                      style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
+                      style={{ background: 'linear-gradient(90deg, #21D3FB 0%, #8A0BE6 60%, transparent 100%)' }} />
                     {!lite && (
                       <motion.div className="absolute top-0 h-full w-14 pointer-events-none"
                         style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.7) 50%, transparent 100%)' }}
@@ -334,12 +334,12 @@ export default function HowWeWork() {
                   {/* Hover glow */}
                   <div aria-hidden="true"
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(82,55,159,0.06) 0%, transparent 65%)' }} />
+                    style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(138, 11, 230,0.06) 0%, transparent 65%)' }} />
 
                   {/* Ghost icon drift */}
                   <motion.div aria-hidden="true"
                     className="absolute -bottom-2 -end-2 opacity-[0.04] pointer-events-none group-hover:opacity-[0.08] transition-opacity duration-500"
-                    style={{ color: 'rgba(82,55,159,1)' }}
+                    style={{ color: 'rgba(138, 11, 230,1)' }}
                     animate={lite ? {} : { y: [0, -10, 0], x: [0, -5, 0] }}
                     transition={{ duration: 5 + i * 1.5, repeat: Infinity, ease: 'easeInOut' }}
                   >
@@ -349,11 +349,11 @@ export default function HowWeWork() {
                   <div className="relative z-10">
                     {/* Radar-sweep icon box */}
                     <div className="relative w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5 overflow-hidden group-hover:scale-110 transition-transform duration-300"
-                      style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.14) 0%, rgba(82,55,159,0.1) 100%)', border: '1px solid rgba(3,201,224,0.25)' }}>
+                      style={{ background: 'linear-gradient(135deg, rgba(33, 211, 251,0.14) 0%, rgba(138, 11, 230,0.1) 100%)', border: '1px solid rgba(33, 211, 251,0.25)' }}>
                       {!lite && (
                         <motion.div
                           className="absolute inset-0 rounded-xl pointer-events-none"
-                          style={{ background: 'conic-gradient(from 0deg, rgba(3,201,224,0.28), transparent 50%)' }}
+                          style={{ background: 'conic-gradient(from 0deg, rgba(33, 211, 251,0.28), transparent 50%)' }}
                           animate={{ rotate: [0, 360] }}
                           transition={{ duration: 3.5, repeat: Infinity, ease: 'linear', delay: i * 0.9 }}
                         />
@@ -380,7 +380,7 @@ export default function HowWeWork() {
           <FadeUp>
             <motion.div
               className="font-handicrafts font-black leading-none mb-2 select-none"
-              style={{ fontSize: '5rem', color: 'rgba(6,0,120,0.12)' }}
+              style={{ fontSize: '5rem', color: 'rgba(43, 14, 116,0.12)' }}
               initial={reduced ? false : { opacity: 0, y: -12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -396,7 +396,7 @@ export default function HowWeWork() {
             <div className="flex items-center justify-center gap-3 mt-8" aria-hidden="true">
               <motion.div
                 className="h-px"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(6,0,120,0.25))', width: reduced ? 48 : 0 }}
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(43, 14, 116,0.25))', width: reduced ? 48 : 0 }}
                 whileInView={{ width: 48 }}
                 viewport={{ once: true }}
                 transition={{ duration: reduced ? 0 : 0.8, delay: reduced ? 0 : 0.4 }}
@@ -408,7 +408,7 @@ export default function HowWeWork() {
               />
               <motion.div
                 className="h-px"
-                style={{ background: 'linear-gradient(270deg, transparent, rgba(6,0,120,0.25))', width: reduced ? 48 : 0 }}
+                style={{ background: 'linear-gradient(270deg, transparent, rgba(43, 14, 116,0.25))', width: reduced ? 48 : 0 }}
                 whileInView={{ width: 48 }}
                 viewport={{ once: true }}
                 transition={{ duration: reduced ? 0 : 0.8, delay: reduced ? 0 : 0.4 }}

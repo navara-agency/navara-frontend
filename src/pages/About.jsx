@@ -78,11 +78,11 @@ const Card = ({ children, delay = 0, className = '' }) => (
   <FadeUp delay={delay}>
     <motion.div
       className={`relative bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm group ${className}`}
-      whileHover={{ y: -5, boxShadow: '0 14px 44px rgba(3,201,224,0.1)' }}
+      whileHover={{ y: -5, boxShadow: '0 14px 44px rgba(33, 211, 251,0.1)' }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
     >
       <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
+        style={{ background: 'linear-gradient(90deg, #21D3FB 0%, #8A0BE6 60%, transparent 100%)' }} />
       {children}
     </motion.div>
   </FadeUp>
@@ -95,12 +95,12 @@ const GlassCard = ({ children, delay = 0, className = '' }) => {
   <FadeUp delay={delay}>
     <motion.div
       className={`relative rounded-2xl overflow-hidden group ${className}`}
-      style={{ background: lite ? 'rgba(255,255,255,0.92)' : 'rgba(255,255,255,0.72)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.88)', boxShadow: '0 4px 24px rgba(82,55,159,0.07)' }}
-      whileHover={{ y: -6, boxShadow: '0 16px 48px rgba(82,55,159,0.14)' }}
+      style={{ background: lite ? 'rgba(255,255,255,0.92)' : 'rgba(255,255,255,0.72)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.88)', boxShadow: '0 4px 24px rgba(138, 11, 230,0.07)' }}
+      whileHover={{ y: -6, boxShadow: '0 16px 48px rgba(138, 11, 230,0.14)' }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
     >
       <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
+        style={{ background: 'linear-gradient(90deg, #21D3FB 0%, #8A0BE6 60%, transparent 100%)' }} />
       {children}
     </motion.div>
   </FadeUp>
@@ -109,7 +109,7 @@ const GlassCard = ({ children, delay = 0, className = '' }) => {
 
 const IconBox = ({ icon: Icon, size = 22, boxClass = 'w-12 h-12 rounded-xl mb-5' }) => (
   <div className={`${boxClass} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
-    style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.15) 0%, rgba(82,55,159,0.12) 100%)', border: '1px solid rgba(82,55,159,0.22)' }}>
+    style={{ background: 'linear-gradient(135deg, rgba(33, 211, 251,0.15) 0%, rgba(138, 11, 230,0.12) 100%)', border: '1px solid rgba(138, 11, 230,0.22)' }}>
     <Icon size={size} className="text-primary-cyan" aria-hidden="true" />
   </div>
 )
@@ -140,7 +140,7 @@ export default function About() {
       >
         <PhotoBackdrop src="/brand/AbstractBG/ab3.webp" opacity={0.14} />
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(155deg, rgba(6,0,120,0.9) 0%, rgba(4,0,78,0.85) 60%, rgba(20,5,100,0.9) 100%)' }} />
+          style={{ background: 'linear-gradient(155deg, rgba(43, 14, 116,0.9) 0%, rgba(26, 6, 72,0.85) 60%, rgba(34, 9, 92,0.9) 100%)' }} />
 
         {/* Pulsing concentric rings */}
         {!lite && [0, 1, 2].map(i => (
@@ -149,7 +149,7 @@ export default function About() {
             style={{
               width: 260 + i * 170, height: 260 + i * 170,
               top: '50%', left: '50%', x: '-50%', y: '-50%',
-              border: '1px solid rgba(3,201,224,0.1)',
+              border: '1px solid rgba(33, 211, 251,0.1)',
             }}
             animate={{ scale: [1, 1.22, 1], opacity: [0.3, 0, 0.3] }}
             transition={{ duration: 5.5, repeat: Infinity, ease: 'easeOut', delay: i * 1.8 }}
@@ -157,31 +157,31 @@ export default function About() {
         ))}
 
         {/* Floating orbs */}
-        <Orb style={{ top: '10%', right: '10%', width: 340, height: 340, background: 'radial-gradient(circle, rgba(3,201,224,0.12) 0%, transparent 70%)', filter: 'blur(65px)' }}
+        <Orb style={{ top: '10%', right: '10%', width: 340, height: 340, background: 'radial-gradient(circle, rgba(33, 211, 251,0.12) 0%, transparent 70%)', filter: 'blur(65px)' }}
           animate={lite ? {} : { y: [0, -26, 0], x: [0, 16, 0] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }} />
-        <Orb style={{ bottom: '8%', left: '5%', width: 280, height: 280, background: 'radial-gradient(circle, rgba(82,55,159,0.18) 0%, transparent 70%)', filter: 'blur(55px)' }}
+        <Orb style={{ bottom: '8%', left: '5%', width: 280, height: 280, background: 'radial-gradient(circle, rgba(138, 11, 230,0.18) 0%, transparent 70%)', filter: 'blur(55px)' }}
           animate={lite ? {} : { y: [0, 20, 0], x: [0, -12, 0] }}
           transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 3 }} />
-        <Orb style={{ top: '45%', left: '2%', width: 180, height: 180, background: 'radial-gradient(circle, rgba(255,165,205,0.09) 0%, transparent 70%)', filter: 'blur(40px)' }}
+        <Orb style={{ top: '45%', left: '2%', width: 180, height: 180, background: 'radial-gradient(circle, rgba(212, 63, 235,0.09) 0%, transparent 70%)', filter: 'blur(40px)' }}
           animate={lite ? {} : { y: [0, -16, 0], opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }} />
 
         {/* Diagonal shimmer sweep */}
         {!lite && (
           <motion.div aria-hidden="true" className="absolute pointer-events-none"
-            style={{ width: 3, height: '220%', top: '-60%', background: 'linear-gradient(to bottom, transparent 0%, rgba(3,201,224,0.16) 50%, transparent 100%)', rotate: 28, transformOrigin: 'center' }}
+            style={{ width: 3, height: '220%', top: '-60%', background: 'linear-gradient(to bottom, transparent 0%, rgba(33, 211, 251,0.16) 50%, transparent 100%)', rotate: 28, transformOrigin: 'center' }}
             animate={{ left: ['-10%', '115%'] }}
             transition={{ duration: 3.8, repeat: Infinity, repeatDelay: 6, ease: 'easeInOut' }} />
         )}
 
         {/* Micro-particles */}
         {!lite && [
-          { cx: '20%', cy: '32%', color: 'rgba(3,201,224,0.7)', size: 3, dur: 4.5, delay: 0 },
-          { cx: '38%', cy: '68%', color: 'rgba(82,55,159,0.6)', size: 2, dur: 6, delay: 1 },
-          { cx: '58%', cy: '28%', color: 'rgba(255,165,205,0.6)', size: 2.5, dur: 5, delay: 0.7 },
-          { cx: '74%', cy: '72%', color: 'rgba(3,201,224,0.5)', size: 2, dur: 7, delay: 2 },
-          { cx: '88%', cy: '42%', color: 'rgba(82,55,159,0.7)', size: 3, dur: 5.5, delay: 1.3 },
+          { cx: '20%', cy: '32%', color: 'rgba(33, 211, 251,0.7)', size: 3, dur: 4.5, delay: 0 },
+          { cx: '38%', cy: '68%', color: 'rgba(138, 11, 230,0.6)', size: 2, dur: 6, delay: 1 },
+          { cx: '58%', cy: '28%', color: 'rgba(212, 63, 235,0.6)', size: 2.5, dur: 5, delay: 0.7 },
+          { cx: '74%', cy: '72%', color: 'rgba(33, 211, 251,0.5)', size: 2, dur: 7, delay: 2 },
+          { cx: '88%', cy: '42%', color: 'rgba(138, 11, 230,0.7)', size: 3, dur: 5.5, delay: 1.3 },
         ].map((p, i) => (
           <motion.span key={i} aria-hidden="true"
             className="absolute rounded-full pointer-events-none"
@@ -216,9 +216,9 @@ export default function About() {
       <Section variant="white" backdrop={
         <>
           <div aria-hidden="true" className="absolute -top-40 -start-20 w-[520px] h-[520px] rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(3,201,224,0.055) 0%, transparent 70%)', filter: 'blur(90px)' }} />
+            style={{ background: 'radial-gradient(circle, rgba(33, 211, 251,0.055) 0%, transparent 70%)', filter: 'blur(90px)' }} />
           <div aria-hidden="true" className="absolute -bottom-20 -end-20 w-[400px] h-[400px] rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(82,55,159,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+            style={{ background: 'radial-gradient(circle, rgba(138, 11, 230,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
         </>
       }>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -244,17 +244,17 @@ export default function About() {
               {STATS.map((stat, i) => (
                 <motion.div key={stat.label}
                   className="relative rounded-xl p-4 text-center overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(3,201,224,0.15)', boxShadow: '0 2px 12px rgba(82,55,159,0.06)' }}
+                  style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(33, 211, 251,0.15)', boxShadow: '0 2px 12px rgba(138, 11, 230,0.06)' }}
                   initial={reduced ? { opacity: 1 } : { opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.7 + i * 0.12, ease: 'easeOut' }}
-                  whileHover={reduced ? {} : { y: -3, boxShadow: '0 8px 24px rgba(3,201,224,0.12)' }}
+                  whileHover={reduced ? {} : { y: -3, boxShadow: '0 8px 24px rgba(33, 211, 251,0.12)' }}
                 >
                   <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px]"
-                    style={{ background: 'linear-gradient(90deg, transparent, #03c9e0, transparent)' }} />
+                    style={{ background: 'linear-gradient(90deg, transparent, #21D3FB, transparent)' }} />
                   <div className="font-handicrafts font-black text-primary-dark-blue leading-none mb-1"
-                    style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', backgroundImage: 'linear-gradient(135deg, #060078, #52379f, #03c9e0)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                    style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', backgroundImage: 'linear-gradient(135deg, #2B0E74, #8A0BE6, #21D3FB)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                     <StatCount to={stat.value} suffix={stat.suffix} decimals={stat.decimals} duration={stat.duration} />
                   </div>
                   <p className="font-somar text-text-gray text-xs">{stat.label}</p>
@@ -280,14 +280,14 @@ export default function About() {
               {/* Animated glow ring behind image */}
               <motion.div aria-hidden="true"
                 className="absolute inset-0 rounded-2xl pointer-events-none"
-                style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(3,201,224,0.12) 0%, transparent 70%)', filter: 'blur(20px)', zIndex: 0 }}
+                style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(33, 211, 251,0.12) 0%, transparent 70%)', filter: 'blur(20px)', zIndex: 0 }}
                 animate={lite ? {} : { opacity: [0.5, 1, 0.5], scale: [0.95, 1.05, 0.95] }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }} />
 
               <div className="relative rounded-2xl overflow-hidden z-10"
-                style={{ boxShadow: '0 24px 64px rgba(3,201,224,0.1), 0 4px 20px rgba(82,55,159,0.1)' }}>
+                style={{ boxShadow: '0 24px 64px rgba(33, 211, 251,0.1), 0 4px 20px rgba(138, 11, 230,0.1)' }}>
                 <div className="absolute inset-0 rounded-2xl z-10 pointer-events-none"
-                  style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.07) 0%, transparent 50%)' }}
+                  style={{ background: 'linear-gradient(135deg, rgba(33, 211, 251,0.07) 0%, transparent 50%)' }}
                   aria-hidden="true" />
                 <img src="/brand/about-story.webp" alt="" aria-hidden="true"
                   className="w-full object-contain rounded-2xl" loading="lazy" />
@@ -297,12 +297,12 @@ export default function About() {
             {/* Decorative corner accents */}
             <motion.div aria-hidden="true"
               className="absolute -bottom-4 -start-4 w-8 h-8 rounded-full pointer-events-none"
-              style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.4), rgba(82,55,159,0.3))', border: '2px solid rgba(3,201,224,0.3)' }}
+              style={{ background: 'linear-gradient(135deg, rgba(33, 211, 251,0.4), rgba(138, 11, 230,0.3))', border: '2px solid rgba(33, 211, 251,0.3)' }}
               animate={lite ? {} : { scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
               transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} />
             <motion.div aria-hidden="true"
               className="absolute -top-3 -end-3 w-5 h-5 rounded-full pointer-events-none"
-              style={{ background: 'rgba(255,165,205,0.5)', border: '1px solid rgba(255,165,205,0.4)' }}
+              style={{ background: 'rgba(212, 63, 235,0.5)', border: '1px solid rgba(212, 63, 235,0.4)' }}
               animate={lite ? {} : { scale: [1, 1.4, 1], opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }} />
           </motion.div>
@@ -315,9 +315,9 @@ export default function About() {
       <Section variant="light" backdrop={
         <>
           <div aria-hidden="true" className="absolute -top-20 -end-20 w-[480px] h-[480px] rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(82,55,159,0.06) 0%, transparent 70%)', filter: 'blur(90px)' }} />
+            style={{ background: 'radial-gradient(circle, rgba(138, 11, 230,0.06) 0%, transparent 70%)', filter: 'blur(90px)' }} />
           <div aria-hidden="true" className="absolute -bottom-20 -start-20 w-[380px] h-[380px] rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(3,201,224,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+            style={{ background: 'radial-gradient(circle, rgba(33, 211, 251,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
         </>
       }>
         <FadeUp>
@@ -336,14 +336,14 @@ export default function About() {
             >
               <motion.div
                 className="relative bg-white border border-gray-100 rounded-2xl p-10 h-full overflow-hidden shadow-sm group"
-                whileHover={{ y: -5, boxShadow: '0 14px 44px rgba(3,201,224,0.1)' }}
+                whileHover={{ y: -5, boxShadow: '0 14px 44px rgba(33, 211, 251,0.1)' }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-                  style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
+                  style={{ background: 'linear-gradient(90deg, #21D3FB 0%, #8A0BE6 60%, transparent 100%)' }} />
                 <div aria-hidden="true"
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: `radial-gradient(ellipse at ${dir === -1 ? '0%' : '100%'} 0%, rgba(82,55,159,0.05) 0%, transparent 65%)` }} />
+                  style={{ background: `radial-gradient(ellipse at ${dir === -1 ? '0%' : '100%'} 0%, rgba(138, 11, 230,0.05) 0%, transparent 65%)` }} />
                 {/* Ghost icon watermark */}
                 <div aria-hidden="true" className="absolute -bottom-2 -end-2 opacity-[0.04] pointer-events-none group-hover:opacity-[0.07] transition-opacity duration-500">
                   <Icon size={80} strokeWidth={1.2} />
@@ -374,9 +374,9 @@ export default function About() {
       <Section variant="white" backdrop={
         <>
           <div aria-hidden="true" className="absolute -top-40 -start-20 w-[520px] h-[520px] rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(3,201,224,0.055) 0%, transparent 70%)', filter: 'blur(90px)' }} />
+            style={{ background: 'radial-gradient(circle, rgba(33, 211, 251,0.055) 0%, transparent 70%)', filter: 'blur(90px)' }} />
           <div aria-hidden="true" className="absolute -bottom-20 -end-20 w-[400px] h-[400px] rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(82,55,159,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+            style={{ background: 'radial-gradient(circle, rgba(138, 11, 230,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
         </>
       }>
         <FadeUp>
@@ -399,21 +399,21 @@ export default function About() {
               >
                 <motion.div
                   className="relative flex gap-6 items-start bg-white border border-gray-100 rounded-2xl p-7 overflow-hidden group shadow-sm"
-                  whileHover={reduced ? {} : { x: fromLeft ? 6 : -6, boxShadow: '0 10px 36px rgba(3,201,224,0.1)' }}
+                  whileHover={reduced ? {} : { x: fromLeft ? 6 : -6, boxShadow: '0 10px 36px rgba(33, 211, 251,0.1)' }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-                    style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
+                    style={{ background: 'linear-gradient(90deg, #21D3FB 0%, #8A0BE6 60%, transparent 100%)' }} />
                   {/* Animated left glow accent */}
                   <motion.div aria-hidden="true"
                     className="absolute start-0 top-0 bottom-0 w-[3px] pointer-events-none"
-                    style={{ background: 'linear-gradient(to bottom, #03c9e0, #52379f)', transformOrigin: 'top' }}
+                    style={{ background: 'linear-gradient(to bottom, #21D3FB, #8A0BE6)', transformOrigin: 'top' }}
                     initial={{ scaleY: 0 }}
                     whileInView={{ scaleY: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: 0.2 + i * 0.08, ease: [0.16, 1, 0.3, 1] }} />
                   <div aria-hidden="true" className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{ background: `radial-gradient(ellipse at ${fromLeft ? '0%' : '100%'} 50%, rgba(3,201,224,0.05) 0%, transparent 65%)` }} />
+                    style={{ background: `radial-gradient(ellipse at ${fromLeft ? '0%' : '100%'} 50%, rgba(33, 211, 251,0.05) 0%, transparent 65%)` }} />
 
                   {/* Spring-pop number */}
                   <motion.span
@@ -448,15 +448,15 @@ export default function About() {
           + animated blobs + alternating card reveals
       ══════════════════════════════════════════════════════════ */}
       <section className="relative py-24 overflow-hidden" aria-label="Our approach"
-        style={{ background: 'linear-gradient(160deg, #f8f9ff 0%, #f0ebff 40%, #f5f8ff 70%, #ece6ff 100%)' }}>
+        style={{ background: 'linear-gradient(160deg, #F9F6FF 0%, #f0ebff 40%, #F8F5FF 70%, #ece6ff 100%)' }}>
 
-        <Orb style={{ top: '-8%', right: '-4%', width: 580, height: 580, background: 'radial-gradient(circle, rgba(82,55,159,0.09) 0%, transparent 70%)', filter: 'blur(90px)' }}
+        <Orb style={{ top: '-8%', right: '-4%', width: 580, height: 580, background: 'radial-gradient(circle, rgba(138, 11, 230,0.09) 0%, transparent 70%)', filter: 'blur(90px)' }}
           animate={lite ? {} : { scale: [1, 1.1, 1], opacity: [0.7, 1, 0.7] }}
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }} />
-        <Orb style={{ bottom: '-6%', left: '-3%', width: 480, height: 480, background: 'radial-gradient(circle, rgba(3,201,224,0.07) 0%, transparent 70%)', filter: 'blur(80px)' }}
+        <Orb style={{ bottom: '-6%', left: '-3%', width: 480, height: 480, background: 'radial-gradient(circle, rgba(33, 211, 251,0.07) 0%, transparent 70%)', filter: 'blur(80px)' }}
           animate={lite ? {} : { scale: [1, 1.12, 1] }}
           transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 4 }} />
-        <Orb style={{ top: '50%', left: '50%', width: 320, height: 320, background: 'radial-gradient(circle, rgba(82,55,159,0.055) 0%, transparent 70%)', filter: 'blur(70px)', transform: 'translate(-50%, -50%)' }}
+        <Orb style={{ top: '50%', left: '50%', width: 320, height: 320, background: 'radial-gradient(circle, rgba(138, 11, 230,0.055) 0%, transparent 70%)', filter: 'blur(70px)', transform: 'translate(-50%, -50%)' }}
           animate={lite ? {} : { scale: [1, 1.2, 1] }}
           transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 7 }} />
 
@@ -483,22 +483,22 @@ export default function About() {
                 >
                   <motion.div
                     className="relative rounded-2xl p-7 h-full overflow-hidden group"
-                    style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 24px rgba(82,55,159,0.07)' }}
-                    whileHover={reduced ? {} : { y: -6, boxShadow: '0 16px 48px rgba(82,55,159,0.14)' }}
+                    style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: lite ? 'none' : 'blur(12px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 4px 24px rgba(138, 11, 230,0.07)' }}
+                    whileHover={reduced ? {} : { y: -6, boxShadow: '0 16px 48px rgba(138, 11, 230,0.14)' }}
                     transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                   >
                     <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-                      style={{ background: 'linear-gradient(90deg, #03c9e0 0%, #52379f 60%, transparent 100%)' }} />
+                      style={{ background: 'linear-gradient(90deg, #21D3FB 0%, #8A0BE6 60%, transparent 100%)' }} />
                     <div aria-hidden="true" className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                      style={{ background: 'radial-gradient(ellipse at 20% 0%, rgba(82,55,159,0.07) 0%, transparent 65%)' }} />
-                    <div aria-hidden="true" className="absolute -bottom-2 -end-2 opacity-[0.05] pointer-events-none group-hover:opacity-[0.09] transition-opacity duration-500" style={{ color: 'rgba(82,55,159,1)' }}>
+                      style={{ background: 'radial-gradient(ellipse at 20% 0%, rgba(138, 11, 230,0.07) 0%, transparent 65%)' }} />
+                    <div aria-hidden="true" className="absolute -bottom-2 -end-2 opacity-[0.05] pointer-events-none group-hover:opacity-[0.09] transition-opacity duration-500" style={{ color: 'rgba(138, 11, 230,1)' }}>
                       <Icon size={72} strokeWidth={1.2} />
                     </div>
 
                     <div className="relative z-10">
                       <motion.div
                         className="w-10 h-10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
-                        style={{ background: 'linear-gradient(135deg, rgba(3,201,224,0.16) 0%, rgba(82,55,159,0.14) 100%)', border: '1px solid rgba(82,55,159,0.25)' }}
+                        style={{ background: 'linear-gradient(135deg, rgba(33, 211, 251,0.16) 0%, rgba(138, 11, 230,0.14) 100%)', border: '1px solid rgba(138, 11, 230,0.25)' }}
                         initial={reduced ? {} : { rotate: -15, opacity: 0 }}
                         whileInView={{ rotate: 0, opacity: 1 }}
                         viewport={{ once: true }}
@@ -527,9 +527,9 @@ export default function About() {
       <Section variant="white" backdrop={
         <>
           <div aria-hidden="true" className="absolute -top-40 -start-20 w-[520px] h-[520px] rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(3,201,224,0.055) 0%, transparent 70%)', filter: 'blur(90px)' }} />
+            style={{ background: 'radial-gradient(circle, rgba(33, 211, 251,0.055) 0%, transparent 70%)', filter: 'blur(90px)' }} />
           <div aria-hidden="true" className="absolute -bottom-20 -end-20 w-[400px] h-[400px] rounded-full pointer-events-none"
-            style={{ background: 'radial-gradient(circle, rgba(82,55,159,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+            style={{ background: 'radial-gradient(circle, rgba(138, 11, 230,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
         </>
       }>
         <FadeUp>
@@ -550,13 +550,13 @@ export default function About() {
             >
               <motion.div
                 className="relative bg-white border border-gray-100 rounded-2xl p-10 text-center overflow-hidden shadow-sm group"
-                whileHover={reduced ? {} : { y: -6, boxShadow: '0 14px 44px rgba(3,201,224,0.1)' }}
+                whileHover={reduced ? {} : { y: -6, boxShadow: '0 14px 44px rgba(33, 211, 251,0.1)' }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[2px] pointer-events-none"
-                  style={{ background: 'linear-gradient(90deg, transparent 0%, #03c9e0 40%, #52379f 80%, transparent 100%)' }} />
+                  style={{ background: 'linear-gradient(90deg, transparent 0%, #21D3FB 40%, #8A0BE6 80%, transparent 100%)' }} />
                 <div aria-hidden="true" className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(3,201,224,0.05) 0%, transparent 65%)' }} />
+                  style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(33, 211, 251,0.05) 0%, transparent 65%)' }} />
 
                 {/* Pulsing orbital indicator */}
                 <div className="relative inline-flex items-center justify-center mb-5">
@@ -565,14 +565,14 @@ export default function About() {
                       className="absolute rounded-full"
                       style={{
                         width: 20 + ring * 16, height: 20 + ring * 16,
-                        border: '1px solid rgba(3,201,224,0.35)',
+                        border: '1px solid rgba(33, 211, 251,0.35)',
                       }}
                       animate={lite ? {} : { scale: [1, 1.6, 1], opacity: [0.5, 0, 0.5] }}
                       transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut', delay: ring * 1 + i * 0.4 }}
                     />
                   ))}
                   <div className="relative w-3 h-3 rounded-full z-10"
-                    style={{ background: 'linear-gradient(135deg, #03c9e0, #52379f)' }} />
+                    style={{ background: 'linear-gradient(135deg, #21D3FB, #8A0BE6)' }} />
                 </div>
 
                 <div className="relative z-10">
